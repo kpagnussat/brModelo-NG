@@ -82,7 +82,6 @@ public class EapCLI extends CliDiagramaProcessador {
                         getDiag().repaint();
                     }
                     return r2;
-//                    //break;
             }
         }
         return true;
@@ -245,7 +244,6 @@ public class EapCLI extends CliDiagramaProcessador {
             Ligue(br, PP, ABAIXO);
             x = bkp;
             for (int i = 1; i < itens.size(); i++) {
-                //EapProcesso p = NovoProcesso(new Point(x, y), itens.get(i));
                 String tmp = itens.get(i);
                 EapProcesso p;
                 if (haveVars(tmp)) {
@@ -273,7 +271,6 @@ public class EapCLI extends CliDiagramaProcessador {
             y += 50;
             Ligue(br, PP, ABAIXO);
             for (int i = 1; i < itens.size(); i++) {
-                //EapProcesso p = NovoProcesso(new Point(x, y), itens.get(i));
                 String tmp = itens.get(i);
                 EapProcesso p;
                 if (haveVars(tmp)) {
@@ -298,7 +295,6 @@ public class EapCLI extends CliDiagramaProcessador {
             y += 50;
             Ligue(br, PP, ABAIXO);
             for (int i = 1; i < itens.size(); i++) {
-                //EapProcesso p = NovoProcesso(new Point(x, y), itens.get(i));
                 String tmp = itens.get(i);
                 EapProcesso p;
                 if (haveVars(tmp)) {

@@ -45,7 +45,6 @@ public class PreCardinalidade extends FormaTextoBase {
         int lado = Fixo.getLado();
         int x = 0, y = 0;
         //# Mudança: com os comentários abaixo, o autoposicionamento da CARD se dará sempre: à direita e acima da linha evitando a sobreposição.
-        //PontoDeLinha outraPonta = Fixo.getDono().getOutraPonta(Fixo);
         int corr = 4;
         switch (lado) {
             case 0:
@@ -55,11 +54,7 @@ public class PreCardinalidade extends FormaTextoBase {
                 } else {
                     x = Fixo.getLeft() + Fixo.getWidth() + 2 * distSelecao;
                 }
-                //if (outraPonta.getTop() >= Fixo.getTop()) {
                     y = Fixo.getTop() - getHeight() - distSelecao + corr;
-                //} else {
-                //    y = Fixo.getTop() + Fixo.getHeight() + distSelecao - corr;
-                //}
                 break;
             case 1:
             case 3:
@@ -68,11 +63,7 @@ public class PreCardinalidade extends FormaTextoBase {
                 } else {
                     y = Fixo.getTop() + Fixo.getHeight() + 2 * distSelecao;
                 }
-                //if (outraPonta.getLeft() >= Fixo.getLeft()) {
                     x = Fixo.getLeft() - getWidth() - distSelecao + corr;
-                //} else {
-                //    x = Fixo.getLeft() + Fixo.getWidth() + distSelecao - corr;
-                //}
                 break;
         }
         setLocation(x, y);
@@ -237,15 +228,17 @@ public class PreCardinalidade extends FormaTextoBase {
         if (!isVisible()) {
             return;
         }
-        if (TamanhoAutmatico) {
+        if (TamanhoAutmatico && !getMaster().isPinturaExterna()) {
             int tamLetra =  g.getFontMetrics(getFont()).stringWidth("M");
-            int largura = g.getFontMetrics(getFont()).stringWidth(FullCard()) + tamLetra;//+ distSelecao * 2;
+            int largura = g.getFontMetrics(getFont()).stringWidth(FullCard()) + tamLetra;
             int altura = g.getFontMetrics(getFont()).getHeight();
             if (getWidth() != largura || getHeight() != altura) {
                 setStopRaize(true);
                 setWidth(largura);
                 setHeight(altura);
                 setStopRaize(false);
+                // The text layout cached for the old size would keep its old line breaks.
+                setTextoFormatado(null);
                 Posicione();
                 if (isSelecionado()) Reposicione();
             }
@@ -258,9 +251,12 @@ public class PreCardinalidade extends FormaTextoBase {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        // Keyed on the scale actually painted at, not only the diagram zoom: the print preview
+        // paints the same diagram scaled down, and its layout must not stick to the editor.
+        double escala = g.getTransform().getScaleX();
+        if (escala != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = escala;
         }
         DesenhadorDeTexto txtf = getTextoFormatado();
         txtf.PinteTexto(g, getForeColor(), getArea(), FullCard());

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=brModelo NG
+Comment=Create entity-relationship and database diagrams
+Comment[pt_BR]=Crie diagramas entidade-relacionamento e de bancos de dados
+Exec=brmodelo-ng %F
+Icon=io.github.kpagnussat.brModeloNG
+Terminal=false
+Categories=Education;Development;Office;
+MimeType=application/x-brmodelo;application/x-brmodelo-json;
+StartupWMClass=principal-Aplicacao

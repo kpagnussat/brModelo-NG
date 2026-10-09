@@ -41,9 +41,17 @@ public class Salvar extends javax.swing.JDialog {
     public Salvar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        if (!com.formdev.flatlaf.util.SystemInfo.isWindows) {
+            javax.swing.GroupLayout layout = (javax.swing.GroupLayout)getContentPane().getLayout();
+            // replaceComponent preserves the generated horizontal/vertical constraints.
+            javax.swing.JPanel placeholder = new javax.swing.JPanel();
+            layout.replace(btnContinuar, placeholder);
+            layout.replace(btnCancelar, btnContinuar);
+            layout.replace(placeholder, btnCancelar);
+        }
+        util.LayoutDialogos.salvar(this, jScrollPane2, Lista, btnSelAll, btnUnSelAll, btnCancelar, btnContinuar);
         
         getRootPane().registerKeyboardAction(e -> {
-            //this.dispose();
             resultado = JOptionPane.CANCEL_OPTION;
             setVisible(false);
 

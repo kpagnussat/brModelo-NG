@@ -72,8 +72,7 @@ public class FormaTriangular extends FormaNaoRetangularBase {
         }
         calculePontos();
         Point pt1, pt2, pt3, pMeio;
-        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
-        //r.grow(-espaco, -espaco);
+        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
         Point p0 = r.getLocation();
         Point p1 = new Point(r.x + r.width, r.y);
         Point p2 = new Point(r.x + r.width, r.y + r.height);
@@ -98,7 +97,7 @@ public class FormaTriangular extends FormaNaoRetangularBase {
                 pt3 = p1;
                 pMeio = pontoPosi4;
                 break;
-            default: //case  Left:
+            default:
                 pt1 = pontoPosi7;
                 pt2 = p1;
                 pt3 = p2;
@@ -148,7 +147,7 @@ public class FormaTriangular extends FormaNaoRetangularBase {
             case Down:
                 a = -2;
                 break;
-            default: //case  Left:
+            default:
                 b = -2;
                 break;
         }
@@ -166,72 +165,7 @@ public class FormaTriangular extends FormaNaoRetangularBase {
                 res = new Point(ptsLi[3].x + b, ptsLi[3].y - a);
                 break;
         }
-//        switch (direcao) {
-//            case Up:
-//                switch (tmp) {
-//                    case 0:
-//                        res = new Point(ptsLi[0].x, ptsLi[0].y  + 2);
-//                        break;
-//                    case 1:
-//                        res = new Point(ptsLi[1].x - 2, ptsLi[1].y);
-//                        break;
-//                    case 2:
-//                        res = new Point(ptsLi[2].x + 2, ptsLi[2].y);
-//                        break;
-//                    case 3:
-//                        res = new Point(ptsLi[3].x, ptsLi[3].y - 2);
-//                        break;
-//                }
-//                break;
-//            case Right:
-//                switch (tmp) {
-//                    case 0:
-//                        res = new Point(ptsLi[0].x -2, ptsLi[0].y);
-//                        break;
-//                    case 1:
-//                        res = new Point(ptsLi[1].x, ptsLi[1].y - 2);
-//                        break;
-//                    case 2:
-//                        res = new Point(ptsLi[2].x, ptsLi[2].y  + 2);
-//                        break;
-//                    case 3:
-//                        res = new Point(ptsLi[3].x + 2, ptsLi[3].y);
-//                        break;
-//                }
-//                break;
-//            case Down:
-//                switch (tmp) {
-//                    case 0:
-//                        res = new Point(ptsLi[0].x, ptsLi[0].y  - 2);
-//                        break;
-//                    case 1:
-//                        res = new Point(ptsLi[1].x + 2, ptsLi[1].y);
-//                        break;
-//                    case 2:
-//                        res = new Point(ptsLi[2].x - 2, ptsLi[2].y);
-//                        break;
-//                    case 3:
-//                        res = new Point(ptsLi[3].x, ptsLi[3].y + 2);
-//                        break;
-//                }
-//                break;
 //            default: //case  Left:
-//                switch (tmp) {
-//                    case 0:
-//                        res = new Point(ptsLi[0].x + 2, ptsLi[0].y);
-//                        break;
-//                    case 1:
-//                        res = new Point(ptsLi[1].x, ptsLi[1].y + 2);
-//                        break;
-//                    case 2:
-//                        res = new Point(ptsLi[2].x, ptsLi[2].y  - 2);
-//                        break;
-//                    case 3:
-//                        res = new Point(ptsLi[3].x - 2, ptsLi[3].y);
-//                        break;
-//                }
-//                break;
-//        }
 
         return res;
     }
@@ -254,9 +188,9 @@ public class FormaTriangular extends FormaNaoRetangularBase {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         getTextoFormatado().PinteTexto(g, getForeColor(), getArea(), toPaintTxt);
     }

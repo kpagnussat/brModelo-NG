@@ -29,7 +29,7 @@ public class TextLineNumber extends JPanel
     public final static float CENTER = 0.5f;
     public final static float RIGHT = 1.0f;
 
-    private final static Border OUTER = new MatteBorder(0, 0, 0, 2, Color.GRAY);
+    private final static Border OUTER = new util.BordaLinhaTexto();
 
     private final static int HEIGHT = Integer.MAX_VALUE - 1000000;
 
@@ -72,7 +72,7 @@ public class TextLineNumber extends JPanel
         setFont(component.getFont());
 
         setBorderGap(5);
-        setCurrentLineForeground(Color.BLUE);
+        setCurrentLineForeground(util.EstiloUI.cor("Component.accentColor"));
         setDigitAlignment(RIGHT);
         setMinimumDisplayDigits(minimumDisplayDigits);
 
@@ -413,19 +413,10 @@ public class TextLineNumber extends JPanel
         }
     }
 //
-//    public static void main(String[] args) {
 //
-//        javax.swing.JFrame jf = new javax.swing.JFrame();
 //
-//        jf.setVisible(true);
 //
-//        JTextArea ta = new JTextArea(25, 25);
 //
-//        javax.swing.JScrollPane sp = new javax.swing.JScrollPane(ta, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 //
-//        TextLineNumber tln = new TextLineNumber(ta);
-//        sp.setRowHeaderView(tln);
-//        jf.setContentPane(sp);
 //
-//    }
 }

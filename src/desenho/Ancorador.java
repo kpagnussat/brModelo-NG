@@ -165,8 +165,10 @@ public class Ancorador extends FormaElementar{
     
     @Override
     public boolean IsMe(Point p) {
-        if (super.IsMe(p)) {
-            return getRegiao().contains(p);
+        if (!isVisible()) return false;
+        Posicione(getMaster().getSelecionado());
+        for (Rectangle area : areas) {
+            if (area.contains(p)) return true;
         }
         return false;
     }
@@ -189,35 +191,33 @@ public class Ancorador extends FormaElementar{
             }
             return;
         }
-        final int espaco = 8;
+        Rectangle previous = getBounds();
+        boolean wasVisible = isVisible();
+        Construa(selecionado);
+        areas.clear();
+        areas.addAll(PosicionamentoAncorador.layout(selecionado, getAncorasCode().size()));
+        if (areas.isEmpty()) {
+            SetVisible(false);
+            return;
+        }
+        Rectangle bounds = new Rectangle(areas.get(0));
+        for (Rectangle area : areas) bounds.add(area);
+        SetBounds(bounds);
+        DestruaRegiao();
         SetVisible(true);
-        
-        int L = selecionado.getLeft() - getWidth() - espaco; 
-        int T = selecionado.getTop(); 
-        if (L < 0) {
-            L = selecionado.getLeftWidth() + espaco;
+        if (overRNow != null && !areas.contains(overRNow)) setOverNow(null);
+        if (!wasVisible || !previous.equals(bounds)) {
+            InvalidateArea(previous);
+            InvalidateArea(bounds);
         }
-        if ((T + getHeight() + espaco) > getMaster().getHeight()) {
-            T = getMaster().getHeight() - (getHeight() + espaco);
-        }
-        
-        int H = Construa(selecionado);
-        SetBounds(L, T, getWidth(), H);
     }
     
     private final ArrayList<Rectangle> areas = new ArrayList<>();
     
     public int Construa(FormaElementar sel) {
         getAncorasCode().clear();
-        int larg = getWidth();
-        int y = getTop();
-        final int sx = 2;
-
-        for (Integer c : sel.getAncorasCode()) {
-            y += larg + sx;
-            getAncorasCode().add(c);
-        }
-        return y -sx;
+        getAncorasCode().addAll(sel.getAncorasCode());
+        return getAncorasCode().size() * 20;
     }
 
     @Override
@@ -225,19 +225,8 @@ public class Ancorador extends FormaElementar{
         if (!isVisible() || getMaster().getSelecionado() == null) {
             return;
         }
+        Posicione(getMaster().getSelecionado());
         g.setFont(getFont());
-
-        areas.clear();
-        int larg = getWidth();
-        int x = getLeft();
-        int y = getTop();
-
-        final int sx = 2;
-
-        for (Integer c : getAncorasCode()) {
-            areas.add(new Rectangle(x, y, larg, larg + sx));
-            y += larg + sx;
-        }
 
         if (areas.isEmpty()) {
             return;
@@ -245,7 +234,6 @@ public class Ancorador extends FormaElementar{
         g.setColor(new Color(204, 204, 255));
         int i = 0;
         for (Integer c : getAncorasCode()) {
-//            g.setColor(Color.gray);
             Rectangle r = areas.get(i);
 
             g.setColor(Color.white);
@@ -253,9 +241,7 @@ public class Ancorador extends FormaElementar{
             g.setColor(Color.gray);
 
             String whatDraw = getMaster().getSelecionado().WhatDrawOnAcorador(c);
-            g.drawImage(
-                    getMaster().getEditor().getControler().ImagemDeDiagrama.get(whatDraw).getImage(),
-                    r.x + 1, r.y + 1, null);
+            util.Icones.pinteNoPapel(whatDraw, g, r.x + 1, r.y + 1, 16, null);
 
             if (overRNow != null && overRNow.equals(r)) {
                 g.setColor(Color.lightGray);

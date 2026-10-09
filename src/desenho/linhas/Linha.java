@@ -93,13 +93,6 @@ public class Linha extends FormaElementar {
         PontoDeLinha pt = new PontoDeLinha(this);
         Pontos.add(posicao, pt);
 
-//        if (posicao > 0) {
-//            Pontos.get(posicao - 1).Proximo = pt;
-//        }
-//        if (posicao < Pontos.size() - 1) {
-//            pt.Proximo = Pontos.get(posicao + 1);
-//        }
-//
         pt.IsTopOrBotton = false;
 
         return pt;
@@ -114,12 +107,10 @@ public class Linha extends FormaElementar {
         SetBounds(local);
         if (Pontos.isEmpty()) {
             PontoDeLinha pt1 = NovoPonto();
-            //pt1.IsHide = false;
             PontoDeLinha pt2 = InserirPonto(pt1);
             pt2.IsTopOrBotton = false;
             //PontoDeLinha pt3 =
             InserirPonto(pt2);
-            //pt3.IsHide = false;
         }
         PontoDeLinha pt = Pontos.get(0);
         pt.setLocation(local.getLocation());
@@ -140,7 +131,6 @@ public class Linha extends FormaElementar {
     }
 
     public boolean isDuplaLinha() {
-        //int res = Float.compare(getLargura(), 1f);
         return (largura != larguraBase);
     }
 
@@ -188,41 +178,6 @@ public class Linha extends FormaElementar {
         g.setStroke(bkp);
     }
 
-//    public void Diminua(int[] baseX, int[] baseY) {
-//        final int w = getMaster().getPontoWidth();
-//        for (int i = 0; i < baseX.length; i++) {
-//            if ((baseX.length > 1) && ((i == 0) || (i == baseX.length - 1))) {
-//                int a, b, c, d, n;
-//                if (i == 0) {
-//                    a = baseX[0];
-//                    b = baseX[1];
-//                    c = baseY[0];
-//                    d = baseY[1];
-//                    n = 1;
-//                } else {
-//                    a = baseX[baseX.length - 2];
-//                    b = baseX[baseX.length - 1];
-//                    c = baseY[baseX.length - 2];
-//                    d = baseY[baseX.length - 1];
-//                    n = -1;
-//                }
-//                int m = w*n*2;
-//                if (a == b) {
-//                    if (c < d) {
-//                        baseY[i] = baseY[i] + m;
-//                    } else {
-//                        baseY[i] = baseY[i] - m;
-//                    }
-//                } else {
-//                    if (a < b) {
-//                        baseX[i] = baseX[i] + m;
-//                    } else {
-//                        baseX[i] = baseX[i] - m;
-//                    }
-//                }
-//            } 
-//        }
-//    }
     @Override
     public boolean IsMe(Point p) {
         boolean res = false;
@@ -436,9 +391,6 @@ public class Linha extends FormaElementar {
 
     @Override
     public void mousePressed(MouseEvent e) {
-//        if (isNulo()) {
-//            return;
-//        }
         if (!isSelecionado()) {
             getMaster().DiagramaDoSelecao(this, true, false);
             jaSel = false;
@@ -478,7 +430,6 @@ public class Linha extends FormaElementar {
             ProcessPontoMouseUp();
         }
         dragging = false;
-        //reSetBounds();
         getPontaA().ProcessaOverDraw(true);
         getPontaB().ProcessaOverDraw(true);
         super.mouseReleased(e);
@@ -488,7 +439,6 @@ public class Linha extends FormaElementar {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        //if (!jaSel) return; //# Permite a movimentação apenas se já estiver selecionado
         super.mouseDragged(e);
         dragging = true;
         if (!getMaster().IsMultSelecionado()) {
@@ -632,8 +582,6 @@ public class Linha extends FormaElementar {
     public void mouseEntered(MouseEvent e) {
         super.mouseEntered(e);
         fator_largura = 2;
-        //Rectangle r = getBounds();
-        //r.grow(50, 50);
         InvalidateArea(getBounds());
     }
 
@@ -644,22 +592,8 @@ public class Linha extends FormaElementar {
         }
         fator_largura = 1;
         InvalidateArea(getBounds());
-//        Rectangle r = getBounds();
-//        r.grow(50, 50);
-//        InvalidateArea(r);
     }
 
-//    @Override
-//    protected void InfoDiagrama_ToXmlValores(Document doc, Element me) {
-//        super.InfoDiagrama_ToXmlValores(doc, me);
-//        //me.appendChild(util.XMLGenerate.ValorInteger(doc, "Largura", (int)largura));
-//        //me.appendChild(util.XMLGenerate.ValorInteger(doc, "Fator_Largura", (int)fator_largura));
-//        Element sbPontos = doc.createElement("Pontos");
-//        for (PontoDeLinha pl : getPontos()) {
-//            pl.ToXlm(doc, sbPontos);
-//        }
-//        me.appendChild(sbPontos);
-//    }
     public void Clean() {
         while (2 < getPontos().size()) {
             RemoveSubItem(Pontos.get(1));

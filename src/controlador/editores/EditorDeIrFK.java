@@ -49,6 +49,31 @@ public class EditorDeIrFK extends javax.swing.JDialog {
     public EditorDeIrFK(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.DicasInterface.dica(comboTabelas, "table");
+        util.DicasInterface.dica(Adicionar, "constraintFieldAdd");
+        util.DicasInterface.dica(chkIsnomeada, "constraintNamed");
+        util.DicasInterface.dica(txtNome, "constraintName");
+        util.DicasInterface.dica(mostrador, "ddl");
+        util.DicasInterface.dica(btnPronto, "done");
+        util.DicasInterface.dica(Listador, "constraints");
+        util.DicasInterface.dica(btnAdd, "constraintAdd");
+        util.DicasInterface.dica(btnDel, "constraintDelete");
+        util.DicasInterface.dica(btnUP2, "constraintUp");
+        util.DicasInterface.dica(btnDown2, "constraintDown");
+        util.DicasInterface.dica(comboTabelasLigadas, "referencedTable");
+        util.DicasInterface.dica(comboIR, "referencedKey");
+        util.DicasInterface.dica(comboLigacoes, "relationship");
+        util.DicasInterface.dica(btnEditar, "referencedEdit");
+        util.LayoutDialogos.pares(jPanel1, "Chave estrangeira", jLabel1, comboTabelas);
+        javax.swing.JPanel reference = new javax.swing.JPanel(new java.awt.BorderLayout(util.AcabamentoDialogos.px(8), 0));
+        reference.add(comboIR, java.awt.BorderLayout.CENTER);
+        reference.add(btnEditar, java.awt.BorderLayout.EAST);
+        util.LayoutDialogos.pares(jPanel5, null, chkIsnomeada, txtNome,
+                jLabel6, comboTabelasLigadas, jLabel7, reference, jLabel3, comboLigacoes);
+        jLabel2.setVisible(false);
+        util.LayoutIr.montar(this, jPanel1, jPanel5, jPanel4, jToolBar1,
+                jScrollPane1, mostrador, jScrollPane2, jPanel2,
+                jSplitPane7, jPanel11, Listador, jScrollPane9, jToolBar9);
     }
 
     /**
@@ -100,7 +125,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         setTitle(bundle.getString("EditorDeCampos.title")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(Editor.fromConfiguracao.getValor("Inspector.obj.constraint.fkey")));
+        jPanel1.setBorder(util.AcabamentoDialogos.bordaSecao(jPanel1, Editor.fromConfiguracao.getValor("Inspector.obj.constraint.fkey")));
 
         comboTabelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -121,7 +146,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboTabelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -136,11 +161,11 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         jScrollPane9.setViewportView(Listador);
 
         jToolBar9.setFloatable(false);
-        jToolBar9.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar9.setOrientation(javax.swing.SwingConstants.HORIZONTAL);
         jToolBar9.setRollover(true);
         jToolBar9.add(jSeparator25);
 
-        btnUP2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/up.png"))); // NOI18N
+        btnUP2.setIcon(util.Icones.de("/imagens/up.png")); // NOI18N
         btnUP2.setText(bundle.getString("FormHelp.btnUP2.text")); // NOI18N
         btnUP2.setToolTipText(bundle.getString("FormHelp.btnUP2.toolTipText")); // NOI18N
         btnUP2.setFocusable(false);
@@ -153,7 +178,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         });
         jToolBar9.add(btnUP2);
 
-        btnDown2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/down.png"))); // NOI18N
+        btnDown2.setIcon(util.Icones.de("/imagens/down.png")); // NOI18N
         btnDown2.setToolTipText(bundle.getString("FormHelp.btnDown2.toolTipText")); // NOI18N
         btnDown2.setFocusable(false);
         btnDown2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -166,7 +191,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         jToolBar9.add(btnDown2);
         jToolBar9.add(jSeparator26);
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add_16.gif"))); // NOI18N
+        btnAdd.setIcon(util.Icones.de("/imagens/add_16.gif")); // NOI18N
         btnAdd.setText(bundle.getString("FormHelp.btnAdd.text")); // NOI18N
         btnAdd.setToolTipText(bundle.getString("FormHelp.btnAdd.toolTipText")); // NOI18N
         btnAdd.setActionCommand(bundle.getString("FormHelp.btnAdd.actionCommand")); // NOI18N
@@ -180,7 +205,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         });
         jToolBar9.add(btnAdd);
 
-        btnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/busy.png"))); // NOI18N
+        btnDel.setIcon(util.Icones.de("/imagens/busy.png")); // NOI18N
         btnDel.setText(bundle.getString("FormHelp.btnDel.text")); // NOI18N
         btnDel.setToolTipText(bundle.getString("FormHelp.btnDel.toolTipText")); // NOI18N
         btnDel.setFocusable(false);
@@ -218,7 +243,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        Adicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mais.png"))); // NOI18N
+        Adicionar.setIcon(util.Icones.de("/imagens/mais.png")); // NOI18N
         Adicionar.setText(bundle.getString("EditorDeIR.Adicionar.Campo")); // NOI18N
         Adicionar.setFocusable(false);
         Adicionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -248,7 +273,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
 
         comboLigacoes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mini_edit.png"))); // NOI18N
+        btnEditar.setIcon(util.Icones.de("/imagens/mini_edit.png")); // NOI18N
         btnEditar.setText(bundle.getString("EditorDeIrUnique.Editar")); // NOI18N
         btnEditar.setEnabled(false);
         btnEditar.setFocusable(false);
@@ -313,7 +338,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        Principal.setBackground(new java.awt.Color(204, 204, 204));
+        Principal.setBackground(util.EstiloUI.fundo(Principal, "Panel.background"));
         Principal.setLayout(null);
         jScrollPane1.setViewportView(Principal);
 
@@ -329,7 +354,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -352,19 +377,16 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 434, Short.MAX_VALUE))
-            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                    .addGap(50, 50, 50)
-                    .addComponent(jSplitPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
         );
 
         mostrador.setEditable(false);
         mostrador.setColumns(20);
-        mostrador.setRows(5);
+        mostrador.setRows(3);
         jScrollPane2.setViewportView(mostrador);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         btnPronto.setText(bundle.getString("EditorDeCampos.Fechar")); // NOI18N
         btnPronto.addActionListener(new java.awt.event.ActionListener() {
@@ -689,7 +711,6 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                     constrSelecionada.getCamposDeDestino().stream().forEach(c -> {
                         Itens.stream().filter(it -> it.campo == c).forEach(it -> it.comboCmpOrigem.setSelectedIndex(0));
                     });
-                    //RearranjeItens();
                     populando = false;
                 }
                 btnEditar.setEnabled(constrOrigem != null);
@@ -711,11 +732,13 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         });
 
         changeTabela();
+        util.LayoutIr.dimensionar(this, Principal, jScrollPane1, mostrador, jScrollPane2);
     }
 
     private void changeTabela() {
         populando = true;
         Principal.removeAll();
+        Principal.setPreferredSize(null);
         Principal.validate();
         Itens.clear();
         v = 0;
@@ -848,12 +871,6 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                 comboLigacoes.setSelectedIndex(idx);
             }
         }
-//        else {
-//            Ligacoes = new ArrayList<>();
-//            constrDaTabOrigem = new ArrayList<>();
-//            linha = null;
-//            btnEditar.setEnabled(false);
-//        }
         camposOrigem = (constrOrigem == null) ? new ArrayList<>() : constrOrigem.getCamposDeOrigem().stream().filter(c -> (c != null)).collect(Collectors.toList());
     }
 
@@ -865,12 +882,9 @@ public class EditorDeIrFK extends javax.swing.JDialog {
 
         Itens.stream().forEach(item -> {
             item.chkCampo.setEnabled(!desabiliteTudo);
-            //item.chkPK.setEnabled(!desabiliteTudo);
-            //item.chUnique.setEnabled(!desabiliteTudo);
             item.chkfk.setEnabled(!desabiliteTudo);
             item.comboCmpOrigem.setEnabled(!desabiliteTudo);
 
-            //item.comboCmpOrigem.setSelectedIndex(0);
         });
         if (constrSelecionada == null && desabiliteTudo) {
             return;
@@ -885,15 +899,11 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                 item.chkfk.setEnabled(false);
                 item.comboCmpOrigem.setEnabled(true);
 
-//                int idx = camposOrigem.indexOf(item.campo);
-//                idx++;
-//                item.comboCmpOrigem.setSelectedIndex(idx);
             } else {
                 item.chkCampo.setEnabled(!item.campo.isFkey());
                 item.chkCampo.setSelected(item.campo.isFkey());
                 item.chkfk.setEnabled(item.campo.isFkey());
                 item.comboCmpOrigem.setEnabled(false);
-//                item.comboCmpOrigem.setSelectedIndex(0);
             }
         });
     }
@@ -903,7 +913,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
     public void AdicionarPainel(Campo cmp) {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR");
         javax.swing.JPanel ItemPan = new javax.swing.JPanel();
-        final int altura = 37;
+        int altura = 37; // minimum row height; grows with the theme font below
         java.awt.FlowLayout lay = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5);
         ItemPan.setLayout(lay);
 
@@ -922,7 +932,8 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         javax.swing.JLabel lblCmpOrigem = new javax.swing.JLabel();
 
         chkCampo.setText(cmp.getTexto()); // NOI18N
-        chkCampo.setPreferredSize(new Dimension(120, 23));
+        chkCampo.setToolTipText("<html>" + util.DicasInterface.texto("constraintField") + "<br>" + util.DicasInterface.escape(cmp.getTexto()) + "</html>");
+
         ItemPan.add(chkCampo);
 
         lblCmpOrigem.setText(bundle.getString("EditorDeIrFk.lblCmpOrigem")); // NOI18N
@@ -932,7 +943,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         final String ori_txt = cmp.getCampoOrigem() == null ? bundle.getString("EditorDeIrFk.selecione") : cmp.getCampoOrigem().getTexto();
 
         comboCmpOrigem.setModel(new javax.swing.DefaultComboBoxModel());
-        comboCmpOrigem.setPreferredSize(new Dimension(120, 20));
+
         ItemPan.add(comboCmpOrigem);
 
         chkPK.setText(bundle.getString("EditorDeIR.chkPK")); // NOI18N
@@ -947,19 +958,14 @@ public class EditorDeIrFK extends javax.swing.JDialog {
         chUnique.setSize(new Dimension(51, 23));
         ItemPan.add(chUnique);
 
-        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir.png"))); // NOI18N
+        btnExcluir.setIcon(util.Icones.de("/imagens/excluir.png")); // NOI18N
         btnExcluir.setToolTipText(bundle.getString("EditorDeCampos.tooltip.excluir")); // NOI18N
-        btnExcluir.setPreferredSize(new Dimension(49, 25));
+
         ItemPan.add(btnExcluir);
 
-        Principal.add(ItemPan);
-        if (largura == 0) {
-            largura = lay.preferredLayoutSize(ItemPan).width;
-        }
-        ItemPan.setBounds(0, v, largura, altura);
-        v += altura + 3;
-        //Principal.setSize(new Dimension(675, v));
-        Principal.setPreferredSize(new Dimension(largura, v));
+        util.LinhasDialogos.adicionar(Principal, ItemPan);
+        util.DicasInterface.dica(comboCmpOrigem, "sourceField");
+        chkCampo.setToolTipText("<html>" + util.DicasInterface.texto("constraintField") + "<br>" + util.DicasInterface.escape(cmp.getTexto()) + "</html>");
 
         chkCampo.setSelected(cmp.isFkey());
         chkfk.setSelected(cmp.isFkey());
@@ -1034,7 +1040,6 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             if (constrSelecionada == null || populando) {
                 return;
             }
-            //if (cmp.isFkey() != chkfk.isSelected()) {
 
             cmp.SetFkey(false);
             constrSelecionada.RemoveFromDestino(cmp);
@@ -1046,7 +1051,6 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             changeConstraint();
             RearranjeItens();
             populando = false;
-            // }
         });
 
         btnExcluir.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -1059,7 +1063,7 @@ public class EditorDeIrFK extends javax.swing.JDialog {
             chUnique.setEnabled(false);
             chkfk.setEnabled(false);
             btnExcluir.setEnabled(false);
-            ItemPan.setBackground(Color.lightGray);
+            ItemPan.setBackground(util.EstiloUI.fundo(ItemPan, "Panel.background"));
             comboCmpOrigem.setEnabled(false);
             Done();
             populando = true;
@@ -1102,11 +1106,11 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                 if (item_idx > -1 && item_idx < camposOrigem.size()) {
                     if (constrSelecionada != null) {
                         if (constrSelecionada.getCamposDeOrigem().indexOf(camposOrigem.get(item_idx)) > -1) {
-                            lbl.setFont(new Font(lbl.getFont().getFontName(), Font.PLAIN, lbl.getFont().getSize()));
-                            lbl.setForeground(Color.red);
+                            lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN));
+                            lbl.setForeground(util.EstiloUI.texto(lbl, "Component.error.focusedBorderColor"));
                         } else {
-                            lbl.setFont(new Font(lbl.getFont().getFontName(), Font.BOLD, lbl.getFont().getSize()));
-                            lbl.setForeground(Color.BLACK);
+                            lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
+                            lbl.setForeground(util.EstiloUI.texto(lbl, "Label.foreground"));
                         }
                     }
                 }
@@ -1144,14 +1148,9 @@ public class EditorDeIrFK extends javax.swing.JDialog {
                 populando = true;
                 comboCmpOrigem.removeAllItems();
                 comboCmpOrigem.addItem(bundle.getString("EditorDeIrFk.selecione"));
-                //boolean ja = ori_txt.equals(bundle.getString("EditorDeIrFk.selecione"));
                 for (Campo c : camposOrigem) {
                     comboCmpOrigem.addItem(c.getTexto());
-                    //ja = ja ? true : (c.getTexto().equals(ori_txt));
                 }
-//                if (!ja) {
-//                    comboCmpOrigem.addItem(ori_txt);
-//                }
                 populando = bkp;
             }
         });

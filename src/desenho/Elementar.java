@@ -365,7 +365,6 @@ public class Elementar implements ElementarListener, Serializable {
             clientRectangle = new Rectangle(0, 0, 0, 0);
         }
         SetBounds(clientRectangle.x, clientRectangle.y, clientRectangle.width, clientRectangle.height);
-        //this.clientRectangle = clientRectangle;
     }
 
     /**
@@ -470,9 +469,7 @@ public class Elementar implements ElementarListener, Serializable {
         ReSized();
         if (visible) {
             DoMasterInvalidate();
-            //InvalidateArea();
         }
-        //DoMuda();
     }
 
     /**
@@ -707,10 +704,6 @@ public class Elementar implements ElementarListener, Serializable {
 
     public void mousePressed(MouseEvent e) {
         //alterado em 16/12/2013 - não sei se terá algum efeito
-//        if (criador != null) {
-//            criador.BringToFront();
-//        }
-//        BringToFront();
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -769,9 +762,6 @@ public class Elementar implements ElementarListener, Serializable {
                 i++;
             }
             //            nos eventos de destroy: java.util.ConcurrentModificationException     
-            //            for (ElementarListener el : listeners) {
-            //                el.ReciveNotificacao(evt);
-            //            }
         }
     }
 
@@ -822,7 +812,6 @@ public class Elementar implements ElementarListener, Serializable {
             return false;
         }
         SendNotificacao(Constantes.Operacao.opDestroy);
-        //visible = false;
         return true;
     }
 
@@ -854,16 +843,12 @@ public class Elementar implements ElementarListener, Serializable {
      * Mostra os artefatos em cor padrão ao ser disabilitado na pintura.
      */
     private boolean disablePainted = false;
-    //protected boolean disablePainted = false;
 
     public boolean isDisablePainted() {
         return disablePainted;
     }
 
     public void setDisablePainted(boolean disablePainted) {
-//        if (this.disablePainted == disablePainted) {
-//            return;
-//        }
         this.disablePainted = disablePainted;
     }
     

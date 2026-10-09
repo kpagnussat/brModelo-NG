@@ -51,7 +51,7 @@ public class PreRelacionamento extends FormaLosangular {
     }
 
     private boolean AutoRelacionamento(ArrayList<Forma> ligados) {
-        return ((ligados.size() == 2) && (ligados.get(0) == ligados.get(1)));// instanceof PreEntidade) && (ligados.get(1) instanceof PreEntidade));
+        return ((ligados.size() == 2) && (ligados.get(0) == ligados.get(1)));
     }
 
     @Override
@@ -102,6 +102,7 @@ public class PreRelacionamento extends FormaLosangular {
     public void DoAnyThing(int Tag) {
         super.DoAnyThing(Tag);
         if (Tag == CONST_DO_ORGATTR) {
+            mudouAtributos = desenho.formas.OrganizadorDeConexoes.organize(this);
             List<PontoDeLinha> pts = getListaDePontosLigados().stream()
                     .filter(p -> p.getDono().getOutraPonta(p).getEm() instanceof Atributo)
                     .collect(Collectors.toList());
@@ -113,6 +114,9 @@ public class PreRelacionamento extends FormaLosangular {
 
             for (PontoDeLinha p : pts) {
                 Atributo att = (Atributo) p.getDono().getOutraPonta(p).getEm();
+                if (getMaster().getItensSelecionados().contains(att)) {
+                    continue;
+                }
                 if (Alinhe(p, att)) {
                     mudouAtributos = true;
                 }

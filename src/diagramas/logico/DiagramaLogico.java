@@ -84,7 +84,6 @@ public class DiagramaLogico extends Diagrama {
     protected FormaElementar RealiseComando(Point posi) {
         ClearSelect(false);
         FormaElementar resu = null;
-        //Point tmpPt;
         Point pt1, pt2;
         FormaElementar obj1, obj2;
         Elementar res;
@@ -131,8 +130,8 @@ public class DiagramaLogico extends Diagrama {
                 if (obj1 instanceof Tabela && obj2 instanceof Tabela) {
                     Tabela ori = (Tabela) obj1;
                     Tabela dest = (Tabela) obj2;
-                    Campo cmpO = ori.getCampoFromPoint(pt1);// getCampoSelecionado();
-                    Campo cmpD = dest.getCampoFromPoint(pt2);// getCampoSelecionado();
+                    Campo cmpO = ori.getCampoFromPoint(pt1);
+                    Campo cmpD = dest.getCampoFromPoint(pt2);
 
                     if (cmpO != null && (cmpO.isUnique() || cmpO.isKey())) {
                         if (cmpD == null) {
@@ -163,7 +162,6 @@ public class DiagramaLogico extends Diagrama {
                                     constr_fk.setLigacao(linha);
                                 }
                             }
-                            //constr_fk.Valide();
                         }
                     }
                     linha.ajusteSeta();
@@ -510,16 +508,6 @@ public class DiagramaLogico extends Diagrama {
             }
         }
 
-//        for (Tabela t : getListaDeTabelas()) {
-//            if (t.getCampos().stream().anyMatch(cc -> cc.getTipo().isEmpty())) {
-//                EditorDeTipos edt = new EditorDeTipos((Frame) (Aplicacao.fmPrincipal.getRootPane()).getParent(), true);
-//                edt.setLocationRelativeTo(Aplicacao.fmPrincipal.getRootPane());
-//                edt.Inicie(this);
-//                edt.setVisible(true);
-//                vai = edt.getResultado() == JOptionPane.OK_OPTION;
-//                if (!vai) break;
-//            }
-//        }
         if (!vai) {
             return false;
         }
@@ -556,11 +544,6 @@ public class DiagramaLogico extends Diagrama {
         return getListaDeItens().stream().filter(tb -> tb instanceof Tabela).map(tb -> (Tabela) tb).collect(Collectors.toList());
     }
 
-//    public static final int MSG_IR_CHANGE_ADD_CMP = 2;
-//    public static final int MSG_IR_CHANGE_DEL_CMP = 3;
-//    public static final int MSG_IR_PREDELETE = 4;
-//    public static final int MSG_CMP_DELETE = 5;
-//    public static final int MSG_CMP_CHANGE_TIPO = 6;
     public void ReciveNotifiqueIR(Constraint cons, int msg, Campo cmp) {
 
         switch (msg) {

@@ -74,20 +74,16 @@ public class SuperLinha extends Linha {
             pt1.IsTopOrBotton = true;
             pt1.setCentro(pIni);
         }
-        //Inicie(local);
     }
 
     @Override
     public void ReciveClick(Elementar sender, boolean dbl, MouseEvent e) {
-        if (dbl) {   //&& !isInteligente() inteligente não trata os pontos??????.
+        if (dbl) {
             if (sender instanceof PontoDeLinha) {
                 PontoDeLinha pt = (PontoDeLinha) sender;
                 if (pt.IsTopOrBotton) {
                     return;
                 }
-//                int i = getPontos().indexOf(pt) - 1;
-//                int j = i + 2;
-//                getPontos().get(i).Proximo = getPontos().get(j);
 
                 RemoveSubItem(pt);
                 reSetBounds();
@@ -104,7 +100,6 @@ public class SuperLinha extends Linha {
                     getPontosParaDesenho()[i].x, getPontosParaDesenho()[i].y)) {
                 PontoDeLinha pt = InserirPonto(i);
                 pt.setCentro(p);
-                //pt.IsHide = false;
                 pt.setVisible(true);
                 mouseExited(null);//evita que a linha permaneça na forma do mouseEntred.
                 return;
@@ -190,7 +185,6 @@ public class SuperLinha extends Linha {
             }
         } else if (ALeft > BLeft) {
             if (ATop < BTop) {
-                //letra = 'E';//Troca e inverte
                 letra = 'I';
                 inver = true;
                 if (B.getLeftWidth() >= ALeft) {
@@ -198,10 +192,8 @@ public class SuperLinha extends Linha {
                     inver = false;
                 } else if (pontaA.y >= BTop) {
                     letra = 'B';
-                    //inver = false;
                 }
             } else if (ATop > BTop) {
-                //letra = 'G';//Troca e inverte
                 letra = 'C';
                 inver = true;
                 if (B.getLeftWidth() >= ALeft) {
@@ -211,13 +203,11 @@ public class SuperLinha extends Linha {
                 }
 
             } else { // ==
-                //letra = 'F';
                 letra = 'B';
                 inver = true;
             }
         } else { // ==
             if (ATop > BTop) {
-                //letra = 'H';
                 letra = 'D';
                 inver = true;
             } else if (ATop < BTop) {
@@ -284,8 +274,6 @@ public class SuperLinha extends Linha {
 
         Point p1 = null, p2 = null, p3 = null, p4 = null;
 
-        //A.SetTexto("A - " + letra);
-        //B.SetTexto("B - " + letra);
         switch (letra) {
             // <editor-fold defaultstate="collapsed" desc="Case B">
             case 'B':
@@ -457,7 +445,6 @@ public class SuperLinha extends Linha {
                                 p1 = A0;
                                 p2 = new Point(A0.x, pc.y);
                                 p3 = new Point(B2.x, pc.y);
-                                //p4 = B2;
                                 break;
                             case 2:
                                 p1 = A0;
@@ -727,9 +714,6 @@ public class SuperLinha extends Linha {
                                 p4 = B4;
                                 break;
                             case 3:
-                                //p1 = A0;
-                                //p2 = new Point(A0.x, pc.y);
-                                //p3 = new Point(B6.x, pc.y);
 
                                 p1 = A0;
                                 tmpPoint = maiorPonto(A7, B6, false);
@@ -885,11 +869,6 @@ public class SuperLinha extends Linha {
     // </editor-fold>
 
 
-//    @Override
-//    protected void ToXmlValores(Document doc, Element me) {
-//        super.ToXmlValores(doc, me);
-//        me.appendChild(util.XMLGenerate.ValorBoolean(doc, "Inteligente", isInteligente()));
-//    }
     
     private PreTexto tag = null;
 
@@ -1179,6 +1158,4 @@ public class SuperLinha extends Linha {
 //    /**
 //     * É usado em linhas no futuro que usam texto apenso.
 //     */
-//    public void PrepareTexto() {
-//    }
 }

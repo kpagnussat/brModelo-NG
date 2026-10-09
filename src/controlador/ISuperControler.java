@@ -13,5 +13,4 @@ public interface ISuperControler {
     public void Super_Esperando();
     public void Super_Pronto();
     public void DoComandoExterno(Controler.menuComandos c);
-    //((FrameView)master.getFramePrincipal()).getFrame() //em uso!
 }

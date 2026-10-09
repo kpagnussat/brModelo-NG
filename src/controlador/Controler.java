@@ -127,7 +127,6 @@ public class Controler {
         cmdNew, cmdOpen, cmdClose, cmdPrint, cmdExport, cmdSave, cmdSaveAs, cmdSaveAll, //menu arquivo
         cmdTreeNavegador, cmdTreeSelect, //comandos diversos
         cmdMicroAjuste0, cmdMicroAjuste1, cmdMicroAjuste2, cmdMicroAjuste3, //micro ajuste.
-        //cmdDimCp, 
         cmdDimPastLeft, cmdDimPastTop, cmdDimPastRight, cmdDimPastBottom, cmdDimPastWidth, cmdDimPastHeight, cmdDimAlignH, cmdDimAlignV
     }
 
@@ -171,32 +170,6 @@ public class Controler {
         }
 
         ImagemDeDiagrama.put(Mostrador.Img, TratadorDeImagens.loadFromResource(Mostrador.Img, true));
-        ImagemDeDiagrama.put("diagrama.Campo_Key.img", TratadorDeImagens.loadFromResource("diagrama.Campo_Key.img", true));
-        ImagemDeDiagrama.put("diagrama.Campo_Fkey.img", TratadorDeImagens.loadFromResource("diagrama.Campo_Fkey.img", true));
-        ImagemDeDiagrama.put("diagrama.Campo_KeyFkey.img", TratadorDeImagens.loadFromResource("diagrama.Campo_KeyFkey.img", true));
-
-        ImagemDeDiagrama.put("diagrama.ancordor.0.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.0.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.1.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.1.img", true));
-
-        ImagemDeDiagrama.put("diagrama.ancordor.0.0.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.0.0.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.2.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.2.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.3.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.3.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.4.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.4.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.5.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.5.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.6.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.6.img", true));
-
-        ImagemDeDiagrama.put("diagrama.ancordor.7.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.7.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.8.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.8.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.9.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.9.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.7.0.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.7.0.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.8.0.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.8.0.img", true));
-        ImagemDeDiagrama.put("diagrama.ancordor.9.0.img", TratadorDeImagens.loadFromResource("diagrama.ancordor.9.0.img", true));
-
-        ImagemDeDiagrama.put("diagrama.Constraint_PK.img", TratadorDeImagens.loadFromResource("diagrama.Constraint_PK.img", true));
-        ImagemDeDiagrama.put("diagrama.Constraint_FK.img", TratadorDeImagens.loadFromResource("diagrama.Constraint_FK.img", true));
-        ImagemDeDiagrama.put("diagrama.Constraint_UN.img", TratadorDeImagens.loadFromResource("diagrama.Constraint_UN.img", true));
-        ImagemDeDiagrama.put("diagrama.Constraint_UNFK.img", TratadorDeImagens.loadFromResource("diagrama.Constraint_UNFK.img", true));
-        ImagemDeDiagrama.put("diagrama.Constraint_see.img", TratadorDeImagens.loadFromResource("diagrama.Constraint_see.img", true));
 
         ImagemDeDiagrama.put("Controler.interface.ajuda.icone", TratadorDeImagens.loadFromResource("Controler.interface.ajuda.icone", true));
     }
@@ -224,7 +197,6 @@ public class Controler {
                 ac.IDX = i++;
                 btn = arrume(new JToggleButton(ac));
                 buttons.add(btn);
-                //obj.add(btn);
                 listaBotoes.put(ca.command, btn);
             }
         }
@@ -251,7 +223,6 @@ public class Controler {
         btn.setFocusable(false);
         btn.setPreferredSize(btnDim);
         btn.setDoubleBuffered(true);
-        //btn.setMargin(new Insets(2, 5, 2, 5));
         btn.setRolloverEnabled(false);
         return btn;
     }
@@ -263,9 +234,7 @@ public class Controler {
                 Acao ac = new Acao(editor, ca.texto, ca.ico, ca.descricao, ca.command);
                 ac.IDX = i++;
                 JMenuItem mi = new JMenuItem(ac);
-                //obj.add(mi);
                 listaMenus.put(ca.command, mi);
-                //ListaDeAcoes.add(ac);
             }
         }
         obj.setText(Editor.fromConfiguracao.getValor("Controler.interface.menu.menuDiagrama.texto"));
@@ -306,7 +275,6 @@ public class Controler {
 
         String[] btns = new String[]{menuComandos.cmdMicroAjuste0.toString(), menuComandos.cmdMicroAjuste1.toString(),
             menuComandos.cmdMicroAjuste2.toString(), menuComandos.cmdMicroAjuste3.toString(),
-            //menuComandos.cmdDimCp.toString(), 
             menuComandos.cmdDimPastLeft.toString(), menuComandos.cmdDimPastTop.toString(),
             menuComandos.cmdDimPastRight.toString(), menuComandos.cmdDimPastBottom.toString(), menuComandos.cmdDimPastWidth.toString(),
             menuComandos.cmdDimPastHeight.toString(), menuComandos.cmdDimAlignH.toString(), menuComandos.cmdDimAlignV.toString()
@@ -329,11 +297,10 @@ public class Controler {
                     ac.putValue(Acao.MNEMONIC_KEY, KeyEvent.getExtendedKeyCodeForChar(a));
 
                     JMenuItem mi = new JMenuItem(ac);
-                    //mi.setAccelerator(k);
                     if (medt) {
                         i++;
                         if (i == 4 || i == 9 || i == 10 || i == 16) {
-                            menuEditar.addSeparator();// add(new JSeparator());
+                            menuEditar.addSeparator();
                             popup.addSeparator();
                         }
                         menuEditar.add(mi);
@@ -344,11 +311,10 @@ public class Controler {
                         if (menuComandos.cmdNew.toString().equals(ca.command)) {
                             JMenu men = new JMenu(ac);
                             men.setText(ca.texto);
-                            //ac.putValue(Action.ACTION_COMMAND_KEY, "");
 
                             for (Diagrama.TipoDeDiagrama tp : Diagrama.TipoDeDiagrama.values()) {
                                 String tmp = Editor.fromConfiguracao.getValor("Inspector.lst.tipodiagrama." + tp.name().substring(2).toLowerCase());
-                                ac = new Acao(editor, tmp, "Controler.interface.Diagrama.Icone." + tp.name().substring(2), tmp, ca.command);
+                                ac = new Acao(editor, tmp, "Controler.interface.Diagrama.Icone." + tp.name().substring(2), "Controler.comandos." + tp.name().substring(2).toLowerCase() + ".dica", ca.command);
                                 ac.IDX = -1;
                                 ac.normal = false;
 
@@ -372,7 +338,6 @@ public class Controler {
                         }
 
                     }
-                    //} catch (Exception e) {
                 } finally {
                 }
             } else if (justBtns.indexOf(ca.command) > -1) {
@@ -390,7 +355,6 @@ public class Controler {
             }
         }
         JMenuItem quit = menuArquivo.getItem(0);
-        //if ("Exit".equals(quit.getText())) {
         menuArquivo.remove(quit);
         javax.swing.Action ac = quit.getAction();
         KeyStroke k = KeyStroke.getKeyStroke(Editor.fromConfiguracao.getValor("Controler.interface.menu.quit.tecla"));
@@ -401,7 +365,6 @@ public class Controler {
         ac.putValue(Acao.MNEMONIC_KEY, KeyEvent.getExtendedKeyCodeForChar(a));
         menuArquivo.add(new JSeparator());
         menuArquivo.add(quit);
-        //}
         menuEditar.setText(Editor.fromConfiguracao.getValor("Controler.interface.menu.menuEditar.texto"));
         char b = Editor.fromConfiguracao.getValor("Controler.interface.menu.menuEditar.mtecla").charAt(0);
         menuEditar.setMnemonic(b);
@@ -546,6 +509,18 @@ public class Controler {
      * @param path nome da classe
      * @return Imagem
      */
+    /** Interface icon of a diagram type (tabs, trees): the SVG theme icon, else the bitmap. */
+    public javax.swing.Icon getIconeDoTipo(Diagrama.TipoDeDiagrama tipo) {
+        javax.swing.Icon svg = util.Icones.daChave("Controler.interface.Diagrama.Icone." + tipo.name().substring(2), 16);
+        return svg != null ? svg : ImagemDeDiagrama.get(tipo.name());
+    }
+
+    /** Interface icon for a diagram element (navigation trees), as getImagem but SVG first. */
+    public javax.swing.Icon getIconeInterface(String path) {
+        javax.swing.Icon svg = util.Icones.daChave("diagrama." + path + ".img", 16);
+        return svg != null ? svg : getImagem(path);
+    }
+
     public ImageIcon getImagem(String path) {
         String caminhoCompleto = "diagrama." + path + ".img";
         if (ImagemDeDiagrama.containsKey(path)) {

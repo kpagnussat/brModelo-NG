@@ -149,7 +149,6 @@ public class Historico {
         listaDiagramas = null;
 
         HistDiagrama hm = getByDiagrama(mo);
-        //int p = lista.indexOf(hm);
         boolean re = lista.remove(hm);
         if (noLugar == null) {
             atual = null;

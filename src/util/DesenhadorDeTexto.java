@@ -94,14 +94,12 @@ public class DesenhadorDeTexto implements Serializable {
     }
 
     public void setTexto(String Texto) {
-        //if (!this.Texto.equals(Texto)) {
         this.Texto = Texto;
         if (Texto == null || Texto.equals("")) {
             return;
         }
         Textos = Texto.split("\n");
         lbmTexto = null;
-        //}
     }
     private Font font;
 
@@ -127,8 +125,6 @@ public class DesenhadorDeTexto implements Serializable {
     }
 
     public void PinteTexto(Graphics2D g, Color foreColor, Rectangle clientArea, String texto) {
-        //Font bkp = g.getFont();
-        //g.setFont(this.getFont());
         if (!Texto.equals(texto)) {
             setTexto(texto);
         }
@@ -149,7 +145,6 @@ public class DesenhadorDeTexto implements Serializable {
             g.clipRect(clientArea.x, clientArea.y, clientArea.width, clientArea.height);
         }
 
-        //boolean isCentro = isCentrarTextoVertical();
         int recuo = 2;
 
         int x = clientArea.x + recuo + CorretorPosicao.x;
@@ -219,8 +214,6 @@ public class DesenhadorDeTexto implements Serializable {
         if (LimitarAreaDePintura) {
             g.setClip(bkp);
         }
-        //g.drawString(Integer.toString(getFont().getSize()), x, y);
-        //g.setFont(bkp);
     }
     
     public void PinteTexto(Graphics2D g, Rectangle clientArea, String texto) {
@@ -245,7 +238,6 @@ public class DesenhadorDeTexto implements Serializable {
             g.clipRect(clientArea.x, clientArea.y, clientArea.width, clientArea.height);
         }
 
-        //boolean isCentro = isCentrarTextoVertical();
         int recuo = 2;
 
         int x = clientArea.x + recuo + CorretorPosicao.x;
@@ -315,7 +307,6 @@ public class DesenhadorDeTexto implements Serializable {
         if (LimitarAreaDePintura) {
             g.setClip(bkp);
         }
-        //g.drawString(Integer.toString(getFont().getSize()), x, y);
         g.setFont(bkpf);
     }
 
@@ -326,9 +317,7 @@ public class DesenhadorDeTexto implements Serializable {
                 String tmp = Textos[i].isEmpty()? " " : Textos[i];
                 AttributedString attribString = new AttributedString(tmp);
                 attribString.addAttribute(TextAttribute.FONT, getFont());
-                //attribString.addAttribute(TextAttribute.FONT, getFont());
                 AttributedCharacterIterator attribCharIterator = attribString.getIterator();
-                //FontRenderContext frc = new FontRenderContext(null, true, false);
                 FontRenderContext frc = g.getFontRenderContext();
                 lbmTexto[i] = new LineBreakMeasurer(attribCharIterator, frc);
             }

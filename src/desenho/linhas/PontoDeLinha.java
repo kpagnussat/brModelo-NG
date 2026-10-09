@@ -37,7 +37,6 @@ public class PontoDeLinha extends PontoElementar {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Campos">
-    //public PontoDeLinha Proximo;
     public boolean IsTopOrBotton;
     private int posicao = -1;
 
@@ -53,8 +52,6 @@ public class PontoDeLinha extends PontoElementar {
 
     private transient Point down = new Point(0, 0);
     private transient boolean isMouseDown = false;
-    //public boolean AllwaysHide = false;
-    //public int[] Fixacao = new int[]{0, 0, 0};
 
     public boolean isEstaLigado() {
         return getEm() != null;
@@ -95,7 +92,6 @@ public class PontoDeLinha extends PontoElementar {
         this.em = destino;
         if (destino != null) {
             PerformLigacao(destino, true);
-            //this.em.maisLigacao(this);
         }
     }
 
@@ -123,9 +119,6 @@ public class PontoDeLinha extends PontoElementar {
             Elementar res = getMaster().CaptureBaseFromPoint(null, e.getPoint());
             if (res instanceof Forma) {
                 res = res.ProcessaComposicao(e.getPoint());
-//                if (res.isComposto()) {
-//                    res = res.ProcessaComposicao(e.getPoint());
-//                }
                 setEm((Forma) res);
                 if (getEm() != null) {
                     getEm().PosicionePonto(this);
@@ -165,7 +158,6 @@ public class PontoDeLinha extends PontoElementar {
         Rectangle rec = getBounds();
         rec.grow(5, 5);
         InvalidateArea(rec);
-        //ProcessaOverDraw(true);
         return sn;
     }
 
@@ -185,8 +177,6 @@ public class PontoDeLinha extends PontoElementar {
                 down.setLocation(e.getPoint());
                 getDono().reSetBounds();
             }
-            //EmLinha.setTop(getTop());
-            //EmColuna.setLeft(getLeft());
             down.setLocation(e.getPoint());
             ProcessaOverDraw(false);
         }
@@ -292,27 +282,6 @@ public class PontoDeLinha extends PontoElementar {
                 break;
         }
 
-//        if (i == Constantes.Operacao.opMove) {
-//            if (!linha.isSelecionado()) {
-//                Point pt = (Point) evt.getMsg();
-//                DoMove(pt.x, pt.y);
-//                meOrganizeLigacao();
-//            }
-//        } else if (i == Constantes.Operacao.opReenquadre) {
-//            Point pt = (Point) evt.getMsg();
-//            DoMove(pt.x, pt.y);
-//            meOrganizeLigacao();
-//        } else if (i == Constantes.Operacao.opResize) {
-//            //if (isEstaLigado()) {
-//            ReposicioneAfterFormaResize((Forma) evt.getSender());
-//            //}
-//        } else if (i == Constantes.Operacao.opReposicione) {
-//            SimplesmenteReposicione((Forma) evt.getSender());
-//        } else if (i == Constantes.Operacao.opOrganizeLigacoes) {
-//            meOrganizeLigacao();
-//        } else {
-//            super.ReciveNotificacao(evt);
-//        }
     }
 
     private void ReposicioneAfterFormaResize(Forma formaMovida) {
@@ -415,8 +384,6 @@ public class PontoDeLinha extends PontoElementar {
         if (IsTopOrBotton && !isEstaLigado()) {
             Paint bkpP = g.getPaint();
             Rectangle rec = getBounds();
-            //rec.grow(2, 2);
-            //g.setPaint(getMaster().getPontoCorMultSel());
             if (getMaster().IsMultSelecionado() && getDono().isSelecionado()) {
                 g.setPaint(this.getBackColor());
             } else {
@@ -434,7 +401,6 @@ public class PontoDeLinha extends PontoElementar {
             int y = rec.height / 2;
             rec.grow(x + 1, y + 1);
 
-            //rec = new Rectangle(rec.x - x, rec.y - y, rec.width * 2, rec.height * 2);
             Stroke bkp = g.getStroke();
             Paint bkpP = g.getPaint();
 
@@ -486,7 +452,6 @@ public class PontoDeLinha extends PontoElementar {
 
     @Override
     public boolean IsMe(Point p) {
-//        if (IsTopOrBotton && linhaDona.isSelecionado()) {
         if (linhaDona.isSelecionado()) {
             if (!isVisible()) {
                 return super.IsMe(p);
@@ -494,7 +459,6 @@ public class PontoDeLinha extends PontoElementar {
             Rectangle r = getBounds();
             int x = r.width / 2;
             int y = r.height / 2;
-            //r = new Rectangle(r.x - x, r.y - y, r.width * 2, r.height * 2);
             r.grow(x, y);
             return r.contains(p);
         }
@@ -510,7 +474,6 @@ public class PontoDeLinha extends PontoElementar {
         Rectangle r = getBounds();
         int x = r.width / 2;
         int y = r.height / 2;
-        //r = new Rectangle(r.x - x, r.y - y, r.width * 2, r.height * 2);
         r.grow(x + 2, y + 2);
         InvalidateArea(r);
     }
@@ -522,7 +485,6 @@ public class PontoDeLinha extends PontoElementar {
         Rectangle r = getBounds();
         int x = r.width / 2;
         int y = r.height / 2;
-        //r = new Rectangle(r.x - x, r.y - y, r.width * 2, r.height * 2);
         r.grow(x + 2, y + 2);
         InvalidateArea(r);
     }

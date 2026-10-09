@@ -4,7 +4,7 @@
  */
 package controlador.editores;
 
-import com.sun.java.swing.plaf.windows.WindowsBorders.DashedBorder;
+import javax.swing.BorderFactory;
 import desenho.formas.Legenda;
 import java.awt.Color;
 import java.awt.Component;
@@ -22,14 +22,15 @@ import javax.swing.ListCellRenderer;
  */
 public class JListItemParaItemLegenda extends JLabel implements ListCellRenderer {
 
-    final Color HIGHLIGHT_COLOR = new Color(0, 0, 128);
+    final Color HIGHLIGHT_COLOR = util.EstiloUI.cor("List.selectionBackground");
 
     private final boolean ehLina;
     
     public JListItemParaItemLegenda(boolean ehLinha) {
         setOpaque(true);
         setIconTextGap(6);
-        setBorder(new DashedBorder(Color.gray));
+        // Portable replacement for the Windows-only WindowsBorders.DashedBorder (absent from non-Windows JDKs).
+        setBorder(BorderFactory.createEmptyBorder(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
         this.ehLina = ehLinha;
     }
 
@@ -61,11 +62,11 @@ public class JListItemParaItemLegenda extends JLabel implements ListCellRenderer
         setIcon(img);
 
         if (isSelected) {
-            setBackground(HIGHLIGHT_COLOR);
-            setForeground(Color.white);
+            setBackground(util.EstiloUI.cor("List.selectionBackground"));
+            setForeground(util.EstiloUI.cor("List.selectionForeground"));
         } else {
-            setBackground(Color.white);
-            setForeground(Color.black);
+            setBackground(util.EstiloUI.cor("List.background"));
+            setForeground(util.EstiloUI.cor("Label.foreground"));
         }
         
         return this;

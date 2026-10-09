@@ -133,7 +133,6 @@ public class DiagramaConceitual extends Diagrama {
     protected FormaElementar RealiseComando(Point posi) {
         ClearSelect(false);
         FormaElementar resu = null;
-        //Point tmpPt;
         Point pt1, pt2, pt3, pt4;
         FormaElementar obj1, obj2, obj3;
         Forma obj;
@@ -353,14 +352,13 @@ public class DiagramaConceitual extends Diagrama {
                 }
                 obj1 = cliq1.getForma();
                 //obj2 já ok.
-                //if ((obj1 instanceof Entidade || obj1 instanceof EntidadeAssociativa) && (obj2 instanceof Entidade || obj2 instanceof EntidadeAssociativa) && obj1 != obj2) {
                 if ((obj1 instanceof Entidade) && (obj2 instanceof Entidade) && obj1 != obj2) {
                     int a = (Math.min(obj1.getLeftWidth(), obj2.getLeftWidth()) + Math.max(obj1.getLeft(), obj2.getLeft())) / 2;
-                    int b = Math.max(obj1.getTopHeight(), obj2.getTopHeight()); //(Math.min(obj1.getTopHeight(), obj2.getTopHeight()) + Math.max(obj1.getTop(), obj2.getTop())) / 2;
+                    int b = Math.max(obj1.getTopHeight(), obj2.getTopHeight());
                     //largura da união / 2"
                     a += -20; // 40 div 2 = 20
                     //largura da entidade / 3"
-                    b += 40; //Math.min(obj1.getWidth(), obj2.getWidth()) / 2;
+                    b += 40;
 
                     setComando(Controler.Comandos.cmdUniao);
                     Uniao resUni = (Uniao) RealiseComando(new Point(a, b));
@@ -415,14 +413,12 @@ public class DiagramaConceitual extends Diagrama {
                 }
                 pt1 = posi;
                 pt2 = null;
-                //if (obj1 instanceof Entidade || obj1 instanceof EntidadeAssociativa) {
                 if (obj1 instanceof Entidade) {
                     pt2 = new Point(posi.x, obj1.getTopHeight() - 2);
                     pt1 = new Point(posi.x, obj1.getTop() + (int) (obj1.getHeight() * 1.5));
                 }
                 setComando(Controler.Comandos.cmdEspecializacao);
                 resu = RealiseComando(pt1);
-                //if (obj1 instanceof Entidade || obj1 instanceof EntidadeAssociativa) {
                 if (obj1 instanceof Entidade) {
                     obj1.BringToFront();
                     Especializacao espED = (Especializacao) resu;
@@ -443,7 +439,7 @@ public class DiagramaConceitual extends Diagrama {
 
                         liEsp = new Ligacao(this);
                         liEsp.setInteligente(false);
-                        pt2 = espED.getPontosColaterais()[3]; // espED.getMelhorPontoDeLigacao(pt1);
+                        pt2 = espED.getPontosColaterais()[3];
                         pt2 = new Point(pt2.x, pt2.y - 2);
                         pt1 = new Point(pt2.x, pt1.y + 2);
 
@@ -492,10 +488,8 @@ public class DiagramaConceitual extends Diagrama {
                 if (res == null || res instanceof PreLigacao) {
                     att.SetBounds(pt1a.x - 1, pt1a.y - 3, largAtt, (2 * wa));
                     att.BringToFront();
-                    //att.Reenquadre();
                     att.repaint();
                     la.SuperInicie(0, pt1a, new Point(pt1a.x - largAtt, pt1a.y + 4));
-                    //la.Reenquadre();
                 } else {
                     res = res.ProcessaComposicao(posi);
                     Point pt2a = new Point(res.getLeftWidth() + res.getWidth() / 2, res.getTop() + res.getHeight() / 2);
@@ -547,7 +541,6 @@ public class DiagramaConceitual extends Diagrama {
                 if (com == Controler.Comandos.cmdAtributo_Multivalorado) {
                     posi = new Point(mx == 0 ? att.getLeft() + 2 : att.getLeftWidth() - 2, att.getTop());
                     setComando(Controler.Comandos.cmdAtributo);
-                    //posi = att.getBounds().getLocation();
                     FormaElementar tmp = RealiseComando(posi);
                     tmp.DoMove(distancia, - 2);
 
@@ -650,7 +643,7 @@ public class DiagramaConceitual extends Diagrama {
     }
 
     public void LancarEditorDeAtributos() {
-        if ((getListaDeItens().stream().filter(tb -> tb instanceof PreEntidade).count() == 0)) { // ||  !(getSelecionado() instanceof PreEntidade)) {
+        if ((getListaDeItens().stream().filter(tb -> tb instanceof PreEntidade).count() == 0)) {
             JOptionPane.showMessageDialog(Aplicacao.fmPrincipal,
                     Editor.fromConfiguracao.getValor("Controler.interface.mensagem.sem_attr"),
                     Editor.fromConfiguracao.getValor("Controler.interface.mensagem.tit_informacao"),

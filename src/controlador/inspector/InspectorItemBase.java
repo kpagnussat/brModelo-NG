@@ -34,39 +34,23 @@ public class InspectorItemBase extends BaseControlador {
     }
 
     protected final void getCorParaTexto(Graphics g) {
-        if (falhou) {
-            g.setColor(Color.red);
-            return;
-        }
-        if (!CanEdit()) {
-            g.setColor(Color.LIGHT_GRAY);
-            return;
-        }
+        g.setColor(GradePropriedades.texto(this));
+    }
 
-        g.setColor(Color.black);
-//        if (isSelecionado()) {
-//            g.setColor(Color.BLUE);
-//        }
+    /**
+     * Intrinsic row size, so the Inspector's layout manager can size rows from content
+     * (like CSS auto height) instead of a fixed 20px: at least the original 20px, taller
+     * when the theme font needs it. Width is irrelevant: rows stretch to the viewport.
+     */
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(0, Math.max(28, getFontMetrics(getFont()).getHeight() + 10));
     }
 
     protected void setSelecionado(boolean selecionado) {
         this.selecionado = selecionado;
-        if (ondeEditar != null) {
-            if (selecionado) {
-                int tam = (getWidth() / 2) - 2;
-                ondeEditar.setBounds(tam + 3, 1, tam - 2, Criador.altura - 2);
-                add(ondeEditar);//, new org.netbeans.lib.awtextra.AbsoluteConstraints(tam + 3, 1, tam - 2, Criador.altura - 2));
-                ondeEditar.setVisible(true);
-                ondeEditar.requestFocus();
-                validate();
-                ondeEditar.setEnabled(CanEdit());
-                if (ondeEditar instanceof JTextField) {
-                    ((JTextField) ondeEditar).selectAll();
-                }
-            } else {
-                remove(ondeEditar);
-            }
-        }
+        GradePropriedades.selecionar(this, selecionado);
+        DicasInspector.atualizar(this);
         repaint();
     }
 
@@ -78,7 +62,7 @@ public class InspectorItemBase extends BaseControlador {
 
     public InspectorItemBase() {
         super();
-        setLayout(null);//new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setLayout(null);
         setFocusable(true);
     }
     private boolean canEdit = true;
@@ -96,14 +80,14 @@ public class InspectorItemBase extends BaseControlador {
         if (this.canEdit != canEdit) {
             this.canEdit = canEdit;
             if (ondeEditar != null && selecionado) {
-                ondeEditar.setEnabled(CanEdit());
+                GradePropriedades.selecionar(this, true);
             }
         }
     }
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
+        super.paintComponent(g);
         RenderingHints renderHints
                 = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -121,119 +105,21 @@ public class InspectorItemBase extends BaseControlador {
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
 
-        Canvas.setPaint(Color.BLACK);
+        Canvas.setPaint(util.EstiloUI.cor("Label.foreground"));
 
         paint2D(Canvas);
+        paintBorder(g);
+        paintChildren(g);
     }
 
     public void paint2D(Graphics2D g) {
-        int esq = (int) (getWidth() * Criador.getDivisor()) - 2;
-        int dir = getWidth() - (esq + 2);
-        if (isSelecionado() && ondeEditar != null && ondeEditar.isVisible() && ondeEditar.getWidth() != dir - 2) {
-            Dimension d = new Dimension(dir - 2, Criador.altura - 2);
-            ondeEditar.setPreferredSize(d);
-            ondeEditar.setSize(d);
-            ondeEditar.setLocation(esq + 3, 1);
-            ondeEditar.repaint();
-            ondeEditar.validate();
-        }
-//        int tam = (getWidth() / 2) - 2;
-//        if (isSelecionado() && ondeEditar != null && ondeEditar.isVisible() && ondeEditar.getWidth() != tam) {
-//            Dimension d = new Dimension(tam - 2, Criador.altura - 2);
-//            ondeEditar.setPreferredSize(d);
-//            ondeEditar.setSize(d);
-//            ondeEditar.setLocation(tam + 3, 1);
-//            ondeEditar.repaint();
-//            ondeEditar.validate();
-//        }
+        GradePropriedades.posicionarEditor(this);
 
         paintBase(g);
     }
 
     protected void paintBase(Graphics2D g) {
-        Rectangle r = this.getBounds();
-        int esq = (int) (r.width * Criador.getDivisor());
-        int dir = r.width - esq;
-        area = new Rectangle(esq - 2, 0, 4, r.height - 1);
-
-        if (!isSelecionado()) {
-            g.setColor(Color.GRAY);
-            g.drawRoundRect(0, 0, r.width - 1, r.height - 1, 10, 10);
-            g.drawLine(esq, 0, esq, r.height - 1);
-
-            g.setColor(Color.BLACK);
-
-            Rectangle bkp = g.getClipBounds();
-            g.clipRect(0, 0, esq - 1, r.height);
-
-            getCorParaTexto(g);
-            g.drawString(getTexto(), (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-            //g.setColor(Color.BLACK);
-            g.setClip(bkp);
-            g.clipRect(esq + 1, 0, dir - 1, r.height);
-            //getCorParaTexto(g);
-            g.drawString(getTransValor().replaceAll("\n", " | "), esq + (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-
-            g.setClip(bkp);
-
-        } else {
-            g.setColor(Color.BLACK);
-            g.drawRoundRect(0, 0, r.width - 1, r.height - 1, 10, 10);
-            g.drawLine(esq, 0, esq, r.height - 1);
-            Rectangle bkp = g.getClipBounds();
-
-            g.setFont(new Font(this.getFont().getFontName(), Font.BOLD, getFont().getSize()));
-            g.clipRect(0, 0, esq - 1, r.height);
-
-            g.setColor(Color.BLACK);
-
-            getCorParaTexto(g);
-
-            g.drawString(getTexto(), (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-
-            g.setClip(bkp);
-
-        }
-//        Rectangle r = this.getBounds();
-//        int tmp = r.width / 2;
-//        if (!isSelecionado()) {
-//            g.setColor(Color.GRAY);
-//            g.drawRoundRect(0, 0, r.width - 1, r.height - 1, 10, 10);
-//            g.drawLine(tmp, 0, tmp, r.height - 1);
-//
-//            g.setColor(Color.BLACK);
-//
-//            Rectangle bkp = g.getClipBounds();
-//            g.clipRect(0, 0, tmp - 1, r.height);
-//
-//            getCorParaTexto(g);
-//            g.drawString(getTexto(), (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-//            //g.setColor(Color.BLACK);
-//            g.setClip(bkp);
-//            g.clipRect(tmp + 1, 0, tmp - 1, r.height);
-//            //getCorParaTexto(g);
-//            g.drawString(getTransValor().replaceAll("\n", " | "), tmp + (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-//
-//            g.setClip(bkp);
-//
-//        } else {
-//            g.setColor(Color.BLACK);
-//            g.drawRoundRect(0, 0, r.width - 1, r.height - 1, 10, 10);
-//            g.drawLine(tmp, 0, tmp, r.height - 1);
-//            Rectangle bkp = g.getClipBounds();
-//
-//            g.setFont(new Font(this.getFont().getFontName(), Font.BOLD, getFont().getSize()));
-//            g.clipRect(0, 0, tmp - 1, r.height);
-//
-//            g.setColor(Color.BLACK);
-//
-//            getCorParaTexto(g);
-//
-//            g.drawString(getTexto(), (Criador.espaco * 2) + 1, (int) (r.height * 0.72));
-//
-//            g.setClip(bkp);
-//
-//        }
+        GradePropriedades.pintar(this, g);
     }
 
     private JComponent ondeEditar;
@@ -261,9 +147,7 @@ public class InspectorItemBase extends BaseControlador {
         this.propriedade = propriedade;
         setCanEdit(true);
 
-        if (Criador.getEditor().isMostrarTooltips()) {
-            this.setToolTipText(getTransValor());
-        }
+        DicasInspector.atualizar(this);
     }
 
     public String getTexto() {
@@ -292,6 +176,7 @@ public class InspectorItemBase extends BaseControlador {
             return;
         }
         propriedade.valor_string = valor;
+        DicasInspector.atualizar(this);
     }
 
     public void setFalhou(boolean b) {
@@ -327,24 +212,19 @@ public class InspectorItemBase extends BaseControlador {
                 ib = new InspectorItemCor(principal);
                 break;
             case tpTextoLongo:
-                //ib = new InspectorItemTextoLongo(principal);
                 ib = new InspectorItemExtender(principal, InspectorExtenderEditor.TipoDeAcao.tpAcaoDlgTexto);
                 break;
             case tpApenasLeituraTexto:
-                //ib = new InspectorItemApenasLeitura(principal);
                 ib = new InspectorItemExtender(principal, InspectorExtenderEditor.TipoDeAcao.tpReadOnlyTexto);
                 break;
             case tpApenasLeituraCor:
-                //ib = new InspectorItemApenasLeitura(principal, true);
                 ib = new InspectorItemExtender(principal, InspectorExtenderEditor.TipoDeAcao.tpReadOnlyCor);
                 break;
             case tpSelecObject:
                 ib = new InspectorItemExtender(principal, InspectorExtenderEditor.TipoDeAcao.tpAcaoSelectObj);
-                //ib = new InspectorItemSelectObj(principal);
                 break;
             case tpCommand:
                 ib = new InspectorItemExtender(principal, InspectorExtenderEditor.TipoDeAcao.tpAcaoCommand);
-                //ib = new InspectorItemSelectObj(principal);
                 break;
             case tpSeparador:
                 ib = new InspectorItemSeparador(principal);
@@ -385,7 +265,6 @@ public class InspectorItemBase extends BaseControlador {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (isMouseDown) {
-//            setCursor(Cursor.getDefaultCursor());
             isMouseDown = false;
         }
         super.mouseReleased(e);
@@ -402,18 +281,15 @@ public class InspectorItemBase extends BaseControlador {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Criador.PerformSelect(this);
-        if (area != null && area.contains(e.getPoint())) {
-//            setCursor(new Cursor(Cursor.HAND_CURSOR));
-            isMouseDown = true;
-        }
+        GradePropriedades.pressionar(this, e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        super.mouseMoved(e); //To change body of generated methods, choose Tools | Templates.
+        super.mouseMoved(e);
+        repaint();
         if (area != null && area.contains(e.getPoint())) {
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
         } else {
             setCursor(Cursor.getDefaultCursor());
         }

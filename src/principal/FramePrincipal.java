@@ -5,7 +5,6 @@
  */
 package principal;
 
-import controlador.Acao;
 import controlador.Configuer;
 import controlador.Controler;
 import controlador.Controler.menuComandos;
@@ -14,19 +13,13 @@ import controlador.Editor;
 import controlador.ISuperControler;
 import controlador.apoios.TreeItem;
 import desenho.formas.Forma;
-import helper.FormHelp;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.HeadlessException;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -39,7 +32,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import partepronta.FormPartes;
-import util.TratadorDeImagens;
 
 /**
  *
@@ -47,16 +39,18 @@ import util.TratadorDeImagens;
  */
 public class FramePrincipal extends javax.swing.JFrame implements ISuperControler {
 
+    // Keep the existing UI serial identity while retiring the legacy help API.
+    private static final long serialVersionUID = 4568124540668658184L;
+
     /**
      * Creates new form FramePrincipal
      */
     public FramePrincipal() {
+        util.EstiloUI.iniciar();
         initComponents();
         exitMenuItem.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                FramePrincipal.this.setVisible(false);
-//                System.exit(0);
                 Fechador(false);
             }
         });
@@ -73,18 +67,83 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
             setLocationRelativeTo(null);
         }
         DoInit();
-        setTitle("brModelo");
+        ajustarDivisorEsquerdo();
+        // The palette sits alone in a JTabbedPane whose tab title is blank on Unix (see
+        // getBarraBotoesTexto); FlatLaf still paints the selected-tab underline, a stray blue
+        // bar above the palette. Hide the tab area while there is a single tab (FlatLaf only;
+        // other look-and-feels ignore the property).
+        jTabbedPane1.putClientProperty("JTabbedPane.hideTabAreaWithOneTab", true);
+        ajustarDivisorDaPaleta();
+        ApoiosJanelaPrincipal.ajustarDivisorDasDicasAoAbrir(SplitInspector, inspectorDicas2);
+        setTitle("brModelo NG");
+        util.TemaAplicacao.instalar(jToolBar1, MenuEditar);
+        AcabamentoJanela.aplicar(this, barraDiags, jToolBar1, jPanel3, TabInspector,
+                SplitInspector, statusPanel, BarraDeBotoes, Scroller);
+        ApoiosJanelaPrincipal.instalarPaleta(BarraDeBotoes, SplitDiagramas, jTabbedPane1, ScrollerBarraDeBotoes);
+        util.DicasInterface.dica(btnMais, "zoomIn");
+        util.DicasInterface.dica(btnMenos, "zoomOut");
+        util.DicasInterface.dica(lblZoom, "zoom");
+        util.DicasInterface.dica(TreeItensDiagrama, "navigation");
+        util.DicasInterface.dica(MenuVer, "partsView");
+        util.DicasInterface.dica(MenuAdicionar, "partsAdd");
+        util.DicasInterface.dica(MenuSalvarRepo, "partsSave");
+        util.DicasInterface.dica(MenuPartes, "partsMenu");
+        util.DicasInterface.dica(menuVerAtualizacao, "releases");
+        util.DicasInterface.dica(menuSobre, "about");
+        util.DicasInterface.dica(menuAjuda, "help");
+        util.DicasInterface.dica(fileMenu, "fileMenu");
+        util.DicasInterface.dica(MenuEditar, "editMenu");
+        util.DicasInterface.dica(MenuDiagrama, "diagramMenu");
+        util.DicasInterface.dica(menuCMD, "commands");
+        util.DicasInterface.dica(helpMenu, "helpMenu");
+        util.DicasInterface.dica(exitMenuItem, "quit");
+        util.DicasInterface.dica(statusMessageLabel, "status");
+        util.DicasInterface.dica(lblStatus, "status");
+        util.DicasInterface.dica(ScrollerBarraDeBotoes, "palette");
+        TabInspector.setToolTipTextAt(0, util.DicasInterface.texto("properties"));
+        TabInspector.setToolTipTextAt(1, util.DicasInterface.texto("navigation"));
+        TabInspector.setToolTipTextAt(2, util.DicasInterface.texto("config"));
+        jTabbedPane1.setToolTipText(util.DicasInterface.texto("palette"));
+        util.DicasInterface.abas(TabInspector);
+    }
+
+    /**
+     * The GUI builder pins the left column at 251px (SplitMaster divider) whatever it holds.
+     * With GTK fonts/toolbars the column's minimum width is larger, so the Inspector's
+     * scrollbar and row edges ended up clipped under the divider. Widen the column to its
+     * content's minimum when needed; never narrower than the original 251px. Runs after
+     * DoInit(), which adds the diagram toolbar buttons that count toward that minimum.
+     */
+    private void ajustarDivisorEsquerdo() {
+        ApoiosJanelaPrincipal.ajustarDivisorEsquerdo(panSplitInspectors, SplitMaster);
+        ApoiosJanelaPrincipal.mostrarTodasAsAbasAoAbrir(TabInspector, SplitMaster);
+    }
+
+    /**
+     * The GUI builder also pins the diagram/palette divider (SplitDiagramas) at 915px, so the
+     * palette got whatever width the window left over (very wide on large windows, its
+     * buttons stretched by the GridLayout). Once the split has its first real size, give the
+     * palette its preferred width (plus room for its vertical scrollbar); later window resizes
+     * go to the diagram, as resizeWeight=1 already says.
+     */
+    private void ajustarDivisorDaPaleta() {
+        SplitDiagramas.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                if (SplitDiagramas.getWidth() <= 0) {
+                    return;
+                }
+                SplitDiagramas.removeComponentListener(this);
+                ApoiosJanelaPrincipal.ajustarDivisorDaPaleta(SplitDiagramas, jTabbedPane1, ScrollerBarraDeBotoes);
+            }
+        });
     }
 
     private void DoInit() {
         Manager.AjusteTamanho();
         Manager.setFramePrincipal(this);
-        //Manager.PopuleBarraModelo(toolModelos);
         Manager.PopuleBarra(MenuDiagrama);
         Manager.PopuleBarra(BarraDeBotoes);
-        //Manager.PopuleBarra(botoes);
-        //JMenu diagramas = (JMenu)menuBar.add(new JMenu(Editor.fromConfiguracao.getValor("Controler.interface.menu.menuListaDiagramas.texto")), 3);
-        //diagramas.setMnemonic(Editor.fromConfiguracao.getValor("Controler.interface.menu.menuListaDiagramas.mtecla").charAt(0));
         Manager.PopuleMenus(MenuEditar, fileMenu, masterPopUp);
 
         JMenu nv = (JMenu) fileMenu.getItem(0);
@@ -95,14 +154,13 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
             b.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
             b.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
             String s = nv.getItem(i).getAction().getValue(javax.swing.AbstractAction.NAME).toString();
-            b.setToolTipText(s);
+            b.setToolTipText((String) nv.getItem(i).getAction().getValue(javax.swing.Action.SHORT_DESCRIPTION));
             s = nv.getItem(i).getName();
             b.setName(s);
-            //jToolBar1.add(b, i + 5);
             barraDiags.add(b, i);
         }
         JMenuItem fechatudo = new JMenuItem(Editor.fromConfiguracao.getValor("Controler.interface.menu.closeall"));
-        fechatudo.setToolTipText(Editor.fromConfiguracao.getValor(Editor.fromConfiguracao.getValor("Controler.interface.menu.closeall.dica")));
+        fechatudo.setToolTipText(Editor.fromConfiguracao.getValor("Controler.interface.menu.closeall.dica"));
         fechatudo.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -119,13 +177,8 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         Manager.setShowDiagramas(ListadorDeDiagramas);
         Manager.setLabelZoom(lblZoom);
         Manager.setLblStatus(lblStatus);
-        util.BrLogger.setStatus(statusMessageLabel);
-        try {
-            Image img = Configuer.getImageFromResource("Controler.interface.Icone");
-            img = TratadorDeImagens.makeColorTransparent(img, Color.white);
-            this.setIconImage(img);
-        } finally {
-        }
+        BarraStatus.iniciar(lblStatus, btnLogs, this);
+        setIconImages(util.IconeAplicacao.imagens());
 
         ScrollerBarraDeBotoes.getHorizontalScrollBar().setBlockIncrement(100);
         ScrollerBarraDeBotoes.getVerticalScrollBar().setBlockIncrement(100);
@@ -135,78 +188,9 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         btnAbrir.setAction(fileMenu.getItem(1).getAction());
         btnFechar.setAction(fileMenu.getItem(2).getAction());
 
-        for (Acao a : Manager.getControler().ListaDeAcoesEditaveis) {
-            String k = a.getValue(Action.ACTION_COMMAND_KEY).toString();
-            menuComandos mc = menuComandos.valueOf(k);
-            switch (mc) {
-                case cmdSelAnt:
-                    btnAnterior.setAction(a);
-                    break;
-                case cmdSelProx:
-                    btnProximo.setAction(a);
-                    break;
-                case cmdSendToBack:
-                    btnSendToBack.setAction(a);
-                    break;
-                case cmdBringToFront:
-                    btnBringToFront.setAction(a);
-                    break;
-                case cmdUndo:
-                    btnDesfazer.setAction(a);
-                    break;
-                case cmdRendo:
-                    btnRefazer.setAction(a);
-                    break;
-                case cmdMicroAjuste0:
-                    b0.setAction(a);
-                    break;
-                case cmdMicroAjuste1:
-                    b1.setAction(a);
-                    break;
-                case cmdMicroAjuste2:
-                    b2.setAction(a);
-                    break;
-                case cmdMicroAjuste3:
-                    b3.setAction(a);
-                    break;
-
-                case cmdCopyFormat:
-                    b4.setAction(a);
-                    break;
-                case cmdPasteFormat:
-                    b5.setAction(a);
-                    break;
-                case cmdDimPastLeft:
-                    b6.setAction(a);
-                    break;
-                case cmdDimPastTop:
-                    b7.setAction(a);
-                    break;
-                case cmdDimPastRight:
-                    b8.setAction(a);
-                    break;
-                case cmdDimPastBottom:
-                    b9.setAction(a);
-                    break;
-                case cmdDimPastWidth:
-                    b10.setAction(a);
-                    break;
-                case cmdDimPastHeight:
-                    b11.setAction(a);
-                    break;
-
-                case cmdDimAlignH:
-                    b12.setAction(a);
-                    break;
-                case cmdDimAlignV:
-                    b13.setAction(a);
-                    break;
-
-                case cmdSave:
-                    btnSalvar.setAction(a);
-                    break;
-            }
-        }
+        ApoiosJanelaPrincipal.vincularAcoes(Manager,
+                btnAnterior, btnProximo, btnSendToBack, btnBringToFront, btnDesfazer, btnRefazer, b0, b1, b2, b3,
+                b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, btnSalvar);
 
         TreeItensDiagrama.setCellRenderer(new DefaultTreeCellRenderer() {
             @Override
@@ -215,58 +199,24 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
                     boolean isLeaf, int row, boolean focused) {
                 Component c = super.getTreeCellRendererComponent(tree, value,
                         selected, expanded, isLeaf, row, focused);
-                if (value instanceof TreeItem) {
-                    int id = ((TreeItem) value).getId();
-                    if (id == 0) {
-                        setIcon(Manager.getControler().ImagemDeDiagrama.get(Manager.diagramaAtual.getTipo().name()));
-                    } else {
-                        ImageIcon img = Manager.getControler().getImagem(((TreeItem) value).getExtraInfo());
-                        if (img != null) {
-                            setIcon(img);
-                        }
-                    }
-                }
+                ApoiosJanelaPrincipal.renderizarItem(this, value, Manager);
                 return c;
             }
         });
 
-        controladorImpressao = new fmImpressao(this, true);
         Manager.AtualizeTreeNavegacao();
         Manager.diagramaAtual.populeComandos(Manager.getControler().BarraMenu.getItem(0));
         Manager.CarregueConfig();
 
-        //---- Recentes
-        JMenu m = new JMenu(Editor.fromConfiguracao.getValor("Inspector.obj.cfg.recentes"));
-        m.setToolTipText(Editor.fromConfiguracao.getValor("Inspector.dica.cfg.recentes"));
-        fileMenu.add(m, 2);
-        Manager.setMenuRecente(m);
-        JMenuItem jmi = new JMenuItem(Editor.fromConfiguracao.getValor("Inspector.obj.cfg.recentes.limbar"));
-        jmi.setToolTipText(Editor.fromConfiguracao.getValor("Inspector.dica.cfg.recentes.limpar"));
-        jmi.addActionListener(new AbstractAction() {
+        ApoiosJanelaPrincipal.carregarRecentes(fileMenu, Manager, new AbstractAction() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                Manager.setRecentes(new ArrayList<>());
-                JMenuItem mm = Manager.getMenuRecente().getItem(Manager.getMenuRecente().getItemCount() - 1);
-                Manager.getMenuRecente().removeAll();
-                Manager.getMenuRecente().addSeparator();
-                Manager.getMenuRecente().add(mm);
-                Manager.reloadMenuRecentes();
+                ApoiosJanelaPrincipal.limparRecentes(Manager);
             }
         });
-        m.addSeparator();
-        m.add(jmi);
-        ArrayList<String> lst = new ArrayList<>();
-        if (Editor.fromConfiguracao.hasValor("cfg.recentes")) {
-            lst.addAll(Arrays.asList(Editor.fromConfiguracao.getValor("cfg.recentes").split(";")));
-        }
 
-        Manager.setRecentes(lst);
-        Manager.reloadMenuRecentes();
-        m.setEnabled(lst.size() > 0);
-        //End.
-
-        btnPrint.setToolTipText(Editor.fromConfiguracao.getValor("Controler.comandos.print.descricao"));
+        btnPrint.setToolTipText(util.DicasInterface.acao("Controler.comandos.print.descricao"));
 
         if (Manager.LoadAutoSave()) {
             util.Dialogos.ShowMessageInform(this, Editor.fromConfiguracao.getValor("Inspector.obj.msg.autosalvar"));
@@ -342,6 +292,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         statusMessageLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         lblShowAllMSG = new javax.swing.JLabel();
+        btnLogs = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -379,9 +330,8 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         SplitMaster.setDividerLocation(251);
         SplitMaster.setResizeWeight(0.1);
 
-        panSplitInspectors.setBackground(new java.awt.Color(204, 204, 204));
+        panSplitInspectors.setBackground(util.EstiloUI.fundo(panSplitInspectors, "Panel.background"));
 
-        SplitInspector.setBorder(null);
         SplitInspector.setDividerLocation(550);
         SplitInspector.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         SplitInspector.setResizeWeight(1.0);
@@ -394,6 +344,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         TabInspector.setAlignmentX(0.0F);
         TabInspector.setAlignmentY(0.0F);
         TabInspector.setMinimumSize(new java.awt.Dimension(150, 200));
+        TabInspector.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         TabInspector.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 TabInspectorStateChanged(evt);
@@ -442,13 +393,13 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(31, 31, 31)
-                    .addComponent(TabInspector, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TabInspector, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                     .addGap(0, 0, 0)))
         );
 
         SplitInspector.setLeftComponent(jPanel3);
 
-        inspectorDicas2.setBackground(new java.awt.Color(240, 240, 255));
+        inspectorDicas2.setBackground(util.EstiloUI.fundo(inspectorDicas2, "Panel.background"));
         inspectorDicas2.setMinimumSize(new java.awt.Dimension(50, 50));
 
         javax.swing.GroupLayout inspectorDicas2Layout = new javax.swing.GroupLayout(inspectorDicas2);
@@ -482,14 +433,14 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         SplitDiagramas.setDividerLocation(915);
         SplitDiagramas.setResizeWeight(1.0);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(util.EstiloUI.fundo(jPanel1, "Panel.background"));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 51));
+        jPanel2.setBackground(util.EstiloUI.fundo(jPanel2, "Panel.background"));
         jPanel2.setLayout(new java.awt.GridLayout(2, 0));
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.setMinimumSize(new java.awt.Dimension(729, 32));
 
         btnAbrir.setText(bundle.getString("FramePrincipal.jButton2.text")); // NOI18N
         btnAbrir.setActionCommand(bundle.getString("FramePrincipal.btnAbrir.actionCommand")); // NOI18N
@@ -514,7 +465,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         btnFechar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(btnFechar);
 
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/menu_imprimir.png"))); // NOI18N
+        btnPrint.setIcon(util.Icones.de("/imagens/menu_imprimir.png")); // NOI18N
         btnPrint.setText(bundle.getString("FramePrincipal.btnPrint.text")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHideActionText(true);
@@ -602,7 +553,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         jToolBar1.add(b3);
         jToolBar1.add(jSeparator6);
 
-        btnMenos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoommenos.png"))); // NOI18N
+        btnMenos.setIcon(util.Icones.de("/imagens/zoommenos.png")); // NOI18N
         btnMenos.setIconTextGap(2);
         btnMenos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -614,7 +565,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         lblZoom.setText(bundle.getString("FramePrincipal.lblZoom.text")); // NOI18N
         jToolBar1.add(lblZoom);
 
-        btnMais.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoom.png"))); // NOI18N
+        btnMais.setIcon(util.Icones.de("/imagens/zoom.png")); // NOI18N
         btnMais.setIconTextGap(2);
         btnMais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -716,7 +667,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         );
         ListadorDeDiagramasLayout.setVerticalGroup(
             ListadorDeDiagramasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 25, Short.MAX_VALUE)
+            .addGap(0, 31, Short.MAX_VALUE)
         );
 
         jPanel2.add(ListadorDeDiagramas);
@@ -724,7 +675,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         Scroller.setBorder(null);
         Scroller.setDoubleBuffered(true);
 
-        Manager.setBackground(new java.awt.Color(255, 255, 255));
+        Manager.setBackground(util.EstiloUI.fundo(Manager, "mesa"));
         Scroller.setViewportView(Manager);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -737,7 +688,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(Scroller, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE))
         );
@@ -749,9 +700,9 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         ScrollerBarraDeBotoes.setBorder(null);
         ScrollerBarraDeBotoes.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollerBarraDeBotoes.setToolTipText(bundle.getString("FramePrincipal.ScrollerBarraDeBotoes.TabConstraints.tabTitle")); // NOI18N
-        ScrollerBarraDeBotoes.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        BarraDeBotoes.setMinimumSize(new java.awt.Dimension(70, 0));
+        BarraDeBotoes.setMinimumSize(new java.awt.Dimension(40, 0));
+        BarraDeBotoes.setName(""); // NOI18N
         BarraDeBotoes.setLayout(new java.awt.GridLayout(15, 1));
         ScrollerBarraDeBotoes.setViewportView(BarraDeBotoes);
 
@@ -762,11 +713,10 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
 
         SplitMaster.setRightComponent(SplitDiagramas);
 
-        statusPanel.setPreferredSize(new java.awt.Dimension(54, 30));
+        statusPanel.setBorder(BarraStatus.separador());
 
         statusMessageLabel.setText(bundle.getString("FramePrincipal.statusMessageLabel.text")); // NOI18N
         statusMessageLabel.setToolTipText(bundle.getString("FramePrincipal.statusMessageLabel.toolTipText")); // NOI18N
-        statusMessageLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         statusMessageLabel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         jSeparator1.setAlignmentX(0.0F);
@@ -777,7 +727,6 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         lblShowAllMSG.setText(bundle.getString("FramePrincipal.lblShowAllMSG.text")); // NOI18N
         lblShowAllMSG.setToolTipText(bundle.getString("FramePrincipal.lblShowAllMSG.toolTipText")); // NOI18N
         lblShowAllMSG.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        lblShowAllMSG.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         lblShowAllMSG.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblShowAllMSGMouseClicked(evt);
@@ -790,35 +739,45 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
             }
         });
 
-        lblStatus.setBackground(new java.awt.Color(204, 204, 204));
-        lblStatus.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblStatus.setText(bundle.getString("FramePrincipal.lblStatus.text")); // NOI18N
         lblStatus.setToolTipText(bundle.getString("FramePrincipal.lblStatus.toolTipText")); // NOI18N
-        lblStatus.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         lblStatus.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        // Compatibility labels remain declared with their original serialized field types.
+        statusMessageLabel.setVisible(false);
+        lblShowAllMSG.setVisible(false);
+        jSeparator1.setVisible(false);
+        btnLogs.setText("");
+        btnLogs.setBorderPainted(false);
+        btnLogs.setContentAreaFilled(false);
+        btnLogs.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnLogs.setToolTipText("Nenhuma mensagem nova");
 
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(lblShowAllMSG, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(lblStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jSeparator1)
+                .addComponent(btnLogs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8))
+            .addComponent(statusMessageLabel, 0, 0, 0)
+            .addComponent(lblShowAllMSG, 0, 0, 0)
+            .addComponent(jSeparator1, 0, 0, 0)
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblShowAllMSG, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
+            .addComponent(statusMessageLabel, 0, 0, 0)
+            .addComponent(lblShowAllMSG, 0, 0, 0)
+            .addComponent(jSeparator1, 0, 0, 0)
         );
 
         lblStatus.getAccessibleContext().setAccessibleName(bundle.getString("FramePrincipal.lblStatus.AccessibleContext.accessibleName")); // NOI18N
@@ -826,7 +785,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
 
         fileMenu.setText(bundle.getString("FramePrincipal.fileMenu.text")); // NOI18N
 
-        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         exitMenuItem.setMnemonic('r');
         exitMenuItem.setText(bundle.getString("FramePrincipal.exitMenuItem.text")); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -885,7 +844,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         helpMenu.setText(bundle.getString("FramePrincipal.helpMenu.text")); // NOI18N
 
         menuAjuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        menuAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ajuda.png"))); // NOI18N
+        menuAjuda.setIcon(util.Icones.de("/imagens/ajuda.png")); // NOI18N
         menuAjuda.setMnemonic('j');
         menuAjuda.setText(bundle.getString("FramePrincipal.menuAjuda.text")); // NOI18N
         menuAjuda.addActionListener(new java.awt.event.ActionListener() {
@@ -895,7 +854,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         });
         helpMenu.add(menuAjuda);
 
-        menuVerAtualizacao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/download.png"))); // NOI18N
+        menuVerAtualizacao.setIcon(util.Icones.de("/imagens/download.png")); // NOI18N
         menuVerAtualizacao.setText(bundle.getString("FramePrincipal.menuVerAtualizacao.text")); // NOI18N
         menuVerAtualizacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -956,6 +915,11 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
     @Override
     public void DoComandoExterno(Controler.menuComandos c) {
         if (c == Controler.menuComandos.cmdPrint) {
+            // Construct on first use on the EDT: defaultPage() performs native printer
+            // discovery and must not delay showing the main window at startup.
+            if (controladorImpressao == null) {
+                controladorImpressao = new fmImpressao(this, true);
+            }
             fmImpressao fm = controladorImpressao;
             fm.rdMostarAI.setSelected(mostarAreaImpressao);
             fm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -1071,41 +1035,23 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
     }//GEN-LAST:event_TabInspectorStateChanged
 
     private void lblShowAllMSGMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblShowAllMSGMouseEntered
-        lblShowAllMSG.setFont(new Font(lblShowAllMSG.getFont().getName(), Font.BOLD, lblShowAllMSG.getFont().getSize()));
-        lblShowAllMSG.setBackground(Color.yellow);
+        lblShowAllMSG.setFont(lblShowAllMSG.getFont().deriveFont(Font.BOLD));
+        lblShowAllMSG.setBackground(util.EstiloUI.cor("Button.toolbar.hoverBackground"));
     }//GEN-LAST:event_lblShowAllMSGMouseEntered
 
     private void lblShowAllMSGMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblShowAllMSGMouseExited
-        lblShowAllMSG.setFont(new Font(lblShowAllMSG.getFont().getName(), Font.PLAIN, lblShowAllMSG.getFont().getSize()));
-        lblShowAllMSG.setBackground(new Color(240, 240, 240, 0));
+        lblShowAllMSG.setFont(lblShowAllMSG.getFont().deriveFont(Font.PLAIN));
+        lblShowAllMSG.setBackground(util.EstiloUI.cor("Panel.background"));
     }//GEN-LAST:event_lblShowAllMSGMouseExited
 
     private void lblShowAllMSGMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblShowAllMSGMouseClicked
-        FormaLogs fm = new FormaLogs(this, true);
-        fm.setLocationRelativeTo(this);
-        fm.setVisible(true);
-//        if (BrLogger.MSGs.isEmpty()) {
-//            JOptionPane.showMessageDialog(this,
-//                    Editor.fromConfiguracao.getValor("Controler.MSG_STATUS_NO_ERROR"),
-//                    Editor.fromConfiguracao.getValor("Controler.MSG_STATUS_TITLE"),
-//                    JOptionPane.INFORMATION_MESSAGE);
-//        } else if (JOptionPane.showConfirmDialog(this,
-//                Editor.fromConfiguracao.getValor("Controler.MSG_STATUS_TITLE") + ":\n"
-//                + BrLogger.MSGs + "\n\n" + Editor.fromConfiguracao.getValor("Controler.MSG_STATUS_CLEAN"),
-//                Editor.fromConfiguracao.getValor("Controler.MSG_STATUS_TITLE"),
-//                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//            BrLogger.Clean();
-//        }
+        BarraStatus.abrirLog(this);
     }//GEN-LAST:event_lblShowAllMSGMouseClicked
 
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSobreActionPerformed
-        CarregarFormAjuda();
-//        if (!CarregarFormAjuda()) {
-//            return;
-//        }
         FrameSobre fs = new FrameSobre(this, true);
         fs.setLocationRelativeTo(this);
-        fs.Inicie(formAjuda.AjudaMng);
+        fs.Inicie();
         fs.setVisible(true);
     }//GEN-LAST:event_menuSobreActionPerformed
 
@@ -1137,12 +1083,8 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         MenuAdicionar.setEnabled(Manager.diagramaAtual.TemSelecionado());
     }//GEN-LAST:event_MenuPartesMenuSelected
 
-    FormHelp formAjuda = null;
     private void menuAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAjudaActionPerformed
-        if (!CarregarFormAjuda()) {
-            util.Dialogos.ShowMessageInform(this, Editor.fromConfiguracao.getValor("Controler.MSG_HELP_NOT_FOUND"));
-        }
-        formAjuda.setVisible(true);
+        util.AjudaNavegador.abrir(this);
     }//GEN-LAST:event_menuAjudaActionPerformed
 
     private void MenuSalvarRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuSalvarRepoActionPerformed
@@ -1152,22 +1094,13 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
     }//GEN-LAST:event_MenuSalvarRepoActionPerformed
 
     private void menuVerAtualizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVerAtualizacaoActionPerformed
-        FormAtualizar fm = new FormAtualizar();
-        fm.setLocationRelativeTo(this);
-        fm.Inicie(Aplicacao.VERSAO_A + "." + Aplicacao.VERSAO_B + "." + Aplicacao.VERSAO_C);
-        fm.setVisible(true);
+        util.AtualizacoesNG.abrirReleases();
     }//GEN-LAST:event_menuVerAtualizacaoActionPerformed
 
-    public void ReloadHelp() {
-        formAjuda = null;
-    }
 
     private boolean CarregarFormPartes() {
         if (formPartes == null) {
-            formPartes = new FormPartes();
-            formPartes.externalSalvar = MenuSalvarRepo;
-            //formPartes.Mananger = Manager;
-            formPartes.setLocationRelativeTo(this);
+            formPartes = ApoiosJanelaPrincipal.criarFormPartes(this, MenuSalvarRepo);
             if (!formPartes.LoadData()) {
                 formPartes.dispose();
                 formPartes = null;
@@ -1177,17 +1110,6 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         return true;
     }
 
-    private boolean CarregarFormAjuda() {
-        if (formAjuda == null) {
-            formAjuda = new FormHelp();
-            formAjuda.fmp = this;
-            formAjuda.setLocationRelativeTo(this);
-            if (!formAjuda.LoadData()) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public void Fechador(boolean sofecha) throws HeadlessException {
         if (formPartes != null && formPartes.Partes.isMudou() && (!sofecha)) {
@@ -1235,20 +1157,8 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
         Editor.fromConfiguracao.setValor("cfg.location.y", String.valueOf(getLocation().y));
         Editor.fromConfiguracao.setValor("cfg.recentes", tmp);
         if (!sofecha) {
-            if (formAjuda != null && formAjuda.AjudaMng.isMudou()) {
-                if (util.Dialogos.ShowMessageConfirm(this.getRootPane(), Editor.fromConfiguracao.getValor("Controler.MSG_SAVE_HELP")) == JOptionPane.YES_OPTION) {
-                    formAjuda.Salva();
-                }
-            }
-            Manager.EndAutoSave();
-            System.exit(0);
+            Manager.EndAutoSave(() -> System.exit(0));
         }
-//                Editor.fromConfiguracao.getValor("Controler.MSG_CLOSE_TITLE"),
-//                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-//        if (i == JOptionPane.YES_OPTION) {
-//            //Utilidade.configFile.clear();
-//            System.exit(0);
-//        }
     }
 
 
@@ -1318,6 +1228,7 @@ public class FramePrincipal extends javax.swing.JFrame implements ISuperControle
     private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
+    private transient javax.swing.JButton btnLogs;
     private javax.swing.JLabel lblShowAllMSG;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblZoom;

@@ -50,8 +50,6 @@ public class EntidadeAssociativa extends PreEntidadeAssociativa {
         res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "entassociativa.convrelacionamento").setTag(90816));
 
         res.add(InspectorProperty.PropertyFactorySeparador("entidadeasossiativa.relacao"));
-//        res.add(InspectorProperty.PropertyFactoryTexto("nome", "setRelTexto", getRelTexto()));
-//        res.add(InspectorProperty.PropertyFactoryTextoL("observacao", "setRelObservacao", getRelObservacao()));
         String relaName = Editor.getClassTexto(this.getInterno());
         res.add(InspectorProperty.PropertyFactoryTexto("nome", relaName + ".setTexto", this.getInterno().getTexto()));
         res.add(InspectorProperty.PropertyFactoryTextoL("observacao", relaName + ".setObservacao", this.getInterno().getObservacao()));

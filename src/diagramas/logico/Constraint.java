@@ -66,7 +66,7 @@ public class Constraint implements Serializable {
             return;
         }
 
-        float alfa = 1f - getTabela().getAlfa();// 0.2f;
+        float alfa = 1f - getTabela().getAlfa();
         Composite originalComposite = g.getComposite();
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfa));
         Paint bkpp = g.getPaint();
@@ -86,16 +86,16 @@ public class Constraint implements Serializable {
 
         Rectangle bkp = g.getClipBounds();
 
-        ImageIcon img;
+        String img;
         switch (getTipo()) {
             case tpPK:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_PK.img");
+                img = "diagrama.Constraint_PK.img";
                 break;
             case tpFK:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_FK.img");
+                img = "diagrama.Constraint_FK.img";
                 break;
             default:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_UN.img");
+                img = "diagrama.Constraint_UN.img";
         }
         if (!isValidado()) {
             g.drawRoundRect(r.x - 1 + f, r.y + 4 - 1, imgl + 1, imgl + 1, 4, 4);
@@ -103,15 +103,12 @@ public class Constraint implements Serializable {
         if (roqued) {
             Stroke bkps = g.getStroke();
             g.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1, 2}, 0));
-            //g.drawRoundRect(r.x - 1 + f + 2, r.y + f - 1 + 2, imgl + 1 - 4, imgl + 1 - 4, 4, 4);
             g.drawRoundRect(r.x - 1 + f, r.y + 4 - 1, imgl + 1, imgl + 1, 4, 4);
             g.setStroke(bkps);
         }
 
-        if (getTabela().isDisablePainted()) {
-            img = new ImageIcon(util.TratadorDeImagens.dye(img, getTabela().getForeColor()));
-        }
-        g.drawImage(img.getImage(), r.x + f, r.y + 4, imgl, imgl, null);
+        util.Icones.pinteNoPapel(img, g, r.x + f, r.y + 4, imgl,
+                getTabela().isDisablePainted() ? getTabela().getForeColor() : null);
 
         g.clipRect(r.x, r.y, r.width, r.height);
         g.setColor(getTabela().getForeColor());
@@ -128,7 +125,7 @@ public class Constraint implements Serializable {
         Rectangle r = new Rectangle(getTabela().getLeft() + x, getTabela().getTop() + y, getTabela().cmpAltura, getTabela().cmpAltura);
         area = r;
 
-        float alfa = 1f - getTabela().getAlfa();// 0.2f;
+        float alfa = 1f - getTabela().getAlfa();
         Composite originalComposite = g.getComposite();
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfa));
         Paint bkpp = g.getPaint();
@@ -148,16 +145,16 @@ public class Constraint implements Serializable {
 
         Rectangle bkp = g.getClipBounds();
 
-        ImageIcon img;
+        String img;
         switch (getTipo()) {
             case tpPK:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_PK.img");
+                img = "diagrama.Constraint_PK.img";
                 break;
             case tpFK:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_FK.img");
+                img = "diagrama.Constraint_FK.img";
                 break;
             default:
-                img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_UN.img");
+                img = "diagrama.Constraint_UN.img";
         }
         if (!isValidado()) {
             g.drawRoundRect(r.x - 1 + f, r.y + f - 1, imgl + 1, imgl + 1, 4, 4);
@@ -168,10 +165,8 @@ public class Constraint implements Serializable {
             g.drawRoundRect(r.x - 1 + f, r.y + 4 - 1, imgl + 1, imgl + 1, 4, 4);
             g.setStroke(bkps);
         }
-        if (getTabela().isDisablePainted()) {
-            img = new ImageIcon(util.TratadorDeImagens.dye(img, getTabela().getForeColor()));
-        }
-        g.drawImage(img.getImage(), r.x + f, r.y + f, imgl, imgl, null);
+        util.Icones.pinteNoPapel(img, g, r.x + f, r.y + f, imgl,
+                getTabela().isDisablePainted() ? getTabela().getForeColor() : null);
         g.clipRect(r.x, r.y, r.width, r.height);
         g.setColor(getTabela().getForeColor());
         g.setClip(bkp);
@@ -314,7 +309,6 @@ public class Constraint implements Serializable {
     private final ArrayList<Campo> camposDeDestino = new ArrayList<>();
 
     private CONSTRAINT_TIPO tipo = CONSTRAINT_TIPO.tpPK;
-    //private HashMap<Campo, Campo> listaDeCamposKV = new HashMap<>();
     private Constraint constraintOrigem = null;
 
     public Constraint getConstraintOrigem() {
@@ -384,13 +378,13 @@ public class Constraint implements Serializable {
             setValidado(false);
             motivoValidade = V_MOTIVO_CONS_ORIGEM;
         }
-        //InvalidateArea();
     }
 
     public void SetTipo(int tpForInspector) {
         try {
             setTipo(CONSTRAINT_TIPO.values()[tpForInspector]);
         } catch (Exception e) {
+            // Keep the current constraint type when the inspector value is invalid.
         }
     }
 
@@ -422,13 +416,6 @@ public class Constraint implements Serializable {
         return (isNomeada() && !getNome().isEmpty()) ? getNome() : getTipoStr();
     }
 
-//    public HashMap<Campo, Campo> getListaDeCamposKV() {
-//        return listaDeCamposKV;
-//    }
-//
-//    public void setListaDeCamposKV(HashMap<Campo, Campo> listaDeCamposKV) {
-//        this.listaDeCamposKV = listaDeCamposKV;
-//    }
     public void Add(Campo origem, Campo destino, LogicoLinha lig, Constraint orig) {
         novalide = true;
         setConstraintOrigem(orig);
@@ -451,10 +438,6 @@ public class Constraint implements Serializable {
                 camposDeDestino.add(destino);
             }
 // # não usa destino!
-//            else {
-//                camposDeDestino.remove(idx);
-//                camposDeDestino.add(idx, destino);
-//            }
         } else {
             int idx = camposDeDestino.indexOf(destino);
             if (idx == -1) {
@@ -708,9 +691,6 @@ public class Constraint implements Serializable {
 //     *
 //     * @return
 //     */
-//    public boolean isLinkedToTable() {
-//        return getTabelaOrigem() != null && getTabela().getListaDeTabelasLigadas().indexOf(getTabelaOrigem()) > -1;
-//    }
     public static final int TAG_COMMAND_PK = 120420170;
     public static final int TAG_COMMAND_FK = 120420171;
     public static final int TAG_COMMAND_UN = 120420172;

@@ -28,6 +28,15 @@ public class fmImpressao extends javax.swing.JDialog {
         super(parent, modal);
         frame = parent;
         initComponents();
+        util.DicasInterface.dica(rdMostarAI, "printArea");
+        util.DicasInterface.dica(rdProporcional, "printProportional");
+        util.DicasInterface.dica(spinC, "printColumns");
+        util.DicasInterface.dica(spinL, "printRows");
+        util.DicasInterface.dica(btnPreview, "printPreview");
+        util.DicasInterface.dica(btnPrint, "print");
+        util.DicasInterface.dica(btnCfgImprimir, "printerSetup");
+        util.DicasInterface.dica(btnSair, "close");
+        util.LayoutDialogos.impressao(this, jToolBar1, jToolBar2, jScrollPane1, jPanel3);
         prn = prnView.getImpressora();
         SpinnerNumberModel model = new SpinnerNumberModel(3, 1, 20, 1);
         spinC.setModel(model);
@@ -38,6 +47,8 @@ public class fmImpressao extends javax.swing.JDialog {
     public void setDiagrama(Diagrama d) {
         prnView.setDiagrama(d);
         AtualizePaginas();
+        util.Escala.cresca(this);
+        util.AcabamentoDialogos.limitar(this);
     }
 
     util.PrintControler prn;
@@ -132,10 +143,10 @@ public class fmImpressao extends javax.swing.JDialog {
         });
         jToolBar1.add(spinC);
 
-        jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jToolBar2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
-        jToolBar2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
 
         btnPreview.setText(bundle.getString("fmImpressao.btnPreview.text")); // NOI18N
         btnPreview.setFocusable(false);
@@ -150,7 +161,6 @@ public class fmImpressao extends javax.swing.JDialog {
         jToolBar2.add(btnPreview);
         jToolBar2.add(jSeparator1);
 
-        btnPrint.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnPrint.setText(bundle.getString("fmImpressao.btnPrint.text")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -174,7 +184,7 @@ public class fmImpressao extends javax.swing.JDialog {
         });
         jToolBar2.add(btnCfgImprimir);
 
-        panBase.setBackground(new java.awt.Color(151, 151, 151));
+        panBase.setBackground(util.EstiloUI.fundo(panBase, "Panel.background"));
 
         javax.swing.GroupLayout prnViewLayout = new javax.swing.GroupLayout(prnView);
         prnView.setLayout(prnViewLayout);
@@ -232,31 +242,21 @@ public class fmImpressao extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                .addGap(36, 36, 36))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 398, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 402, Short.MAX_VALUE)))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -272,12 +272,6 @@ public class fmImpressao extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCfgImprimirActionPerformed
 
 // Se a configuração da página não estiver de acordo com a impressora da erro na impressão. Por essa razão, removo!
-//    private void btnPageSetupActionPerformed(java.awt.event.ActionEvent evt) {                                             
-//        prn.pageSetup();
-//        prnView.CalculePagina();
-//        AtualizePaginas();
-//        prnView.repaint();
-//    }                                            
 
     private boolean stopEv = false;
     private void spinCStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinCStateChanged
@@ -378,73 +372,4 @@ public class fmImpressao extends javax.swing.JDialog {
         return prnView.getAreaImpressao();
     }
 
-//    private void CarregarMargens() {
-//        Rectangle mar = prnView.Impressora.getMargensMM();
-//        txtTop.setText(String.valueOf(mar.y));
-//        txtLeft.setText(String.valueOf(mar.x));
-//        txtRigth.setText(String.valueOf(mar.width));
-//        txtBotton.setText(String.valueOf(mar.height));
-//        checkTxtEditor(txtTop, false);
-//        checkTxtEditor(txtLeft, false);
-//        checkTxtEditor(txtBotton, false);
-//        checkTxtEditor(txtRigth, false);
-//    }
-//
-//    private void checkTxtEditor(javax.swing.JTextField txt, boolean sn) {
-//        if (sn) {
-//            txt.setBackground(Color.yellow);
-//        } else {
-//            txt.setBackground(Color.white);
-//        }
-//    }
-//
-//    private void AlterarMargens() {
-//        int left = 0, top = 0, ri = 0, bo = 0;
-//        boolean err = false;
-//        Integer r = convInt(txtTop.getText());
-//        if (r == null) {
-//            err = true;
-//            checkTxtEditor(txtTop, true);
-//        } else {
-//            top = r.intValue();
-//            checkTxtEditor(txtTop, false);
-//        }
-//        r = convInt(txtLeft.getText());
-//        if (r == null) {
-//            err = true;
-//            checkTxtEditor(txtLeft, true);
-//        } else {
-//            left = r.intValue();
-//            checkTxtEditor(txtLeft, false);
-//        }
-//        r = convInt(txtBotton.getText());
-//        if (r == null) {
-//            err = true;
-//            checkTxtEditor(txtBotton, true);
-//        } else {
-//            bo = r.intValue();
-//            checkTxtEditor(txtBotton, false);
-//        }
-//        r = convInt(txtRigth.getText());
-//        if (r == null) {
-//            err = true;
-//            checkTxtEditor(txtRigth, true);
-//        } else {
-//            ri = r.intValue();
-//            checkTxtEditor(txtRigth, false);
-//        }
-//        
-//        if (!err) {
-//            prnView.Impressora.setMargensMM(left, top, ri, bo);
-//        }
-//    }
-//
-//    private Integer convInt(String vl) {
-//        try {
-//            int res = Integer.parseInt(vl);
-//            return new Integer(res);
-//        } catch (NumberFormatException e) {
-//            return null;
-//        }
-//    }
 }

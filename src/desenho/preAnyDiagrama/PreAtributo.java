@@ -223,7 +223,7 @@ public class PreAtributo extends FormaNaoRetangularBase {
 
     @Override
     public void DoPaint(Graphics2D g) {
-        if (isAutosize()) {
+        if (isAutosize() && !getMaster().isPinturaExterna()) {
             int largura = g.getFontMetrics(getFont()).stringWidth(getTextoToDraw()) + getHeight() + 4 + 4;
             if (getWidth() != largura) {
                 setStopRaize(true);
@@ -262,7 +262,6 @@ public class PreAtributo extends FormaNaoRetangularBase {
 
     @Override
     protected void PinteRegiao(Graphics2D g) {
-        //super.PinteRegiao(g);//não pinta nada
     }
 
     private transient double z = 0.0;
@@ -270,9 +269,9 @@ public class PreAtributo extends FormaNaoRetangularBase {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
 
         DesenhadorDeTexto txtf = getTextoFormatado();
@@ -282,7 +281,6 @@ public class PreAtributo extends FormaNaoRetangularBase {
                 getWidth() - getHeight() - 2,
                 getHeight() + 2);
 
-        //g.draw(rec);
         txtf.LimitarAreaDePintura = true;
         if (getDirecaoLigacao() != Direcao.Left) {
             txtf.setAlinharDireita(true);
@@ -328,29 +326,11 @@ public class PreAtributo extends FormaNaoRetangularBase {
             return;
         }
         super.calculePontos();
-        //Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
-        //pontoPosi5 = new Point(r.x + r.width, r.y + r.height / 2); //lado 2
-        //pontoPosi7 = new Point(r.x, r.y + r.height / 2); // lado 0
         if (getDirecaoLigacao() == Direcao.Left) {
             pontoPosi4 = pontoPosi6 = pontoPosi5;
         } else {
             pontoPosi4 = pontoPosi6 = pontoPosi7;
         }
-//        if (getDirecaoLigacao() == Direcao.Left) {
-//            pontoPosi4 = new Point(r.x + r.height / 2, r.y); //lado 1
-//            pontoPosi5 = new Point(r.x + r.width, r.y + r.height / 2); //lado 2
-//            pontoPosi6 = new Point(r.x + r.height / 2, r.y + r.height); // lado 3
-//            pontoPosi7 = new Point(r.x, r.y + r.height / 2); // lado 0
-//        } else {
-//            pontoPosi4 = new Point(r.x + r.width - r.height / 2, r.y); //lado 1
-//            pontoPosi5 = new Point(r.x + r.width, r.y + r.height / 2); //lado 2
-//            pontoPosi6 = new Point(r.x + r.width - r.height / 2, r.y + r.height); // lado 3
-//            pontoPosi7 = new Point(r.x, r.y + r.height / 2); // lado 0
-//        }
-        //pontoPosi0 = new Point(pontoPosi7.x, pontoPosi4.y);
-        //pontoPosi1 = new Point(pontoPosi5.x, pontoPosi4.y);
-        //pontoPosi2 = new Point(pontoPosi5.x, pontoPosi6.y);
-        //pontoPosi3 = new Point(pontoPosi7.x, pontoPosi6.y);
     }
 
     @Override
@@ -367,15 +347,6 @@ public class PreAtributo extends FormaNaoRetangularBase {
 
     @Override
     public int retorneProximidade(Point centro) {
-//        int res = super.retorneProximidade(centro);
-//        if (res == 1 || res == 3) {
-//            if (getDirecaoLigacao() == Direcao.Left) {
-//                res = 0;
-//            } else {
-//                res = 2;
-//            }
-//        }
-//        return res;
         calculePontos();
         double dp0 = distance(centro, pontoPosi7);
         double dp2 = distance(centro, pontoPosi5);
@@ -403,13 +374,11 @@ public class PreAtributo extends FormaNaoRetangularBase {
                     return true;
                 }
             } else {
-                //if (forma instanceof PreEntidade) {
                 if (lin.getFormaPontaA() == this || lin.getFormaPontaB() == this) {
                     if (qp == null) {
                         return false;
                     }
                 }
-                //}
                 return (qp == null || qp.getDono() == lin);
             }
         }

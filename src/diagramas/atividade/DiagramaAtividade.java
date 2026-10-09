@@ -55,7 +55,6 @@ public class DiagramaAtividade extends Diagrama {
     protected FormaElementar RealiseComando(Point posi) {
         ClearSelect(false);
         FormaElementar resu = null;
-        //Point tmpPt;
         Point pt1, pt2;
         FormaElementar obj1, obj2;
         Elementar res;
@@ -156,60 +155,5 @@ public class DiagramaAtividade extends Diagrama {
         return resu;
     }
 
-//    @Override
-//    public boolean InfoDiagrama_LoadFromXML(Document doc, boolean colando) {
-//
-//        HashMap<Element, FormaElementar> link = new HashMap<>();
-//
-//        try {
-//            NodeList nodeLst = doc.getElementsByTagName(Diagrama.nodePrincipal);
-//            Node mer = nodeLst.item(0);
-//            nodeLst = mer.getChildNodes();
-//            if (colando) {
-//                ClearSelect(true);
-//            }
-//            this.isLoadCreate = true;
-//            this.isCarregando = true;
-//            int maxID = 0;
-//            for (int s = 0; s < nodeLst.getLength(); s++) {
-//                Node fstNode = nodeLst.item(s);
-//                if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-//                    Element fstElmnt = (Element) fstNode;
-//                    FormaElementar res = runCriadorFromXml(fstElmnt, colando);
-//                    if (res == null) {
 //                        ////// juntar todos os objetos alienígenas para mostrá-los na mensagem de erro.
-//                        util.BrLogger.Logger("ERROR_DIAGRAMA_LOAD", "Lixo encontrado: " + fstElmnt.getNodeName() + " [" + fstElmnt.getTextContent() + "]");
-//                        continue;
-//                    }
-//                    if (!colando) {
-//                        maxID = Math.max(maxID, res.getID());
-//                    }
-//                    link.put(fstElmnt, res);
-//                }
-//            }
-//            if (!colando) {
-//                TotalID = maxID;
-//            }
-//            this.isLoadCreate = false;
-//
-//            for (Element el : link.keySet()) {
-//                FormaElementar proc = link.get(el);
-//                proc.CommitXML(el, link);
-//            }
-//            this.isCarregando = false;
-//
-//            if (colando) {
-//                ReestrutureSelecao(((Element) mer).getAttribute("FIRST_SEL"), link);
-//            }
-//            PerformInspector();
-//
-//        } catch (DOMException | NullPointerException e) {
-//            util.BrLogger.Logger("ERROR_DIAGRAMA_LOAD", e.getMessage());
-//            this.isLoadCreate = false;
-//            this.isCarregando = false;
-//            return false;
-//        }
-//        repaint();
-//        return true;
-//    }
 }

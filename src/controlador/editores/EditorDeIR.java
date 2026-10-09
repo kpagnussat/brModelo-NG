@@ -29,7 +29,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -43,6 +42,17 @@ public class EditorDeIR extends javax.swing.JDialog {
     public EditorDeIR(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.DicasInterface.dica(comboTabelas, "table");
+        util.DicasInterface.dica(Adicionar, "constraintFieldAdd");
+        util.DicasInterface.dica(chkIsnomeada, "constraintNamed");
+        util.DicasInterface.dica(txtNome, "constraintName");
+        util.DicasInterface.dica(mostrador, "ddl");
+        util.DicasInterface.dica(btnPronto, "done");
+        util.LayoutDialogos.pares(jPanel1, "Chave primária", jLabel1, comboTabelas, chkIsnomeada, txtNome);
+        jLabel2.setVisible(false);
+        util.LayoutIr.montar(this, jPanel1, null, null, jToolBar1,
+                jScrollPane1, mostrador, jScrollPane2, jPanel2,
+                null, null, null, null, null);
     }
 
     /**
@@ -71,7 +81,7 @@ public class EditorDeIR extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         setTitle(bundle.getString("EditorDeCampos.title")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(Editor.fromConfiguracao.getValor("Inspector.obj.constraint.key")));
+        jPanel1.setBorder(util.AcabamentoDialogos.bordaSecao(jPanel1, Editor.fromConfiguracao.getValor("Inspector.obj.constraint.key")));
 
         comboTabelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboTabelas.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +121,7 @@ public class EditorDeIR extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboTabelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -124,7 +134,7 @@ public class EditorDeIR extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        Adicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mais.png"))); // NOI18N
+        Adicionar.setIcon(util.Icones.de("/imagens/mais.png")); // NOI18N
         Adicionar.setText(bundle.getString("EditorDeIR.Adicionar.Campo")); // NOI18N
         Adicionar.setFocusable(false);
         Adicionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -136,11 +146,11 @@ public class EditorDeIR extends javax.swing.JDialog {
         });
         jToolBar1.add(Adicionar);
 
-        Principal.setBackground(new java.awt.Color(204, 204, 204));
+        Principal.setBackground(util.EstiloUI.fundo(Principal, "Panel.background"));
         Principal.setLayout(null);
         jScrollPane1.setViewportView(Principal);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         btnPronto.setText(bundle.getString("EditorDeCampos.Fechar")); // NOI18N
         btnPronto.addActionListener(new java.awt.event.ActionListener() {
@@ -167,7 +177,7 @@ public class EditorDeIR extends javax.swing.JDialog {
 
         mostrador.setEditable(false);
         mostrador.setColumns(20);
-        mostrador.setRows(5);
+        mostrador.setRows(3);
         jScrollPane2.setViewportView(mostrador);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -183,9 +193,9 @@ public class EditorDeIR extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -275,14 +285,15 @@ public class EditorDeIR extends javax.swing.JDialog {
 
 
         javax.swing.JPanel ItemPan = new javax.swing.JPanel();
-        final int altura = 37;
+        int altura = 37; // minimum row height; grows with the theme font below
 
         ItemPan.setSize(largura, altura);
         java.awt.FlowLayout lay = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5);
         ItemPan.setLayout(lay);
 
         chkCampo.setText(cmp.getTexto());
-        chkCampo.setPreferredSize(new Dimension(120, 23));
+        chkCampo.setToolTipText("<html>" + util.DicasInterface.texto("constraintField") + "<br>" + util.DicasInterface.escape(cmp.getTexto()) + "</html>");
+
         ItemPan.add(chkCampo);
 
         lblTipo.setText(bundle.getString("EditorDeCampos.lblTipo")); // NOI18N
@@ -296,7 +307,7 @@ public class EditorDeIR extends javax.swing.JDialog {
         }
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel(tipos.toArray()));
         comboTipo.setSelectedItem(tipo_txt);
-        comboTipo.setPreferredSize(new Dimension(73, 20));
+
         ItemPan.add(comboTipo);
 
         chkfk.setText(bundle.getString("EditorDeIR.chkFK")); // NOI18N
@@ -307,23 +318,17 @@ public class EditorDeIR extends javax.swing.JDialog {
         chUnique.setSize(new Dimension(51, 23));
         ItemPan.add(chUnique);
 
-        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir.png"))); // NOI18N
+        btnExcluir.setIcon(util.Icones.de("/imagens/excluir.png")); // NOI18N
         btnExcluir.setToolTipText(bundle.getString("EditorDeCampos.tooltip.excluir")); // NOI18N
-        btnExcluir.setPreferredSize(new Dimension(49, 25));
+
         ItemPan.add(btnExcluir);
 
-        Principal.add(ItemPan);
-        if (largura == 0) {
-            largura = lay.preferredLayoutSize(ItemPan).width;
-        }
-        ItemPan.setBounds(0, v, largura, altura);
-        v += altura + 3;
-        Principal.setPreferredSize(new Dimension(largura, v));
+        util.LinhasDialogos.adicionar(Principal, ItemPan);
+        chkCampo.setToolTipText("<html>" + util.DicasInterface.texto("constraintField") + "<br>" + util.DicasInterface.escape(cmp.getTexto()) + "</html>");
 
         chkCampo.setSelected(cmp.isKey());
         chkfk.setSelected(cmp.isFkey());
         chUnique.setSelected(cmp.isUnique());
-        //chUnique.setEnabled(false);
         chUnique.setToolTipText(Editor.fromConfiguracao.getValor("Inspector.dica.campo.unique"));
         
         chkfk.addItemListener((java.awt.event.ItemEvent evt) -> {
@@ -374,7 +379,7 @@ public class EditorDeIR extends javax.swing.JDialog {
             chkfk.setEnabled(false);
             btnExcluir.setEnabled(false);
             comboTipo.setEnabled(false);
-            ItemPan.setBackground(Color.lightGray);
+            ItemPan.setBackground(util.EstiloUI.fundo(ItemPan, "Panel.background"));
             Done();
         });
         
@@ -508,6 +513,7 @@ public class EditorDeIR extends javax.swing.JDialog {
             DoneTexto();
         });
         
+        util.LayoutIr.dimensionar(this, Principal, jScrollPane1, mostrador, jScrollPane2);
     }
 
     private Tabela selecionada = null;
@@ -528,6 +534,7 @@ public class EditorDeIR extends javax.swing.JDialog {
     private void Popule(Tabela sel) {
         populando = true;
         Principal.removeAll();
+        Principal.setPreferredSize(null);
         Principal.validate();
         Itens.clear();
         v = 0;

@@ -74,7 +74,6 @@ public class PontoDeForma extends PontoElementar {
         }
     }
     Point down = new Point(0, 0);
-//    Point inidown = new Point(0, 0);
     boolean isMouseDown = false;
     public boolean AllwaysHide = false;
     // </editor-fold>
@@ -85,20 +84,17 @@ public class PontoDeForma extends PontoElementar {
         super.mousePressed(e);
         isMouseDown = true;
         down = new Point(e.getX(), e.getY());
-//        inidown = new Point(e.getX(), e.getY());
+        controlador.EncaixeGrade.iniciar(this, e, getDono().getBounds());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         isMouseDown = false;
+        controlador.EncaixeGrade.terminar(this);
         Forma dono = (Forma) getDono();
         dono.Reenquadre();
         dono.DoRaizeReenquadreReposicione();
         super.mouseReleased(e);
-//        Point enddown = new Point(e.getX(), e.getY());
-//        if (!enddown.equals(inidown)) {
-//            dono.DoMuda();
-//        }
     }
 
     @Override
@@ -108,7 +104,11 @@ public class PontoDeForma extends PontoElementar {
         int Y = e.getY();
         if (isMouseDown && !getDono().isAncorado()) {
             if (((X - down.getX()) != 0) || ((Y - down.getY()) != 0)) {
-                getDono().reSetBounds(getPosicao(), getLeft() + X - down.x, getTop() + Y - down.y);
+                if (controlador.EncaixeGrade.ativo()) {
+                    controlador.EncaixeGrade.dimensionar(this, e);
+                } else {
+                    getDono().reSetBounds(getPosicao(), getLeft() + X - down.x, getTop() + Y - down.y);
+                }
                 down.setLocation(e.getPoint());
             }
         }

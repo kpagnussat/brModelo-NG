@@ -42,6 +42,16 @@ public class EditorDeCampos extends javax.swing.JDialog {
     public EditorDeCampos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.DicasInterface.dica(comboTabelas, "table");
+        util.DicasInterface.dica(txtTabela, "tableName");
+        util.DicasInterface.dica(Adicionar, "fieldAdd");
+        util.DicasInterface.dica(btnPronto, "done");
+        util.AcabamentoDialogos.editor(this, jPanel1,
+                util.AcabamentoDialogos.coluna(util.LayoutDialogos.adicoes(jToolBar1), jScrollPane1), jPanel2);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(util.AcabamentoDialogos.px(760), util.AcabamentoDialogos.px(260)));
+        util.LayoutDialogos.pares(jPanel1, "Tabela", lblTabelas, comboTabelas, jLabel1, txtTabela);
+        pack();
+        util.AcabamentoDialogos.limitar(this);
     }
 
     /**
@@ -69,7 +79,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         setTitle(bundle.getString("EditorDeCampos.title")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("EditorDeCampos.tituloTabela"))); // NOI18N
+        jPanel1.setBorder(util.AcabamentoDialogos.bordaSecao(jPanel1, bundle.getString("EditorDeCampos.tituloTabela"))); // NOI18N
 
         lblTabelas.setText(bundle.getString("EditorDeCampos.Tabela.selecionada")); // NOI18N
 
@@ -87,7 +97,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(comboTabelas, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -109,7 +119,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        Adicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/mais.png"))); // NOI18N
+        Adicionar.setIcon(util.Icones.de("/imagens/mais.png")); // NOI18N
         Adicionar.setText(bundle.getString("EditorDeCampos.Adicionar.Campo")); // NOI18N
         Adicionar.setFocusable(false);
         Adicionar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -134,11 +144,11 @@ public class EditorDeCampos extends javax.swing.JDialog {
         });
         jToolBar1.add(Adbtxt);
 
-        Principal.setBackground(new java.awt.Color(204, 204, 204));
+        Principal.setBackground(util.EstiloUI.fundo(Principal, "Panel.background"));
         Principal.setLayout(null);
         jScrollPane1.setViewportView(Principal);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         btnPronto.setText(bundle.getString("EditorDeCampos.Fechar")); // NOI18N
         btnPronto.addActionListener(new java.awt.event.ActionListener() {
@@ -175,9 +185,9 @@ public class EditorDeCampos extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                 .addGap(1, 1, 1)
@@ -195,7 +205,6 @@ public class EditorDeCampos extends javax.swing.JDialog {
 
     private void AdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdicionarActionPerformed
         Campo c = getSelecionada().Add(Editor.fromConfiguracao.getValor("diagrama.Campo.nome"));
-        //c.setTexto(Editor.fromConfiguracao.getValor("diagrama.Campo.nome"));
         AdicionarPainel(c);
         getSelecionada().DoMuda();
     }//GEN-LAST:event_AdicionarActionPerformed
@@ -231,7 +240,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
     
     public void AdicionarPainel(Campo cmp) {
         javax.swing.JPanel ItemPan = new javax.swing.JPanel();
-        final int altura = 37;
+        int altura = 37; // minimum row height; grows with the theme font below
 
         ItemPan.setSize(largura, altura);
         java.awt.FlowLayout lay = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5);
@@ -253,7 +262,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
         ItemPan.add(lblNome);
 
         txtNome.setToolTipText("");
-        txtNome.setPreferredSize(new Dimension(190, 20));
+
         ItemPan.add(txtNome);
         
         lblTipo.setText(bundle.getString("EditorDeCampos.lblTipo")); // NOI18N
@@ -266,7 +275,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
             tipos.add(tipo_txt);
         }
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel(tipos.toArray()));
-        comboTipo.setPreferredSize(new Dimension(73, 20));
+
         ItemPan.add(comboTipo);
         
         chkpk.setText(bundle.getString("EditorDeCampos.chkPK")); // NOI18N
@@ -281,18 +290,12 @@ public class EditorDeCampos extends javax.swing.JDialog {
         chUnique.setSize(new Dimension(51, 23));
         ItemPan.add(chUnique);
 
-        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/excluir.png"))); // NOI18N
+        btnExcluir.setIcon(util.Icones.de("/imagens/excluir.png")); // NOI18N
         btnExcluir.setToolTipText(bundle.getString("EditorDeCampos.tooltip.excluir")); // NOI18N
         ItemPan.add(btnExcluir);
-        btnExcluir.setPreferredSize(new Dimension(49, 25));
 
-        Principal.add(ItemPan);
-        if (largura == 0) {
-            largura = lay.preferredLayoutSize(ItemPan).width;
-        }
-        ItemPan.setBounds(0, v, largura, altura);
-        v += altura + 3;
-        Principal.setPreferredSize(new Dimension(largura, v));
+
+        util.LinhasDialogos.adicionar(Principal, ItemPan);
         
         txtNome.setText(cmp.getTexto());
         chkfk.setSelected(cmp.isFkey());
@@ -311,7 +314,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
             lblTipo.setEnabled(false);
             chUnique.setEnabled(false);
             btnExcluir.setEnabled(false);
-            ItemPan.setBackground(Color.lightGray);
+            ItemPan.setBackground(util.EstiloUI.fundo(ItemPan, "Panel.background"));
         });
 
         chkfk.addItemListener((java.awt.event.ItemEvent evt) -> {
@@ -472,6 +475,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
         });
         
         setSelecionada(sel);
+        util.Escala.alargue(this, jScrollPane1);
     }
 
     private Tabela selecionada = null;
@@ -489,6 +493,7 @@ public class EditorDeCampos extends javax.swing.JDialog {
 
     private void Popule(Tabela sel) {
         Principal.removeAll();
+        Principal.setPreferredSize(null);
         Principal.validate();
         v = 0;
         sel.getCampos().stream().forEach(c -> AdicionarPainel(c));

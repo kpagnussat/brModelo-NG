@@ -36,7 +36,6 @@ public class TratadorDeImagens {
     public static Image makeColorTransparent(Image im, final Color color) {
         //(C)
         //Copiado da internet: 13/02/2011 - http://www.rgagnon.com/javadetails/java-0265.html e http://www.coderanch.com/t/331731/GUI/java/Resize-ImageIcon
-        //
 
         ImageFilter filter = new RGBImageFilter() {
             // the color we are looking for... Alpha bits are set to opaque

@@ -122,7 +122,6 @@ public class ProcessadorExprSimples {
             }
         }
         expr = str.toString();
-        //System.out.println(expr + " [fim]");
 
         str = new StringBuilder();
         String palavra = "";
@@ -145,7 +144,7 @@ public class ProcessadorExprSimples {
                         }
                         BigDecimal p = new BigDecimal(palavra);
                         if (negativo) {
-                            p = p.negate(); // *= -1;
+                            p = p.negate();
                             negativo = false;
                         }
                         num.add(p);
@@ -180,19 +179,19 @@ public class ProcessadorExprSimples {
             try {
                 switch (op) {
                     case "+":
-                        res = res.add(v1);// += v1;
+                        res = res.add(v1);
                         break;
                     case "-":
-                        res = res.subtract(v1);// -= v1;
+                        res = res.subtract(v1);
                         break;
                     case "*":
-                        res = res.multiply(v1);// *= v1;
+                        res = res.multiply(v1);
                         break;
                     case "/":
-                        res = res.divide(v1, 5, RoundingMode.FLOOR);// /= v1;
+                        res = res.divide(v1, 5, RoundingMode.FLOOR);
                         break;
                     case "%":
-                        res = res.remainder(v1);// %= v1;
+                        res = res.remainder(v1);
                         break;
                     case "^":
                         res = res.pow(v1.intValueExact());
@@ -203,7 +202,7 @@ public class ProcessadorExprSimples {
                 return "";
             }
         }
-        return res.toString(); // Double.toString(res);
+        return res.toString();
     }
 
     //reescrever nos processadores mais sofisticados

@@ -6,7 +6,6 @@ package desenho.formas;
 
 import desenho.Elementar;
 import desenho.FormaElementar;
-import desenho.ElementarListener;
 import desenho.PontoElementar;
 import controlador.Editor;
 import controlador.Diagrama;
@@ -25,7 +24,6 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import util.Constantes;
@@ -58,7 +56,7 @@ public class Forma extends FormaElementar {
     }
 
     public Forma(Diagrama diagrama, String texto) {
-        this(diagrama);//super(diagrama);
+        this(diagrama);
         this.SetTexto(diagrama.Nomeie(texto));
     }
 
@@ -160,26 +158,11 @@ public class Forma extends FormaElementar {
 //    /**
 //     * Centraliza ou não o texto na Base
 //     */
-//    public void setCentrarTextox(boolean CentrarTexto) {
-//        if (this.CentrarTextox == CentrarTexto) {
-//            return;
-//        }
-//        this.CentrarTextox = CentrarTexto;
-//        InvalidateArea();
-//        DoMuda();
-//    }
     // <editor-fold defaultstate="collapsed" desc="Ligaçoes">
-    //protected int qtdLigacoes = 0;
-//    public int getQtdLigacoes() {
-//        return qtdLigacoes;
-//    }
-//
     public void menosLigacao(PontoDeLinha aThis) {
-        //qtdLigacoes--;
     }
 
     public void maisLigacao(PontoDeLinha aThis) {
-        //qtdLigacoes++;
     }
 
     // </editor-fold>
@@ -324,7 +307,7 @@ public class Forma extends FormaElementar {
     @Override
     public void Reposicione() {
         PontoElementar[] pontos = getPontos();
-        if ((pontos[0] == null)/* || (isNulo())*/) {
+        if ((pontos[0] == null)) {
             return;
         }
         for (int i = 0; i < pontos.length; i++) {
@@ -425,13 +408,8 @@ public class Forma extends FormaElementar {
 
     @Override
     public void DoPaint(Graphics2D g) {
-        //g.draw(getSuperArea());
-//        if (isAtualizando()) {
-//            return;
-//        }
         super.DoPaint(g);
         PinteTexto(g);
-        //teste: g.drawString(Integer.toString(getListaDePontosLigados().size()), getLeft() + 5, getTop() + 15);
 
         if (dragging && getMaster().getEditor().isMostrarDimensoesAoMover()) {
             Stroke bkp = g.getStroke();
@@ -465,10 +443,8 @@ public class Forma extends FormaElementar {
 
     protected void DoPaintDoks(Graphics2D g) {
         Rectangle rec = Utilidades.Grow(getBounds(), 1, 1, -1);
-        //rec.grow(-2, -2);
         Paint bkpP = g.getPaint();
         g.setPaint(Color.yellow);
-        //g.drawRect(rec.x, rec.y, rec.width -2, rec.height -2);
         g.drawRect(rec.x, rec.y, rec.width, rec.height);
         g.setPaint(bkpP);
     }
@@ -483,9 +459,11 @@ public class Forma extends FormaElementar {
      */
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        // Keyed on the scale actually painted at (zoom, or the print preview's reduced copy),
+        // so a layout made for one surface is not reused on the other.
+        if (g.getTransform().getScaleX() != z) {
             TextoFormatado = null;
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         getTextoFormatado().PinteTexto(g, getForeColor(), getArea(), getTexto());
     }
@@ -523,7 +501,7 @@ public class Forma extends FormaElementar {
         if (!needRecalPts) {
             return;
         }
-        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
         pontoPosi4 = new Point(r.x + r.width / 2, r.y); //lado 1
         pontoPosi5 = new Point(r.x + r.width, r.y + r.height / 2); //lado 2
         pontoPosi6 = new Point(r.x + r.width / 2, r.y + r.height); // lado 3
@@ -564,7 +542,6 @@ public class Forma extends FormaElementar {
         int mx = retorneProximidade(centro);
 
         int recuo = -1;
-        //int corecuo = 1;
 
         switch (mx) {
             case 0:
@@ -577,18 +554,18 @@ public class Forma extends FormaElementar {
                 break;
             case 2:
                 ponto.setLado(2);
-                ponto.setLeft(getLeftWidth() - ponto.getWidth() / 2 /*+ corecuo*/);
+                ponto.setLeft(getLeftWidth() - ponto.getWidth() / 2 );
                 break;
             case 3:
                 ponto.setLado(3);
-                ponto.setTop(getTopHeight() - ponto.getHeight() / 2 /*+ corecuo*/);
+                ponto.setTop(getTopHeight() - ponto.getHeight() / 2 );
                 break;
         }
 
     }
 
     public int retorneProximidade(Point centro) {
-        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
         int[] vl = new int[4];
         vl[0] = centro.x - r.x;
         vl[2] = r.x + r.width - centro.x;
@@ -621,36 +598,15 @@ public class Forma extends FormaElementar {
     }
 
     public ArrayList<PontoDeLinha> getListaDePontosLigados() {
-        ArrayList<PontoDeLinha> res = new ArrayList<>();
-        List<ElementarListener> lst = getListeners();
-        if (lst != null) {
-            for (ElementarListener el : lst) {
-                //if (el instanceof PontoDeLinha) { //alterado em 27/07/2014 - realmente está ligado?
-                if (el instanceof PontoDeLinha && ((PontoDeLinha) el).getEm() == this) {
-                    res.add((PontoDeLinha) el);
-                }
-            }
-        }
-        return res;
+        return LigacoesDaForma.getListaDePontosLigados(this);
     }
 
     public List<Linha> getListaDeLigacoes() {
-        return getListaDePontosLigados().stream().map(p -> p.getDono()).collect(Collectors.toList());
+        return LigacoesDaForma.getListaDeLigacoes(this);
     }
 
     public ArrayList<Forma> getListaDeFormasLigadas(Forma exceto) {
-        if (exceto == null) {
-            return getListaDeFormasLigadas();
-        }
-        ArrayList<PontoDeLinha> pontos = getListaDePontosLigados();
-        ArrayList<Forma> outrasPontas = new ArrayList<>();
-        for (PontoDeLinha pt : pontos) {
-            Forma op = pt.getDono().getOutraPonta(this);
-            if (op != null && op != exceto && outrasPontas.indexOf(op) == -1) {
-                outrasPontas.add(op);
-            }
-        }
-        return outrasPontas;
+        return LigacoesDaForma.getListaDeFormasLigadas(this, exceto);
     }
 
     /**
@@ -660,61 +616,17 @@ public class Forma extends FormaElementar {
      * @return
      */
     public ArrayList<Forma> getListaDeFormasLigadasNaoExclusiva(Class destaClasse) {
-        ArrayList<PontoDeLinha> pontos = getListaDePontosLigados();
-        ArrayList<Forma> outrasPontas = new ArrayList<>();
-        for (PontoDeLinha pt : pontos) {
-            Forma op = pt.getDono().getOutraPonta(this);
-            if (op != null) {
-                if (destaClasse.isAssignableFrom(op.getClass())) {
-                    outrasPontas.add(op);
-                }
-            }
-        }
-        return outrasPontas;
+        return LigacoesDaForma.getListaDeFormasLigadasNaoExclusiva(this, destaClasse);
     }
 
     public ArrayList<Forma> getListaDeFormasLigadas(Class destaClasse) {
-        ArrayList<PontoDeLinha> pontos = getListaDePontosLigados();
-        ArrayList<Forma> outrasPontas = new ArrayList<>();
-        for (PontoDeLinha pt : pontos) {
-            Forma op = pt.getDono().getOutraPonta(this);
-            if (op != null) {
-                if (destaClasse.isAssignableFrom(op.getClass())) {
-                    if (outrasPontas.indexOf(op) == -1) {
-                        outrasPontas.add(op);
-                    }
-                }
-            }
-        }
-        return outrasPontas;
+        return LigacoesDaForma.getListaDeFormasLigadas(this, destaClasse);
     }
 
     public ArrayList<Forma> getListaDeFormasLigadas() {
-        ArrayList<PontoDeLinha> pontos = getListaDePontosLigados();
-        ArrayList<Forma> outrasPontas = new ArrayList<>();
-        for (PontoDeLinha pt : pontos) {
-            Forma op = pt.getDono().getOutraPonta(this);
-            if (op != null && outrasPontas.indexOf(op) == -1) {
-                outrasPontas.add(op);
-            }
-        }
-        return outrasPontas;
+        return LigacoesDaForma.getListaDeFormasLigadas(this);
     }
 
-//    public void getListaDeFormasLigadas(ArrayList<Forma> resu) {
-//        ArrayList<PontoDeLinha> pontos = getListaDePontosLigados();
-//        ArrayList<Forma> outrasPontas = new ArrayList<Forma>();
-//        for (PontoDeLinha pt: pontos) {
-//            Forma op = pt.getDono().getOutraPonta(this);
-//            if (op != null && resu.indexOf(op) == -1) {
-//                outrasPontas.add(op);
-//                resu.add(op);
-//            }
-//        }
-//        for (Forma f: outrasPontas) {
-//            f.getListaDeFormasLigadas(resu);
-//        }
-//    }
     // <editor-fold defaultstate="collapsed" desc="Composto">
     @Override
     public Elementar IsMeOrMine(Point p) {
@@ -822,7 +734,6 @@ public class Forma extends FormaElementar {
 
         res.add(InspectorProperty.PropertyFactorySN("ancorado", "setAncorado", isAncorado()));
         if (editFonte) {
-            //# res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdFonte.name()));
             res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdFonte.name(), nomeComandos.cmdFonte.name().toLowerCase(), getFont().getFontName()));
         }
         res.add(InspectorProperty.PropertyFactoryCor("forecolor", "setForeColor", getForeColor()));
@@ -877,14 +788,12 @@ public class Forma extends FormaElementar {
         me.appendChild(util.XMLGenerate.ValorText(doc, "Observacao", getObservacao()));
         me.appendChild(util.XMLGenerate.ValorText(doc, "Dicionario", getTextoAdicional()));
         me.appendChild(util.XMLGenerate.ValorFonte(doc, getFont()));
-        //me.appendChild(util.XMLGenerate.ValorBoolean(doc, "CentrarTexto", isCentrarTexto()));
 
         //ForeColor não é default.
         if (!getForeColor().equals(Elementar.defaultColor)) {
             me.appendChild(util.XMLGenerate.ValorColor(doc, "ForeColor", getForeColor()));
         }
         me.appendChild(util.XMLGenerate.ValorBoolean(doc, "Ancorado", isAncorado()));
-        //me.appendChild(util.XMLGenerate.ValorColor(doc, "BackColor", getBackColor()));
     }
 
     @Override
@@ -947,7 +856,6 @@ public class Forma extends FormaElementar {
 
     public void OrganizeDiagrama() {
         OrganizeDiagrama(true, false);
-        //ou: OrganizeFluxo();
     }
 
     /**
@@ -959,48 +867,7 @@ public class Forma extends FormaElementar {
      * @param B
      */
     public static int MapaPosi(Forma A, Forma B) {
-        Point posiA = A.getLocation();
-        Point posiB = B.getLocation();
-
-        //  1       2       3
-        //  0       A       4
-        //  7       6       5
-        int dist = Math.max(A.getWidth(), B.getWidth());
-        if (Math.abs(posiA.x - posiB.x) < dist) {
-            //mesma coluna
-            if (posiA.y > posiB.y) {
-                return 2;
-            } else {
-                return 6;
-            }
-        }
-
-        dist = Math.max(A.getHeight(), B.getHeight());
-        if (Math.abs(posiA.y - posiB.y) < dist) {
-            //mesma linha
-            if (posiA.x > posiB.x) {
-                return 0;
-            } else {
-                return 4;
-            }
-        }
-
-        if (posiA.x < posiB.x) {
-            // 3 ou 5
-            if (posiA.y < posiB.y) {
-                return 5;
-            } else {
-                return 3;
-            }
-        } else {
-            //if (posiA.x < posiB.x) {
-            // 1 ou 7
-            if (posiA.y > posiB.y) {
-                return 1;
-            } else {
-                return 7;
-            }
-        }
+        return LigacoesDaForma.MapaPosi(A, B);
     }
 
     /**
@@ -1010,79 +877,7 @@ public class Forma extends FormaElementar {
      * @param movB: pode mover pontos de ligação da entidade B?
      */
     protected void OrganizeDiagrama(boolean movA, boolean movB) {
-        final Forma A = this;
-        A.getListaDePontosLigados().stream().map(p -> p.getDono()).forEach(L -> {
-            Forma B = L.getOutraPonta(A);
-            if (B == null) {
-                B = A;
-            }
-            int sp = 0;
-            int m = Forma.MapaPosi(A, B);
-
-            //  1.      2      .3
-            //  0.      A      .4
-            //  7.      6      .5
-            Point ptA = new Point();
-            Point ptB = new Point();
-            int lpA = 0;
-            int lpB = 0;
-            switch (m) {
-                case 1:
-                case 0:
-                case 7:
-                    ptA = new Point(A.getLeft() + sp, A.getTop() + A.getHeight() / 2);
-                    ptB = new Point(B.getLeftWidth() - sp, B.getTop() + B.getHeight() / 2);
-                    lpA = 0;
-                    lpB = 2;
-                    break;
-
-                case 2:
-                    ptA = new Point(A.getLeft() + A.getWidth() / 2, A.getTop() + sp);
-                    ptB = new Point(B.getLeft() + B.getWidth() / 2, B.getTopHeight() - sp);
-                    lpA = 1;
-                    lpB = 3;
-                    break;
-
-                case 3:
-                case 4:
-                case 5:
-                    ptA = new Point(A.getLeftWidth() - sp, A.getTop() + A.getHeight() / 2);
-                    ptB = new Point(B.getLeft() + sp, B.getTop() + B.getHeight() / 2);
-                    lpA = 2;
-                    lpB = 0;
-                    break;
-
-                case 6:
-                    ptA = new Point(A.getLeft() + A.getWidth() / 2, A.getTopHeight() - sp);
-                    ptB = new Point(B.getLeft() + B.getWidth() / 2, B.getTop() + sp);
-                    lpA = 3;
-                    lpB = 1;
-                    break;
-            }
-
-            if (L.getPontaA().getEm() == A) {
-                if (movA) {
-                    L.getPontaA().setLado(lpA);
-                    L.getPontaA().setCentro(ptA);
-                }
-                if (movB) {
-                    L.getPontaB().setLado(lpB);
-                    L.getPontaB().setCentro(ptB);
-                }
-
-            } else {
-                if (movB) {
-                    L.getPontaA().setLado(lpB);
-                    L.getPontaA().setCentro(ptB);
-                }
-                if (movA) {
-                    L.getPontaB().setLado(lpA);
-                    L.getPontaB().setCentro(ptA);
-                }
-            }
-        });
-        organizeDiagramaRedistribuaLinhas();
-        DoMuda();
+        LigacoesDaForma.OrganizeDiagrama(this, movA, movB);
     }
 
     /**
@@ -1091,47 +886,7 @@ public class Forma extends FormaElementar {
     protected int INI_ORGDIAG = 0;
 
     private void organizeDiagramaRedistribuaLinhas() {
-        Forma tt = this;
-        for (int lado = 0; lado < 4; lado++) {
-            final int ld = lado;
-            final boolean sn = ld % 2 == 0;
-            int tl = Math.toIntExact(tt.getListaDePontosLigados().stream().filter(p -> p.getLado() == ld).count());
-            if (tl == 0) {
-                continue;
-            }
-
-            final int espaco = ((sn ? tt.getHeight() : tt.getWidth()) - 2 * INI_ORGDIAG) / (tl + 1);
-            int ini = INI_ORGDIAG;
-
-            if (sn) {
-                ini += tt.getTop();
-            } else {
-                ini += tt.getLeft();
-            }
-
-            List<PontoDeLinha> ord = tt.getListaDePontosLigados().stream().filter(p -> p.getLado() == ld).sorted((p1, p2) -> {
-                if (sn) {
-                    return Integer.compare(p1.getDono().getOutraPonta(p1).getTop(), p2.getDono().getOutraPonta(p2).getTop());
-                } else {
-                    return Integer.compare(p1.getDono().getOutraPonta(p1).getLeft(), p2.getDono().getOutraPonta(p2).getLeft());
-                }
-
-            }).collect(Collectors.toList());
-
-            for (PontoDeLinha p : ord) {
-                //if (p.getLado() == l) {
-                ini += espaco;
-                if (sn) {
-                    p.setTop(ini);
-                } else {
-                    p.setLeft(ini);
-                }
-                p.getDono().OrganizeLinha();
-                p.getDono().reSetBounds();
-                //}
-            }
-        }
-
+        LigacoesDaForma.organizeDiagramaRedistribuaLinhas(this);
     }
     //</editor-fold>
 
@@ -1144,63 +899,11 @@ public class Forma extends FormaElementar {
      * OrganizeFluxo();<br/> }
      */
     protected void OrganizeFluxo() {
-        List<Forma> lst = new ArrayList<>();
-        lst.add(this);
-        this.getListaDeFormasLigadas().forEach(item -> {
-            OrganizeFluxo(this, item, lst);
-        });
+        LigacoesDaForma.OrganizeFluxo(this);
     }
 
     protected void OrganizeFluxo(Forma origem, Forma dest, List<Forma> lstJA) {
-        if (lstJA.indexOf(dest) > -1) {
-            return; // já.
-        }
-        origem.getListaDeLigacoes().stream().filter(L -> L.getOutraPonta(origem) == dest).forEach(lin -> {
-            int pa = lin.getPontaA().getLado();
-            int pb = lin.getPontaB().getLado();
-
-            boolean sim = false;
-
-            switch (pa) {
-                case 0:
-                    sim = (pb == 2);
-                    break;
-                case 1:
-                    sim = (pb == 3);
-                    break;
-                case 2:
-                    sim = (pb == 0);
-                    break;
-                case 3:
-                    sim = (pb == 1);
-                    break;
-            }
-
-            if (sim) {
-                Point PA = lin.getPontaA().getLocation();
-                Point PB = lin.getPontaB().getLocation();
-
-                int x = 0, y = 0;
-                if (pa == 0 || pa == 2) {
-                    y = PA.y - PB.y;
-                    if (lin.getPontaB().getEm() == origem) {
-                        y = PB.y - PA.y;
-                    }
-                } else {
-                    x = PA.x - PB.x;
-                    if (lin.getPontaB().getEm() == origem) {
-                        x = PB.x - PA.x;
-                    }
-                }
-                dest.DoMove(x, y);
-                dest.Reenquadre();
-            }
-            lstJA.add(dest);
-
-            dest.getListaDeFormasLigadas().forEach(f -> {
-                OrganizeFluxo(dest, f, lstJA);
-            });
-        });
+        LigacoesDaForma.OrganizeFluxo(this, origem, dest, lstJA);
     }
 
     //</editor-fold>
@@ -1225,13 +928,6 @@ public class Forma extends FormaElementar {
         return true;
     }
 
-//    @Override
-//    public void setDisablePainted(boolean disablePainted) {
-//        super.setDisablePainted(disablePainted);
-//        if (isParte()) {
-//            
-//        }
-//    }
     
     
 }

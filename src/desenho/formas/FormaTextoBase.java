@@ -5,7 +5,6 @@
 package desenho.formas;
 
 import controlador.Diagrama;
-import desenho.linhas.Linha;
 import desenho.linhas.PontoDeLinha;
 import java.awt.Graphics2D;
 import util.DesenhadorDeTexto;
@@ -55,6 +54,7 @@ public class FormaTextoBase extends Forma {
         try {
             setAlinhamento(AlinhamentoTexto.values()[Alinhamento]);
         } catch (Exception e) {
+            // Keep the current alignment when the inspector value is invalid.
         }
     }
 

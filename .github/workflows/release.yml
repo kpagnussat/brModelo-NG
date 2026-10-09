@@ -1,0 +1,176 @@
+name: Draft release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+# Serialize retries for a tag so draft creation and asset uploads cannot race.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  packages:
+    name: Native packages (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Temurin JDK 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle cache and validate wrapper
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Read numeric package version from tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version=${RELEASE_TAG#v}
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'Expected vMAJOR.MINOR.PATCH'; exit 1; }
+          echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
+          release_date=$(git for-each-ref --format='%(creatordate:short)' "refs/tags/$RELEASE_TAG")
+          [[ "$release_date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || exit 1
+          echo "RELEASE_DATE=$release_date" >> "$GITHUB_ENV"
+      - name: Install Linux package tools and validators
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes rpm dpkg-dev fakeroot desktop-file-utils appstream xvfb xauth
+      - name: Ensure WiX 3 is on PATH (JDK 21 requirement)
+        if: runner.os == 'Windows'
+        run: |
+          if ! find '/c/Program Files (x86)' -maxdepth 3 -name candle.exe -print -quit | grep -q .; then
+            choco install wixtoolset --version=3.14.1 --yes --allow-downgrade --no-progress
+          fi
+          wix_bin=$(dirname "$(find '/c/Program Files (x86)' -maxdepth 3 -name candle.exe -print -quit)")
+          test -f "$wix_bin/light.exe"
+          cygpath -w "$wix_bin" >> "$GITHUB_PATH"
+      - name: Build, test and package Linux
+        if: runner.os == 'Linux'
+        run: |
+          xvfb-run -a ./gradlew --no-daemon --dependency-verification strict -Pversion="$PACKAGE_VERSION" -PreleaseDate="$RELEASE_DATE" build -Pgui jpackageImage jpackageDeb jpackageRpm
+          appstreamcli validate --no-net build/packaging/input/linux/*.metainfo.xml
+          desktop-file-validate packaging/linux/*.desktop
+          xvfb-run -a bash packaging/smoke-test.sh
+          mkdir -p build/release
+          cp build/libs/brModelo.jar build/jpackage/deb/*.deb build/jpackage/rpm/*.rpm build/release/
+          tar -C build/jpackage/app-image -czf "build/release/brmodelo-ng-$PACKAGE_VERSION-linux-$(uname -m).tar.gz" brmodelo-ng
+      - name: Build, test and package Windows
+        if: runner.os == 'Windows'
+        run: |
+          ./gradlew --no-daemon --dependency-verification strict -Pversion="$PACKAGE_VERSION" -PreleaseDate="$RELEASE_DATE" build -Pheadless jpackageImage jpackageMsi
+          mkdir -p build/release
+          cp build/jpackage/msi/*.msi build/release/
+          # Portable build: the app-image with its Java runtime, for machines where installing is not allowed.
+          pwsh -NoProfile -Command 'Compress-Archive -Path "build/jpackage/app-image/brModelo NG" -DestinationPath "build/release/brmodelo-ng-$env:PACKAGE_VERSION-windows-x64.zip"'
+      - name: Build, test and package macOS
+        if: runner.os == 'macOS'
+        run: |
+          ./gradlew --no-daemon --dependency-verification strict -Pversion="$PACKAGE_VERSION" -PreleaseDate="$RELEASE_DATE" build -Pheadless jpackageImage jpackageDmg
+          mkdir -p build/release
+          cp build/jpackage/dmg/*.dmg build/release/
+      - name: Collect release assets
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packages-${{ matrix.os }}
+          path: build/release/*
+          if-no-files-found: error
+
+  flatpak:
+    name: Flatpak bundle (x86_64)
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-26.08
+      options: --privileged
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Temurin JDK 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle cache and validate wrapper
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Stage the verified jar and desktop assets
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version=${RELEASE_TAG#v}
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
+          # The container runs as root over a checkout owned by the runner user; git refuses it otherwise.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          release_date=$(git for-each-ref --format='%(creatordate:short)' "refs/tags/$RELEASE_TAG")
+          [[ "$release_date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || exit 1
+          ./gradlew --no-daemon --dependency-verification strict -Pversion="$version" -PreleaseDate="$release_date" prepareFlatpak
+      - name: Install Flatpak build tools and SDK
+        run: |
+          flatpak install --noninteractive flathub org.freedesktop.Platform//26.08 org.freedesktop.Sdk//26.08 org.freedesktop.Sdk.Extension.openjdk21//26.08
+          # The 26.08 SDK ships neither validator; the runner image has both in /usr/bin.
+          appstreamcli validate --no-net build/flatpak-input/io.github.kpagnussat.brModeloNG.metainfo.xml
+          desktop-file-validate build/flatpak-input/io.github.kpagnussat.brModeloNG.desktop
+      - name: Build Flatpak bundle
+        uses: flatpak/flatpak-github-actions/flatpak-builder@79327416609af08178ad73b352877e51450790b3 # v6 (peeled annotated tag)
+        with:
+          manifest-path: packaging/flatpak/io.github.kpagnussat.brModeloNG.yml
+          bundle: brmodelo-ng.flatpak
+          arch: x86_64
+          upload-artifact: false
+          cache-key: flatpak-${{ github.sha }}
+      - name: Collect Flatpak release asset
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packages-flatpak
+          path: brmodelo-ng.flatpak
+          if-no-files-found: error
+
+  release:
+    needs: [packages, flatpak]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all package assets
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          pattern: packages-*
+          merge-multiple: true
+          path: release-assets
+      - name: Attach artifacts to a draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            draft=$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')
+            if [ "$draft" != true ]; then
+              echo 'Refusing to modify a published release.' >&2
+              exit 1
+            fi
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft \
+              --title "brModelo NG $RELEASE_TAG" --notes 'Portable jar, portable Linux (tar.gz) and Windows (zip) builds, DEB, RPM, Windows MSI, macOS DMG and Flatpak bundle. Packages are unsigned.'
+          fi
+          gh release upload "$RELEASE_TAG" release-assets/* --clobber

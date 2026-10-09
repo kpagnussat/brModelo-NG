@@ -167,9 +167,6 @@ public class Impressor extends BaseControlador {
         return Impressora;
     }
 
-//    public void setImpressora(util.PrintControler impressora) {
-//        this.Impressora = impressora;
-//    }
     /**
      * Pinta a área que não será impressa
      */

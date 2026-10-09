@@ -21,6 +21,18 @@ public class LegendaEditor extends javax.swing.JFrame {
      */
     public LegendaEditor() {
         initComponents();
+        jPanel1.remove(jLabel1);
+        jPanel1.remove(btnFechar);
+        javax.swing.JPanel actions = new javax.swing.JPanel();
+        actions.add(btnFechar);
+        getContentPane().removeAll();
+        getContentPane().setLayout(new java.awt.BorderLayout(util.AcabamentoDialogos.px(16), util.AcabamentoDialogos.px(16)));
+        getContentPane().add(Scroller, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.EAST);
+        getContentPane().add(actions, java.awt.BorderLayout.SOUTH);
+        util.LayoutDialogos.laterais(jPanel1);
+        util.LayoutDialogos.area(Scroller, 320, 220);
+        util.AcabamentoDialogos.aplicar(this);
     }
 
     /**
@@ -93,7 +105,7 @@ public class LegendaEditor extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(Scroller, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,7 +122,7 @@ public class LegendaEditor extends javax.swing.JFrame {
         }
         String cor = util.Dialogos.ShowDlgCor(this.getRootPane(), "");
         if (!"".equals(cor)) {
-            Color c = util.Utilidades.StringToColor(cor);//new Color(Integer.parseInt(cor));
+            Color c = util.Utilidades.StringToColor(cor);
             String res = util.Dialogos.ShowDlgInputText(this.getRootPane(), "");
             if (!"".equals(res)) {
                 atual.addLegenda(res, c);
@@ -149,7 +161,6 @@ public class LegendaEditor extends javax.swing.JFrame {
         if (Lista != null) {
             if (Lista.getSelectedIndex() > -1) {
                 atual.RemoveLegenda(Lista.getSelectedIndex());
-                //atual.getItens().remove(Lista.getSelectedIndex());
                 Init(atual);
                 RefreshInpector();
             }
@@ -183,6 +194,7 @@ public class LegendaEditor extends javax.swing.JFrame {
             remove(Lista);
         }
         Lista = new JList(itens);
+        Lista.setFixedCellHeight(util.AcabamentoDialogos.px(40));
         Lista.setModel(new javax.swing.AbstractListModel() {
 
             @Override
@@ -195,9 +207,9 @@ public class LegendaEditor extends javax.swing.JFrame {
                 return itens[i];
             }
         });
-        add(Lista);
         Scroller.setViewportView(Lista);
         Lista.setCellRenderer(new JListItemParaItemLegenda(legenda.getTipo() == Legenda.TipoLegenda.tpLinhas));
+        util.EstadosVazios.instalar(Scroller);
         btnAtualizar.setEnabled(legenda.getTipo() == Legenda.TipoLegenda.tpCores);
     }
 

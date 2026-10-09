@@ -200,7 +200,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
     public void DoAnyThing(int Tag) {
         if (Tag == 1) {
             Proporcao();
-            //dono.InvalidateArea();
         }
     }
 
@@ -267,6 +266,7 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         try {
             inttp = tipoDrawer.values()[tipo];
         } catch (Exception e) {
+            // Use the rectangle default when the inspector value is invalid.
         }
         setTipo(inttp);
     }
@@ -367,11 +367,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         }
         imgres = null;
         String[] dist = getPosiImagem().split(",");
-//        if (dist.length < 0) {
-//            setPosiImagem("L,T,200,200");
-//            Proporcao();
-//            return;
-//        }
         int[] pts = ArrayDePontos(getPosiImagem());
         int x = (GetImgSize().y * pts[2] / GetImgSize().x);
         dist[3] = String.valueOf(x);
@@ -394,7 +389,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         dist[2] = String.valueOf(pts[2]);
         this.posiImagem = util.Utilidades.ArrayToStr(dist);
         imgres = null;
-        //dono.InvalidateArea();
     }
 
     public boolean isRecivePaint() {
@@ -435,7 +429,7 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
     private int width = 50;
     private int height = 50;
     private boolean gradiente = false;
-    private Color gradienteEndColor = new Color(204, 204, 204, 255);//Color.WHITE;
+    private Color gradienteEndColor = new Color(204, 204, 204, 255);
     private Color gradienteStartColor = Color.BLACK;
     private boolean vertical = VERTICAL;
     private int direcaogradiente = PreTexto.VERTICAL;
@@ -565,9 +559,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
                 }
                 break;
             case tpArco:
-                //        public final static int OPEN = 0;
-                //        public final static int CHORD = 1;
-                //        public final static int PIE = 2;
                 pts = ArrayDePontos(getArco());
                 if (pts.length == 7) {
                     dr = new Arc2D.Double(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[6]);
@@ -617,14 +608,14 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         int yfim = t + height / 2;
 
         int traco = height;
-        int ytraco = pre_y;// - (traco/2);
+        int ytraco = pre_y;
 
         g.drawLine(xini, ytraco, xini, ytraco + traco);
         g.drawLine(xfim, ytraco, xfim, ytraco + traco);
         g.drawLine(xini, yfim, xfim, yfim);
 
         xini = xini + (width - fm.stringWidth(vl)) / 2;
-        int yini = invertido ? yfim + (fm.getHeight() - fm.getDescent()) : yfim - fm.getDescent();// yfim + (fm.getHeight()) / 2 - fm.getDescent();
+        int yini = invertido ? yfim + (fm.getHeight() - fm.getDescent()) : yfim - fm.getDescent();
         g.drawString(vl, xini, yini);
     }
 
@@ -632,7 +623,7 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         FontMetrics fm = g.getFontMetrics();
         String vl = dono.FormateUnidadeMedida(height);
         int traco = width;
-        int xIni = l;// + (traco) / 2;
+        int xIni = l;
         int xFim = xIni + traco;
         int yIni = t;
         int yFim = t + height;
@@ -644,7 +635,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
 
         int degrees = isInvertido() ? 90 : -90;
         int desse = isInvertido() ? 0 : fm.stringWidth(vl);
-        //int centra = fm.getHeight() / 2 - fm.getDescent();
         int centra = fm.getHeight() - fm.getDescent();
         centra = isInvertido() ? -centra : centra;
 
@@ -678,8 +668,6 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
             for (int i = 0; i < tam; i++) {
                 xPoints[i] = Expr(dist[y++].trim());
                 yPoints[i] = Expr(dist[y++].trim());
-//                xPoints[i] = l + Integer.valueOf(dist[y++].trim());
-//                yPoints[i] = t + Integer.valueOf(dist[y++].trim());
             }
         } catch (Exception x) {
             g.drawString("?", l, t);
@@ -726,13 +714,8 @@ public class baseDrawerItem implements Serializable, IObjetoPintavel {
         } catch (NumberFormatException e) {
             ProcessadorExprSimples pEx = new ProcessadorExprSimples();
             if (pEx.IsMathExpr(conv)) {
-                //try {
                 return pEx.processaExprInt(conv);
-                //} catch (Exception x) {
-                //    throw x;
-                //}
             }
-            //throw e;
         }
         return res;
     }

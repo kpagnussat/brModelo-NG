@@ -39,7 +39,6 @@ public class CopFormatacao {
     public void Copiar(FormaElementar ori) {
         copiado = Resuma(ori.GenerateFullProperty());
         fonteCopiada = Elementar.CloneFont(ori.getFont());
-        //regiaoCopiada = ori.getBounds();
     }
 
     public void Colar(ArrayList<FormaElementar> lst) {
@@ -114,31 +113,25 @@ public class CopFormatacao {
             case cmdDimPastLeft:
                 int x = regiaoCopiada.x - var.getLeft();
                 var.DoMove(x, 0);
-                //var.setLeft(regiaoCopiada.x);
                 break;
             case cmdDimPastTop:
                 int y = regiaoCopiada.y - var.getTop();
                 var.DoMove(0, y);
-                //var.setTop(regiaoCopiada.y );
                 break;
             case cmdDimPastRight:
                 int r = regiaoCopiada.width + regiaoCopiada.x - var.getLeftWidth();
                 var.DoMove(r, 0);
-                //var.setLeft(regiaoCopiada.width + regiaoCopiada.x - var.getLeftWidth());
                 break;
 
             case cmdDimPastBottom:
                 int b = regiaoCopiada.height + regiaoCopiada.y - var.getTopHeight();
-                //var.setTop(regiaoCopiada.height + regiaoCopiada.y - var.getTopHeight());
                 var.DoMove(0, b);
                 break;
             case cmdDimPastWidth:
                 ((Forma)var).ReciveFormaResize(new Rectangle(0, 0, var.getWidth()- regiaoCopiada.width, 0));
-                //((Forma)var).SendNotificacao(Constantes.Operacao.opResize);
                 break;
             case cmdDimPastHeight:
                 ((Forma)var).ReciveFormaResize(new Rectangle(0, 0, 0, var.getHeight() - regiaoCopiada.height));
-                //((Forma)var).SendNotificacao(Constantes.Operacao.opResize);
                 break;
 
             case cmdDimAlignH:

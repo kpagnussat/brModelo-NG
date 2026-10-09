@@ -37,15 +37,13 @@ public class Especializacao extends PreEspecializacao {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Campos">
-//    private boolean Parcial = false;
-//
     @Override
     public boolean isParcial() {
         return (this.getListaDeFormasLigadas().size() > 1 && LigadaAoPontoPrincipal() != null) && super.isParcial();
     }
 
     public boolean isTotal() {
-        return (!isParcial() &&  LigadaAoPontoPrincipal() != null);// (this.getListaDeFormasLigadas().size() > 1 && LigadaAoPontoPrincipal() != null) && (!super.isParcial());
+        return (!isParcial() &&  LigadaAoPontoPrincipal() != null);
     }
     
     public void setTotal(boolean sn) {
@@ -55,7 +53,6 @@ public class Especializacao extends PreEspecializacao {
     public boolean isNaoExclusiva() {
         final PreEntidade tmp = LigadaAoPontoPrincipal();
         return this.getListaDeFormasLigadas().size() > 1 && tmp != null && (
-                    //tmp.getListaDeFormasLigadas().stream().filter(f -> f instanceof Especializacao).count() > 1
                     tmp.getListaDeFormasLigadas().stream().filter(f -> f instanceof Especializacao).map(e -> (Especializacao)e).filter(e -> e.LigadaAoPontoPrincipal() == tmp).count() > 1
                 );
     }
@@ -67,12 +64,6 @@ public class Especializacao extends PreEspecializacao {
                 );
     }
     
-//
-//    public void setParcial(boolean Parcial) {
-//        this.Parcial = Parcial;
-//        if (this.Parcial) toPaintTxt = "p"; else toPaintTxt = "";
-//        InvalidateArea();
-//    }
     // </editor-fold>
     
     @Override
@@ -83,9 +74,7 @@ public class Especializacao extends PreEspecializacao {
         if ((!isExclusiva() && !isNaoExclusiva()) ||(!isParcial() && !isTotal())) {
             res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("especializacao.formacao", Editor.fromConfiguracao.getValor("Inspector.obj.especializacao.malformada")));
         } else {
-            //res.add(InspectorProperty.PropertyFactoryApenasLeituraSN("especializacao.parcial", isParcial()));
             res.add(InspectorProperty.PropertyFactorySN("especializacao.parcial", "setParcial", isParcial()));
-            //res.add(InspectorProperty.PropertyFactoryApenasLeituraSN("especializacao.total", isTotal()));
             res.add(InspectorProperty.PropertyFactorySN("especializacao.total", "setTotal", isTotal()));
             
             res.add(InspectorProperty.PropertyFactoryApenasLeituraSN("especializacao.exclusiva", isExclusiva()));
@@ -104,10 +93,6 @@ public class Especializacao extends PreEspecializacao {
         return res;
     }
     
-//    @Override
-//    public boolean LoadFromXML(Element me, boolean colando) {
-//        return super.LoadFromXML(me, colando);
-//    }
     
     @Override
     protected boolean FinderLinked(Forma quem, Forma origem) {

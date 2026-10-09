@@ -41,7 +41,7 @@ public class InspectorItemExtender extends InspectorItemBase {
     @Override
     public void mouseDblClick(MouseEvent e) {
         super.mouseDblClick(e);
-        Criador.TipoDlg.RunDlg();
+        if (CanEdit() && !GradePropriedades.leitura(this)) Criador.TipoDlg.RunDlg();
     }
     
     @Override
@@ -49,12 +49,13 @@ public class InspectorItemExtender extends InspectorItemBase {
         super.setSelecionado(selecionado);
         if ((getOndeEditar() != null) && (selecionado)) {
             InspectorExtenderEditor xe = (InspectorExtenderEditor)getOndeEditar();
+            xe.setToolTipText(getToolTipText());
             xe.OrganizeSize();
             xe.setAcaoTipo(getMyAction());
         }
     }
     
     public void ExternalRun() {
-        Criador.TipoDlg.RunDlg();
+        if (CanEdit() && !GradePropriedades.leitura(this)) Criador.TipoDlg.RunDlg();
     }
 }

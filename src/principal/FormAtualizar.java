@@ -8,14 +8,10 @@ package principal;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
@@ -33,6 +29,9 @@ public class FormAtualizar extends javax.swing.JFrame {
      */
     public FormAtualizar() {
         initComponents();
+        util.DicasInterface.dica(jButton3, "close");
+        setTitle("brModelo NG: Atualização");
+        util.AcabamentoDialogos.aplicar(this);
         getRootPane().registerKeyboardAction(e -> {
             setVisible(false);
 
@@ -60,13 +59,11 @@ public class FormAtualizar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         jLabel1.setText(bundle.getString("Atualizador.lblVersao")); // NOI18N
 
         lblVersao.setText("vv");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText(bundle.getString("Atualizador.lblNovaVersao")); // NOI18N
 
         lblNovaVersao.setText("nv");
@@ -74,7 +71,7 @@ public class FormAtualizar extends javax.swing.JFrame {
         lblLink.setText("jLabel4");
         lblLink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        subPan2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        subPan2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
         subPan2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 2, 2));
 
         jButton3.setText(bundle.getString("FrameSobre.jButton1.text")); // NOI18N
@@ -149,25 +146,15 @@ public class FormAtualizar extends javax.swing.JFrame {
     private String u = "";
 
     public void Inicie(String v) {
-        lblVersao.setText(v);
-        lblNovaVersao.setText(v);
-        lblLink.setText("");
-        try {
-            String res = getSiteText();
-            String[] sub = res.split("\\|");
-            String v2 = sub[0].trim();
-            u = sub[1].trim();
-            if (v2.equals(v)) {
-                lblLink.setText("Versão já atualizada!");
-            } else {
-                lblNovaVersao.setText(v2);
-                lblLink.setText("<html><body><a href=\"" + u + "\">" + u + "</a></body></html>");
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(FormAtualizar.class.getName()).log(Level.SEVERE, null, ex);
-            lblLink.setText("Não foi possível conectar ao site do brModelo!");
-        }
-        
+        // Legacy window remains callable, but never performs a network check.
+        lblVersao.setText(util.InformacoesAplicacao.versao());
+        jLabel2.setText(java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR").getString("Atualizador.lblNovaVersao"));
+        lblNovaVersao.setText(java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR").getString("Atualizador.releases"));
+        u = util.AtualizacoesNG.RELEASES;
+        lblLink.setText("<html><a href='" + u + "'>" + java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR").getString("FramePrincipal.menuVerAtualizacao.text") + "</a></html>");
+        lblLink.setToolTipText(util.DicasInterface.texto("releases"));
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+
         lblLink.addMouseListener(new MouseInputListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
@@ -207,31 +194,11 @@ public class FormAtualizar extends javax.swing.JFrame {
         });
     }
 
+    // Historical serialized field retained verbatim; no code fetches this URL.
     public final String SITE = "http://www.sis4.com/brModelo/versao.htm";
 
     public String getSiteText() throws MalformedURLException, IOException {
-        URL sis4 = new URL(SITE);
-        URLConnection yc = sis4.openConnection();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        yc.getInputStream()));
-        String inputLine;
-        String res = "";
-        while ((inputLine = in.readLine()) != null) {
-            res += inputLine + "|";
-        }
-        res += "FIM";
-        in.close();
-        return res;
-    }
-
-    private void open(URI uri) {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                Desktop.getDesktop().browse(uri);
-            } catch (IOException e) {
-                /* TODO: error handling */ }
-        } else {
-            /* TODO: error handling */ }
+        // Compatibility entry point: no HTTP requests, including during tests.
+        return util.AtualizacoesNG.RELEASES;
     }
 }

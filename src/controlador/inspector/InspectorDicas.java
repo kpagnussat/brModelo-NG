@@ -20,6 +20,7 @@ public class InspectorDicas extends BaseControlador {
 
     public InspectorDicas() {
         super();
+        setBackground(util.EstiloUI.fundo(this, "Panel.background"));
     }
     private String Texto = "";
 
@@ -41,7 +42,7 @@ public class InspectorDicas extends BaseControlador {
         super.setFont(font);
         getTextoFormatado().setFont(font);
     }
-    private Color ForeColor = Color.BLACK;
+    private Color ForeColor = util.EstiloUI.cor("Label.foreground");
 
     public Color getForeColor() {
         return ForeColor;
@@ -64,10 +65,11 @@ public class InspectorDicas extends BaseControlador {
         super.paintComponent(g); //paint background
 
         Graphics2D Canvas = (Graphics2D) g;
+        Canvas.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        //Canvas.setPaint(Color.RED);
-        //Canvas.draw3DRect(1, 1, getWidth() - 3, getHeight() - 3, true);
-        Rectangle area = new Rectangle(0, 0, getWidth(), getHeight());
-        getTextoFormatado().PinteTexto(Canvas, getForeColor(), area, getTexto());
+        boolean vazio = getTexto() == null || getTexto().isBlank();
+        String text = vazio ? "Selecione uma propriedade para ver a descrição." : getTexto();
+        Rectangle area = new Rectangle(8, 8, Math.max(0, getWidth() - 16), Math.max(0, getHeight() - 16));
+        getTextoFormatado().PinteTexto(Canvas, util.EstiloUI.cor(vazio ? "Label.disabledForeground" : "Label.foreground"), area, text);
     }
 }

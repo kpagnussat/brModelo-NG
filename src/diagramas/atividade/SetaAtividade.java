@@ -29,7 +29,6 @@ public class SetaAtividade extends PreLigacaoSetaComApenso {
         if (getTexto() == null) {
             setTexto(new TextoAtividade(this.getMaster(), "TextoAtividade"));
         }
-        //TextoAtividade texto = (TextoAtividade) getTexto();
         PreTextoApenso texto = getTexto();
         if (texto.isMovimentacaoManual()) {
             return;

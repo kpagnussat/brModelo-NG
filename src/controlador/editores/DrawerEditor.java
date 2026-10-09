@@ -33,6 +33,11 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
     public DrawerEditor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.AcabamentoDialogos.editor(this, util.AcabamentoDialogos.coluna(util.LayoutDialogos.adicoes(jToolBar1)), jSplitPane1, jPanel1);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(util.AcabamentoDialogos.px(860), util.AcabamentoDialogos.px(400)));
+        jSplitPane1.setDividerLocation(util.AcabamentoDialogos.px(360));
+        pack();
+        util.AcabamentoDialogos.limitar(this);
         inspector1.setDicas(inspectorDicas1);
     }
 
@@ -108,7 +113,7 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
         jToolBar1.add(btnExcluir);
         jToolBar1.add(jSeparator1);
 
-        btnSubir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/up.png"))); // NOI18N
+        btnSubir.setIcon(util.Icones.de("/imagens/up.png")); // NOI18N
         btnSubir.setFocusable(false);
         btnSubir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSubir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -119,7 +124,7 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
         });
         jToolBar1.add(btnSubir);
 
-        btnDescer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/down.png"))); // NOI18N
+        btnDescer.setIcon(util.Icones.de("/imagens/down.png")); // NOI18N
         btnDescer.setFocusable(false);
         btnDescer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDescer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -208,7 +213,7 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
 
         jSplitPane1.setRightComponent(jSplitPane3);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         btnPronto.setText(bundle.getString("DrawerEditor.Pronto")); // NOI18N
         btnPronto.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +249,7 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jSplitPane1)
                 .addGap(0, 0, 0)
@@ -327,17 +332,9 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
 //# Talvez, no futuro ele volte. Atualmente considerado inadequado e trabalhoso. Talvez possa usar a régua como base para o futuro desenho.
 //# Código permanece em baseDrawerItem! //??: TO-DO: Remover códigos!
 //#                case "setLeft":
-//#                    Selecionado.setLeft(Integer.valueOf(valor));
-//#                    break;
 //#                case "setTop":
-//#                    Selecionado.setTop(Integer.valueOf(valor));
-//#                    break;
 //#                case "setWidth":
-//#                    Selecionado.setWidth(Integer.valueOf(valor));
-//#                    break;
 //#                case "setHeight":
-//#                    Selecionado.setHeight(Integer.valueOf(valor));
-//#                    break;
                 case "SetTipo":
                     Selecionado.SetTipo(Integer.valueOf(valor));
                     DefaultListModel dlm = (DefaultListModel) Lista.getModel();
@@ -352,8 +349,6 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
                     Selecionado.setFill(Boolean.valueOf(valor));
                     break;
 //#                case "setInvertido":
-//#                    Selecionado.setInvertido(Boolean.valueOf(valor));
-//#                    break;
                 case "setRecivePaint":
                     Selecionado.setRecivePaint(Boolean.valueOf(valor));
                     break;
@@ -416,8 +411,7 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
 
         switch (cmd) {
             case cmdLoadImg:
-                //String titulo = fromConfiguracao.getValor(property);
-                String res = util.Dialogos.ShowDlgFileImg(this.getRootPane());//, titulo); 
+                String res = util.Dialogos.ShowDlgFileImg(this.getRootPane());
                 if (res == null) {
                     return true; //não é erro, foi cancelado pelo usuário.
                 }
@@ -428,7 +422,6 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
                     return true;
                 }
                 PerformInspectorFor();
-                //return false;
                 break;
             case cmdDoAnyThing:
                 Selecionado.DoAnyThing(inspector1.getSelecionado().getPropriedade().Tag);
@@ -488,10 +481,6 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
             return;
         }
         //#Removido o Medida, talvez um dia eu o volte. Está feio e trabalhoso, talvez possa usar a régua como base para o futuro desenho.
-        //#res.add(InspectorProperty.PropertyFactoryNumero("left", "setLeft", Selecionado.getLeft()));
-        //#res.add(InspectorProperty.PropertyFactoryNumero("top", "setTop", Selecionado.getTop()));
-        //#res.add(InspectorProperty.PropertyFactoryNumero("width", "setWidth", Selecionado.getWidth()));
-        //#res.add(InspectorProperty.PropertyFactoryNumero("height", "setHeight", Selecionado.getHeight()));
 
         //tpRetangulo, tpElipse, tpCurva, tpArco, tpPath, tpImagem
         ArrayList<String> menu = new ArrayList<>();
@@ -501,7 +490,6 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
         menu.add(Editor.fromConfiguracao.getValor("Inspector.lst.basedraweritem.tparco"));
         menu.add(Editor.fromConfiguracao.getValor("Inspector.lst.basedraweritem.tppath"));
         menu.add(Editor.fromConfiguracao.getValor("Inspector.lst.basedraweritem.tpimagem"));
-        //#menu.add(Editor.fromConfiguracao.getValor("Inspector.lst.basedraweritem.tpmedida"));
 
         res.add(InspectorProperty.PropertyFactoryMenu("basedraweritem.tipo", "SetTipo", Selecionado.getTipo().ordinal(), menu).
                 AddCondicao(new String[]{"0"}, new String[]{"setRetangulo"}).
@@ -510,7 +498,6 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
                 AddCondicao(new String[]{"3"}, new String[]{"setArco"}).
                 AddCondicao(new String[]{"4"}, new String[]{"setPath"}).
                 AddCondicao(new String[]{"5"}, new String[]{FormaElementar.nomeComandos.cmdLoadImg.name(), FormaElementar.nomeComandos.cmdDoAnyThing.name(), "desenhador.imagem.size", "setPosiImagem"})
-                //#.AddCondicao(new String[]{"6"}, new String[]{"setInvertido", "setWidth", "setHeight", "setTop", "setLeft", "setVertical"})
         );
 
         res.add(InspectorProperty.PropertyFactoryTexto("basedraweritem.retangulo", "setRetangulo", Selecionado.getRetangulo()));
@@ -525,10 +512,8 @@ public class DrawerEditor extends javax.swing.JDialog implements Editor.iParaOut
         res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("desenhador.imagem.size", "(" + String.valueOf(p.x) + " ," + String.valueOf(p.y) + ")"));
         res.add(InspectorProperty.PropertyFactoryCommand(FormaElementar.nomeComandos.cmdDoAnyThing.name(), "desenhador.imagem.resize").setTag(1));
 
-        //#res.add(InspectorProperty.PropertyFactorySN("basedraweritem.medida.vertical", "setVertical", Selecionado.isVertical()));
 
         res.add(InspectorProperty.PropertyFactorySN("basedraweritem.fill", "setFill", Selecionado.isFill()).PropertyForceDisable(Selecionado.getTipo() == baseDrawerItem.tipoDrawer.tpImagem || Selecionado.getTipo() == baseDrawerItem.tipoDrawer.tpMedida));
-        //#res.add(InspectorProperty.PropertyFactorySN("basedraweritem.invertido", "setInvertido", Selecionado.isInvertido()));
         String[] g = new String[]{"setCor", "setGradiente", "setGradienteStartColor", "setGradienteEndColor", "setDirecaogradiente"
         };
         res.add(InspectorProperty.PropertyFactorySN("basedraweritem.recivepaint", "setRecivePaint", Selecionado.isRecivePaint()).

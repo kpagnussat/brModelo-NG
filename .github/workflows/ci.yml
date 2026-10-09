@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Temurin JDK 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle cache and validate wrapper
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Ensure a virtual display is available
+        if: runner.os == 'Linux'
+        run: |
+          if ! command -v xvfb-run >/dev/null || ! command -v xauth >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install --yes xvfb xauth
+          fi
+      # No official jar is redistributed: its compatibility tests skip via JUnit assumptions.
+      # The manual portal test remains opt-in; Xvfb has no desktop session bus.
+      - name: Build and test with GUI coverage
+        if: runner.os == 'Linux'
+        run: xvfb-run -a ./gradlew --no-daemon --dependency-verification strict build -Pgui
+      - name: Build and test headless (explicitly exclude the gui tag)
+        if: runner.os != 'Linux'
+        run: ./gradlew --no-daemon --dependency-verification strict build -Pheadless
+      - name: Build and smoke-test the Linux app-image
+        if: runner.os == 'Linux'
+        run: |
+          ./gradlew --no-daemon --dependency-verification strict jpackageImage
+          xvfb-run -a bash packaging/smoke-test.sh
+      - name: Render committed fixtures in both FlatLaf themes
+        if: runner.os == 'Linux'
+        run: |
+          for theme in flatclaro flatescuro; do
+            xvfb-run -a ./gradlew --no-daemon --dependency-verification strict snapDialogs \
+              -Pargs="$theme 1 build/snapshots/$theme fixtures test-resources/fixtures/conceitual.brM3 test-resources/fixtures/logico.brM3 test-resources/fixtures/fluxo.brM3 test-resources/fixtures/atividade.brM3 test-resources/fixtures/eap.brM3 test-resources/fixtures/livre.brM3"
+          done
+      - name: Upload jar and test reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: build-${{ matrix.os }}
+          path: |
+            build/libs/*.jar
+            build/reports/tests/
+            build/test-results/
+          if-no-files-found: error
+      - name: Upload dialog PNGs
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dialogs-linux
+          path: build/snapshots/**/*.png
+          if-no-files-found: error

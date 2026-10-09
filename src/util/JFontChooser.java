@@ -85,7 +85,7 @@ public class JFontChooser extends JComponent
      **/
     public static final int ERROR_OPTION = -1;
     private static final Font DEFAULT_SELECTED_FONT = new Font("Serif", Font.PLAIN, 12);
-    private static final Font DEFAULT_FONT = new Font("Dialog", Font.PLAIN, 10);
+    private static final Font DEFAULT_FONT = javax.swing.UIManager.getFont("Label.font");
     private static final int[] FONT_STYLE_CODES =
     {
         Font.PLAIN, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC
@@ -137,28 +137,28 @@ public class JFontChooser extends JComponent
         this.fontSizeStrings = fontSizeStrings;
 
         JPanel selectPanel = new JPanel();
-        selectPanel.setLayout(new BoxLayout(selectPanel, BoxLayout.X_AXIS));
+        selectPanel.setLayout(new java.awt.GridBagLayout());
         selectPanel.add(getFontFamilyPanel());
         selectPanel.add(getFontStylePanel());
         selectPanel.add(getFontSizePanel());
 
         JPanel contentsPanel = new JPanel();
-        GridLayout gl = new GridLayout(2, 1);
-        contentsPanel.setLayout(gl);
+        contentsPanel.setLayout(new BorderLayout(0, util.AcabamentoDialogos.px(16)));
         contentsPanel.add(selectPanel, BorderLayout.NORTH);
         
         JPanel pan = new JPanel();
-        pan.setLayout(gl);
+        pan.setLayout(new GridLayout(2, 1, 0, util.AcabamentoDialogos.px(16)));
         
         pan.add(getSamplePanel(), BorderLayout.CENTER);
         pan.add(getLastPanel(), BorderLayout.SOUTH);
 
         contentsPanel.add(pan, BorderLayout.CENTER);
+        util.LayoutDialogos.fontes(selectPanel);
 
         
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.add(contentsPanel);
-        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         this.setSelectedFont(DEFAULT_SELECTED_FONT);
     }
 
@@ -167,13 +167,14 @@ public class JFontChooser extends JComponent
         if (fontFamilyTextField == null)
         {
             fontFamilyTextField = new JTextField();
+            fontFamilyTextField.setColumns(18);
             fontFamilyTextField.addFocusListener(
                 new TextFieldFocusHandlerForTextSelection(fontFamilyTextField));
             fontFamilyTextField.addKeyListener(
                 new TextFieldKeyHandlerForListSelectionUpDown(getFontFamilyList()));
             fontFamilyTextField.getDocument().addDocumentListener(
                 new ListSearchTextFieldDocumentHandler(getFontFamilyList()));
-            fontFamilyTextField.setFont(DEFAULT_FONT);
+
 
         }
         return fontFamilyTextField;
@@ -184,13 +185,14 @@ public class JFontChooser extends JComponent
         if (fontStyleTextField == null)
         {
             fontStyleTextField = new JTextField();
+            fontStyleTextField.setColumns(12);
             fontStyleTextField.addFocusListener(
                 new TextFieldFocusHandlerForTextSelection(fontStyleTextField));
             fontStyleTextField.addKeyListener(
                 new TextFieldKeyHandlerForListSelectionUpDown(getFontStyleList()));
             fontStyleTextField.getDocument().addDocumentListener(
                 new ListSearchTextFieldDocumentHandler(getFontStyleList()));
-            fontStyleTextField.setFont(DEFAULT_FONT);
+
         }
         return fontStyleTextField;
     }
@@ -200,13 +202,14 @@ public class JFontChooser extends JComponent
         if (fontSizeTextField == null)
         {
             fontSizeTextField = new JTextField();
+            fontSizeTextField.setColumns(4);
             fontSizeTextField.addFocusListener(
                 new TextFieldFocusHandlerForTextSelection(fontSizeTextField));
             fontSizeTextField.addKeyListener(
                 new TextFieldKeyHandlerForListSelectionUpDown(getFontSizeList()));
             fontSizeTextField.getDocument().addDocumentListener(
                 new ListSearchTextFieldDocumentHandler(getFontSizeList()));
-            fontSizeTextField.setFont(DEFAULT_FONT);
+
         }
         return fontSizeTextField;
     }
@@ -216,11 +219,12 @@ public class JFontChooser extends JComponent
         if (fontNameList == null)
         {
             fontNameList = new JList(getFontFamilies());
+            fontNameList.setVisibleRowCount(8);
             fontNameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             fontNameList.addListSelectionListener(
                 new ListSelectionHandler(getFontFamilyTextField()));
             fontNameList.setSelectedIndex(0);
-            fontNameList.setFont(DEFAULT_FONT);
+
             fontNameList.setFocusable(false);
         }
         return fontNameList;
@@ -231,11 +235,12 @@ public class JFontChooser extends JComponent
         if (fontStyleList == null)
         {
             fontStyleList = new JList(getFontStyleNames());
+            fontStyleList.setVisibleRowCount(8);
             fontStyleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             fontStyleList.addListSelectionListener(
                 new ListSelectionHandler(getFontStyleTextField()));
             fontStyleList.setSelectedIndex(0);
-            fontStyleList.setFont(DEFAULT_FONT);
+
             fontStyleList.setFocusable(false);
         }
         return fontStyleList;
@@ -246,11 +251,12 @@ public class JFontChooser extends JComponent
         if (fontSizeList == null)
         {
             fontSizeList = new JList(this.fontSizeStrings);
+            fontSizeList.setVisibleRowCount(8);
             fontSizeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             fontSizeList.addListSelectionListener(
                 new ListSelectionHandler(getFontSizeTextField()));
             fontSizeList.setSelectedIndex(0);
-            fontSizeList.setFont(DEFAULT_FONT);
+
             fontSizeList.setFocusable(false);
         }
         return fontSizeList;
@@ -649,15 +655,17 @@ public class JFontChooser extends JComponent
         Action cancelAction = new DialogCancelAction(dialog);
 
         JButton okButton = new JButton(okAction);
-        okButton.setFont(DEFAULT_FONT);
+
         JButton cancelButton = new JButton(cancelAction);
-        cancelButton.setFont(DEFAULT_FONT);
+
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(2, 1));
-        buttonsPanel.add(okButton);
+        okButton.setText("Aplicar");
+        cancelButton.setText("Cancelar");
+        buttonsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING, util.AcabamentoDialogos.px(8), 0));
         buttonsPanel.add(cancelButton);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 10));
+        buttonsPanel.add(okButton);
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(util.AcabamentoDialogos.px(12), 0, 0, 0));
 
         ActionMap actionMap = buttonsPanel.getActionMap();
         actionMap.put(cancelAction.getValue(Action.DEFAULT), cancelAction);
@@ -666,13 +674,10 @@ public class JFontChooser extends JComponent
         inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), cancelAction.getValue(Action.DEFAULT));
         inputMap.put(KeyStroke.getKeyStroke("ENTER"), okAction.getValue(Action.DEFAULT));
 
-        JPanel dialogEastPanel = new JPanel();
-        dialogEastPanel.setLayout(new BorderLayout());
-        dialogEastPanel.add(buttonsPanel, BorderLayout.NORTH);
-
         dialog.getContentPane().add(this, BorderLayout.CENTER);
-        dialog.getContentPane().add(dialogEastPanel, BorderLayout.EAST);
-        dialog.pack();
+        dialog.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+        dialog.getRootPane().setDefaultButton(okButton);
+        util.AcabamentoDialogos.aplicar(dialog);
         dialog.setLocationRelativeTo(frame);
         return dialog;
     }
@@ -697,16 +702,15 @@ public class JFontChooser extends JComponent
         if (fontNamePanel == null)
         {
             fontNamePanel = new JPanel();
-            fontNamePanel.setLayout(new BorderLayout());
-            fontNamePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            fontNamePanel.setPreferredSize(new Dimension(180, 100));
+            fontNamePanel.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
+            fontNamePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
             JScrollPane scrollPane = new JScrollPane(getFontFamilyList());
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
-            p.setLayout(new BorderLayout());
+            p.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
             p.add(getFontFamilyTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
 
@@ -729,16 +733,15 @@ public class JFontChooser extends JComponent
         if (fontStylePanel == null)
         {
             fontStylePanel = new JPanel();
-            fontStylePanel.setLayout(new BorderLayout());
-            fontStylePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            fontStylePanel.setPreferredSize(new Dimension(140, 100));
+            fontStylePanel.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
+            fontStylePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
             JScrollPane scrollPane = new JScrollPane(getFontStyleList());
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
-            p.setLayout(new BorderLayout());
+            p.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
             p.add(getFontStyleTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
 
@@ -760,16 +763,15 @@ public class JFontChooser extends JComponent
         if (fontSizePanel == null)
         {
             fontSizePanel = new JPanel();
-            fontSizePanel.setLayout(new BorderLayout());
-            fontSizePanel.setPreferredSize(new Dimension(70, 100));
-            fontSizePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            fontSizePanel.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
+            fontSizePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
             JScrollPane scrollPane = new JScrollPane(getFontSizeList());
             scrollPane.getVerticalScrollBar().setFocusable(false);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             JPanel p = new JPanel();
-            p.setLayout(new BorderLayout());
+            p.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
             p.add(getFontSizeTextField(), BorderLayout.NORTH);
             p.add(scrollPane, BorderLayout.CENTER);
 
@@ -790,14 +792,14 @@ public class JFontChooser extends JComponent
     {
         if (samplePanel == null)
         {
-            Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), (Editor.fromConfiguracao.getValor("Inspector.obj.font.exemplo")));
-            Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
-            Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
+            Border border = BorderFactory.createEmptyBorder();
 
             samplePanel = new JPanel();
-            samplePanel.setLayout(new BorderLayout());
+            samplePanel.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
             samplePanel.setBorder(border);
+            JLabel heading = new JLabel(Editor.fromConfiguracao.getValor("Inspector.obj.font.exemplo"));
+            heading.putClientProperty("FlatLaf.style", "font: bold");
+            samplePanel.add(heading, BorderLayout.NORTH);
 
             samplePanel.add(getSampleTextField(), BorderLayout.CENTER);
         }
@@ -808,14 +810,14 @@ public class JFontChooser extends JComponent
     {
         if (lastPanel == null)
         {
-            Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), (Editor.fromConfiguracao.getValor("Inspector.obj.font.anterior")));
-            Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
-            Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
+            Border border = BorderFactory.createEmptyBorder();
 
             lastPanel = new JPanel();
-            lastPanel.setLayout(new BorderLayout());
+            lastPanel.setLayout(new BorderLayout(util.AcabamentoDialogos.px(8), util.AcabamentoDialogos.px(8)));
             lastPanel.setBorder(border);
+            JLabel heading = new JLabel(Editor.fromConfiguracao.getValor("Inspector.obj.font.anterior"));
+            heading.putClientProperty("FlatLaf.style", "font: bold");
+            lastPanel.add(heading, BorderLayout.NORTH);
             lastPanel.add(getLastTextField(), BorderLayout.CENTER);
             JButton btn = new JButton(Editor.fromConfiguracao.getValor("Inspector.obj.font.restaurar"));
             btn.addActionListener((ActionEvent ae) -> {
@@ -828,11 +830,10 @@ public class JFontChooser extends JComponent
     
     protected JTextField getSampleTextField() {
         if (sampleText == null) {
-            Border lowered = BorderFactory.createLoweredBevelBorder();
+            Border lowered = javax.swing.UIManager.getBorder("TextField.border");
 
             sampleText = new JTextField(("AaBbYyZz"));
             sampleText.setBorder(lowered);
-            sampleText.setPreferredSize(new Dimension(100, 40));
         }
         return sampleText;
     }
@@ -842,11 +843,10 @@ public class JFontChooser extends JComponent
     {
         if (lastText == null)
         {
-            Border lowered = BorderFactory.createLoweredBevelBorder();
+            Border lowered = javax.swing.UIManager.getBorder("TextField.border");
 
             lastText = new JTextField(("AaBbYyZz"));
             lastText.setBorder(lowered);
-            lastText.setPreferredSize(new Dimension(80, 40));
         }
         return lastText;
     }
@@ -867,10 +867,10 @@ public class JFontChooser extends JComponent
         {
             int i = 0;
             fontStyleNames = new String[4];
-            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(0); // ("Plain");
-            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(1); // ("Bold");
-            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(2); // ("Italic");
-            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(3); // ("BoldItalic");
+            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(0);
+            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(1);
+            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(2);
+            fontStyleNames[i++] = util.Utilidades.decodeFontStyle(3);
         }
         return fontStyleNames;
     }

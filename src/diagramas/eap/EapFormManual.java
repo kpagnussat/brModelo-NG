@@ -6,7 +6,6 @@
 
 package diagramas.eap;
 
-import controlador.Editor;
 import java.awt.Dialog;
 import javax.swing.JOptionPane;
 
@@ -24,16 +23,28 @@ public class EapFormManual extends javax.swing.JDialog {
     public EapFormManual(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.LayoutDialogos.eap(this, jPanel3, jPanel2, jPanel1, jScrollPane1, jLabel3,
+                new javax.swing.JLabel[]{jLabel1, jLabel4, jLabel5, jLabel2},
+                new javax.swing.JTextField[]{txtPrincipal, txtX, txtY},
+                rbVertical, rbHCentro, rbHEsquerda, rbHDireita);
     }
 
     public EapFormManual(Dialog dialog) {
         super(dialog);
         initComponents();
+        util.LayoutDialogos.eap(this, jPanel3, jPanel2, jPanel1, jScrollPane1, jLabel3,
+                new javax.swing.JLabel[]{jLabel1, jLabel4, jLabel5, jLabel2},
+                new javax.swing.JTextField[]{txtPrincipal, txtX, txtY},
+                rbVertical, rbHCentro, rbHEsquerda, rbHDireita);
     }
 
     public EapFormManual(Dialog dialog, boolean bln) {
         super(dialog, bln);
         initComponents();
+        util.LayoutDialogos.eap(this, jPanel3, jPanel2, jPanel1, jScrollPane1, jLabel3,
+                new javax.swing.JLabel[]{jLabel1, jLabel4, jLabel5, jLabel2},
+                new javax.swing.JTextField[]{txtPrincipal, txtX, txtY},
+                rbVertical, rbHCentro, rbHEsquerda, rbHDireita);
     }
     protected void btnCancelarAction(java.awt.event.ActionEvent evt) {                                            
         setResultado(JOptionPane.CANCEL_OPTION);
@@ -139,7 +150,7 @@ public class EapFormManual extends javax.swing.JDialog {
 
         txtProcessos.setColumns(20);
         txtProcessos.setRows(5);
-        txtProcessos.setPreferredSize(new java.awt.Dimension(164, 194));
+
         jScrollPane1.setViewportView(txtProcessos);
 
         jLabel1.setText(bundle.getString("EapFormManual.jLabel1.text")); // NOI18N

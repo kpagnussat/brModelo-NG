@@ -27,7 +27,7 @@ public class InspectorExtenderEditor extends JPanel {
     public InspectorExtenderEditor(Inspector dono) {
         this();
         this.dono = dono;
-        setBackground(Color.white);
+        setBackground(util.EstiloUI.fundo(this, "TextField.background"));
         setFocusable(true);
     }
     
@@ -57,13 +57,14 @@ public class InspectorExtenderEditor extends JPanel {
     
     public InspectorExtenderEditor() {
         super();
-        //setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 1, 1));
+        setBackground(util.EstiloUI.fundo(this, "TextField.background"));
         btn = new JButton("...");
         btn.setBounds(1,1, 20, 20);
-        btn.setBorder(new RoundedBorder(10));
-        //btn.setLocation(1, 1);
-        add(btn);//, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, -1, -1));
+        util.EstiloUI.toolbar(btn);
+        btn.setToolTipText("Abrir editor ou executar ação");
+        btn.setMargin(new Insets(0, 4, 0, 4));
+        add(btn);
         validate();
         setFocusable(true);
         btn.addActionListener((ActionEvent e) -> {
@@ -74,9 +75,9 @@ public class InspectorExtenderEditor extends JPanel {
     public final void RunDlg() {
         if (!isEnabled() || !btn.isEnabled()) return;
         if (getAcaoTipo() == TipoDeAcao.tpAcaoDlgCor) {
-            setTexto(util.Dialogos.ShowDlgCor(this.getRootPane(), getTexto(), dono.getEditor().diagramaAtual));
+            setTexto(util.Dialogos.ShowDlgCor((dono == null ? getRootPane() : dono.getRootPane()), getTexto(), dono.getEditor().diagramaAtual));
         } else if (getAcaoTipo() == TipoDeAcao.tpAcaoDlgTexto) {
-            setTexto(util.Dialogos.ShowDlgTexto(this.getRootPane(),getTexto()));
+            setTexto(util.Dialogos.ShowDlgTexto((dono == null ? getRootPane() : dono.getRootPane()),getTexto()));
         }
         if (dono != null) dono.EndEdit(true, false);
         invalidate();
@@ -85,9 +86,9 @@ public class InspectorExtenderEditor extends JPanel {
     public final void RunDlg(String temporario) {
         if (!isEnabled() || !btn.isEnabled()) return;
         if (getAcaoTipo() == TipoDeAcao.tpAcaoDlgCor) {
-            setTexto(util.Dialogos.ShowDlgCor(this.getRootPane(), temporario, dono.getEditor().diagramaAtual));
+            setTexto(util.Dialogos.ShowDlgCor((dono == null ? getRootPane() : dono.getRootPane()), temporario, dono.getEditor().diagramaAtual));
         } else if (getAcaoTipo() == TipoDeAcao.tpAcaoDlgTexto) {
-            setTexto(util.Dialogos.ShowDlgTexto(this.getRootPane(),temporario, getTexto()));
+            setTexto(util.Dialogos.ShowDlgTexto((dono == null ? getRootPane() : dono.getRootPane()),temporario, getTexto()));
         }
         if (dono != null) dono.EndEdit(true, false);
         invalidate();
@@ -124,33 +125,30 @@ public class InspectorExtenderEditor extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        //Color bkp = g.getColor();
         Rectangle r = this.getBounds();
-        g.setColor(Color.BLACK);
+        g.setColor(util.EstiloUI.cor("Label.foreground"));
         int re = 0;
         String bonito = "?";
         if (getAcaoTipo() == TipoDeAcao.tpAcaoDlgCor || getAcaoTipo() == TipoDeAcao.tpReadOnlyCor) {
-            g.setColor(Color.BLACK);
+            g.setColor(util.EstiloUI.cor("Label.foreground"));
             g.fillRect(3, 3, r.height - 7, r.height - 7);
             try {
                 Color c = util.Utilidades.StringToColor(getTexto());
                 g.setColor(c);
                 bonito = getTexto();
             } catch (Exception e) {
+                // Keep the default swatch when the stored color cannot be parsed.
             }
             g.fillRect(4, 4, r.height - 8, r.height - 8);
-            //g.setColor(Color.BLACK);
-            //g.drawRect(3, 3, r.height - 7, r.height - 7);
             re = r.height - 1;
         } else {
             bonito = getTexto().replaceAll("\n", " | ");
         }
-        //g.setColor(bkp);
         
         Rectangle obkp = g.getClipBounds();
 
-        g.setColor(Color.DARK_GRAY);
-        g.setFont(new Font(this.getFont().getFontName(), Font.BOLD, getFont().getSize()));
+        g.setColor(util.EstiloUI.cor("Label.foreground"));
+        g.setFont(getFont());
         g.clipRect(re, 0, r.width - r.height -re - (re == 0? 4: 8), r.height);
         g.drawString(bonito, re + 2, (int) (r.height * 0.72) + 1);
         g.drawLine(0, 0, 0, getHeight());
@@ -161,6 +159,7 @@ public class InspectorExtenderEditor extends JPanel {
         java.awt.Dimension nd = new java.awt.Dimension(getHeight() -1, getHeight() - 2);
         btn.setPreferredSize(nd);
         btn.setSize(nd);
+        btn.setToolTipText(getToolTipText() == null ? "Abrir editor ou executar ação" : getToolTipText());
         btn.repaint();
     }
 }

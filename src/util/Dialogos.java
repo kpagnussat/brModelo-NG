@@ -16,10 +16,7 @@ import java.io.File;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -73,7 +70,6 @@ public class Dialogos {
     public static String ShowDlgTexto(JComponent form, String texto) {
         DlgExecutor dlg = new DlgExecutor((Frame) form.getParent(), true);
         dlg.Texto.setText(texto);
-        //dlg.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dlg.setLocationRelativeTo(form);
         dlg.setVisible(true);
 
@@ -86,7 +82,6 @@ public class Dialogos {
     public static String ShowDlgTexto(JComponent form, String texto, String original) {
         DlgExecutor dlg = new DlgExecutor((Frame) form.getParent(), true);
         dlg.Texto.setText(texto);
-        //dlg.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dlg.setLocationRelativeTo(form);
         dlg.setVisible(true);
 
@@ -100,16 +95,12 @@ public class Dialogos {
         DlgExecutor dlg = new DlgExecutor((Frame) form.getParent(), true);
         dlg.Texto.setText(texto);
         dlg.Texto.setEditable(false);
-        dlg.Texto.setForeground(Color.DARK_GRAY);
+        dlg.Texto.setForeground(util.EstiloUI.texto(dlg.Texto, "Label.foreground"));
         dlg.Texto.setCaretPosition(0);
         dlg.setLocationRelativeTo(form);
         dlg.btnCancelar.setVisible(false);
         dlg.setVisible(true);
 
-//        if (dlg.getResultado() == JOptionPane.OK_OPTION) {
-//            return dlg.Texto.getText();
-//        }
-//        return texto;
     }
 
     public static Color c = Color.BLACK;
@@ -118,6 +109,7 @@ public class Dialogos {
         try {
             c = Utilidades.StringToColor(textoCor);
         } catch (Exception e) {
+            // Keep the previous chooser color when the stored color cannot be parsed.
         }
         final JColorChooser jcc = new JColorChooser();
         jcc.addChooserPanel(new PainelSelecaoCor(modelo));
@@ -133,7 +125,6 @@ public class Dialogos {
                 },
                 null);
         dialog.setVisible(true);
-        //c = jcc.showDialog(form, Editor.fromConfiguracao.getValor("Controler.MSG_CHOOSE_COLLOR"), c);
         return c == null ? textoCor : Utilidades.ColorToString(c);
     }
 
@@ -142,6 +133,7 @@ public class Dialogos {
         try {
             c = util.Utilidades.StringToColor(textoCor);
         } catch (Exception e) {
+            // Keep the black default when the stored color cannot be parsed.
         }
         c = JColorChooser.showDialog(form, Editor.fromConfiguracao.getValor("Controler.MSG_CHOOSE_COLLOR"), c);
         return c == null ? textoCor : util.Utilidades.ColorToString(c);
@@ -150,179 +142,76 @@ public class Dialogos {
     public static String ShowDlgInputText(JComponent form, String textoCor) {
         String res = JOptionPane.showInputDialog(form,
                 Editor.fromConfiguracao.getValor("Controler.MSG_INPUT_TEXT_LABEL"), textoCor);
-        //null, //Editor.fromConfiguracao.getValor("Controler.MSG_INPUT_TEXT_LABEL"), 
-        //textoCor);
         return res == null ? "" : res;
     }
 
-    public static String ShowDlgFileImg(JComponent form) {
-        JFileChooser f = new JFileChooser();
-        //f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.dlg.image"));
-        int returnVal = f.showDialog(form, Editor.fromConfiguracao.getValor("Controler.dlg.image"));
-        f.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = f.getSelectedFile();
-            return file.getAbsolutePath();
-        } else {
-            return null;
+    private static final String ULTIMA_PASTA = "cfg.seletor.ultimaPasta";
+
+    private static File pastaInicial(String anterior) {
+        if (anterior != null && !anterior.isEmpty()) {
+            return SeletorDeArquivos.pastaDe(new File(anterior));
         }
+        if (Editor.fromConfiguracao.hasValor(ULTIMA_PASTA)) {
+            File pasta = new File(Editor.fromConfiguracao.getValor(ULTIMA_PASTA));
+            if (pasta.isDirectory()) return pasta;
+        }
+        return new File(System.getProperty("user.dir"));
     }
 
-    private static String dir = "";
+    private static File selecionar(Component pai, boolean salvar, String titulo, String aceitar,
+                                   String anterior, String nome, java.util.List<SeletorDeArquivos.Filtro> filtros) {
+        File file = SeletorDeArquivos.escolher(pai, new SeletorDeArquivos.Pedido(
+                salvar, titulo, aceitar, pastaInicial(anterior), nome, filtros, 0));
+        if (file != null) {
+            Editor.fromConfiguracao.SetAndSaveIfNeed(ULTIMA_PASTA, file.getAbsoluteFile().getParent());
+        }
+        return file;
+    }
+
+    public static String ShowDlgFileImg(JComponent form) {
+        String titulo = Editor.fromConfiguracao.getValor("Controler.dlg.image");
+        File file = selecionar(form, false, titulo, titulo, null, "",
+                java.util.List.of(new SeletorDeArquivos.Filtro("Todos os arquivos")));
+        return file == null ? null : file.getAbsolutePath();
+    }
+
+    static java.util.List<SeletorDeArquivos.Filtro> filtrosDiagrama(boolean abrir) {
+        java.util.List<SeletorDeArquivos.Filtro> filtros = new java.util.ArrayList<>();
+        if (abrir) filtros.add(new SeletorDeArquivos.Filtro("Todos os arquivos brModelo", Arquivo.brM3, Arquivo.brMj, Arquivo.xml));
+        filtros.add(new SeletorDeArquivos.Filtro("BrModelo(bin)", Arquivo.brM3));
+        filtros.add(new SeletorDeArquivos.Filtro("BrModelo JSON (.brMj)", Arquivo.brMj));
+        filtros.add(new SeletorDeArquivos.Filtro("BrModelo(xml)", Arquivo.xml));
+        if (abrir) filtros.add(new SeletorDeArquivos.Filtro("Todos os arquivos"));
+        return java.util.List.copyOf(filtros);
+    }
+
+    static java.util.List<SeletorDeArquivos.Filtro> filtrosImagem() {
+        return java.util.List.of(new SeletorDeArquivos.Filtro("Imagem (png)", Arquivo.png),
+                new SeletorDeArquivos.Filtro("Imagem (bmp)", Arquivo.bmp));
+    }
+
     public static File ShowDlgSaveDiagrama(JComponent form, Diagrama diag) {
-        JFileChooser f = new JFileChooser();
-        //f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        f.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        FileFilter filter = new FileNameExtensionFilter("BrModelo(bin)", Arquivo.brM3);
-        FileFilter filter2 = new FileNameExtensionFilter("BrModelo(xml)", Arquivo.xml);
-        f.addChoosableFileFilter(filter);
-        f.addChoosableFileFilter(filter2);
-        f.setAcceptAllFileFilterUsed(false);
-        f.setFileFilter(filter);
-        if (dir.isEmpty()) dir = System.getProperty("user.dir");
-        f.setCurrentDirectory(new File(dir + "."));
-        f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.MSG_SAVE_TITLE") + " " + diag.getNomeFormatado());
-        if (!diag.getNome().isEmpty()){ 
-            f.setSelectedFile(new File(diag.getNome()));
-        }
-        //f.setApproveButtonText(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        int returnVal = f.showSaveDialog(form);
-        //int returnVal = f.showDialog(form, Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = f.getSelectedFile();
-            String ext = Arquivo.getExtension(file);
-            if (ext == null) {
-                ext = "";
-            }
-            String arq = file.getAbsolutePath();
-            dir = f.getCurrentDirectory().getAbsolutePath();
-            if (f.getFileFilter().equals(filter) && !Arquivo.brM3.toUpperCase().equals(ext.toUpperCase())) {
-                return new File(arq + "." + Arquivo.brM3);
-            }
-            if (f.getFileFilter().equals(filter2) && !Arquivo.xml.toUpperCase().equals(ext.toUpperCase())) {
-                return new File(arq + "." + Arquivo.xml);
-            }
-            return file;
-        } else {
-            return null;
-        }
+        return selecionar(form, true, Editor.fromConfiguracao.getValor("Controler.MSG_SAVE_TITLE") + " " + diag.getNomeFormatado(),
+                "Salvar", null, diag.getNome(), filtrosDiagrama(false));
     }
 
     public static File ShowDlgSaveAsImg(JComponent form, Diagrama diag) {
-        JFileChooser f = new JFileChooser();
-        //f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        f.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        FileFilter filter = new FileNameExtensionFilter("Imagem (png)", Arquivo.png);
-        FileFilter filter2 = new FileNameExtensionFilter("Imagem (bmp)", Arquivo.bmp);
-        f.addChoosableFileFilter(filter);
-        f.addChoosableFileFilter(filter2);
-        f.setAcceptAllFileFilterUsed(false);
-        f.setFileFilter(filter);
-        if (dir.isEmpty()) dir = System.getProperty("user.dir");
-        f.setCurrentDirectory(new File(dir));
-        f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.MSG_EPRT_TITLE"));
-        if (!diag.getNome().isEmpty()){ 
-            f.setSelectedFile(new File(diag.getNome()));
-        }
-        //f.setApproveButtonText(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        int returnVal = f.showSaveDialog(form);
-        //int returnVal = f.showDialog(form, Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = f.getSelectedFile();
-            String ext = Arquivo.getExtension(file);
-            if (ext == null) {
-                ext = "";
-            }
-            dir = file.getAbsolutePath();
-            if (f.getFileFilter().equals(filter) && !Arquivo.png.toUpperCase().equals(ext.toUpperCase())) {
-                return new File(file.getAbsolutePath() + "." + Arquivo.png);
-            }
-            if (f.getFileFilter().equals(filter2) && !Arquivo.bmp.toUpperCase().equals(ext.toUpperCase())) {
-                return new File(file.getAbsolutePath() + "." + Arquivo.bmp);
-            }
-            return file;
-        } else {
-            return null;
-        }
+        return selecionar(form, true, Editor.fromConfiguracao.getValor("Controler.MSG_EPRT_TITLE"),
+                "Salvar", null, diag.getNome(), filtrosImagem());
     }
 
     public static File ShowDlgSaveAsAny(JComponent form, String ar) {
-        JFileChooser f = new JFileChooser();
-        //f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        f.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        //FileFilter filter = new FileNameExtensionFilter("Arquivo texto (txt)", Arquivo.png);
-        //FileFilter filter2 = new FileNameExtensionFilter("Imagem (bmp)", Arquivo.bmp);
-        //f.addChoosableFileFilter(filter);
-        //f.addChoosableFileFilter(filter2);
-        f.setAcceptAllFileFilterUsed(true);
-        //f.setFileFilter(filter);
-        if (dir.isEmpty()) dir = System.getProperty("user.dir");
-        f.setCurrentDirectory(new File(dir));
-        f.setDialogTitle(Editor.fromConfiguracao.getValor("Controler.MSG_EPRT_TITLE"));
-        if (!ar.isEmpty()){ 
-            f.setSelectedFile(new File(ar));
-        }
-        //f.setApproveButtonText(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-        int returnVal = f.showSaveDialog(form);
-        //int returnVal = f.showDialog(form, Editor.fromConfiguracao.getValor("Controler.dlg.modelo.salvar"));
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = f.getSelectedFile();
-//            String ext = Arquivo.getExtension(file);
-//            if (ext == null) {
-//                ext = "";
-//            }
-            dir = file.getAbsolutePath();
-
-            return file;
-        } else {
-            return null;
-        }
+        File sugestao = ar == null || ar.isEmpty() ? null : new File(ar);
+        return selecionar(form, true, Editor.fromConfiguracao.getValor("Controler.MSG_EPRT_TITLE"),
+                "Salvar", sugestao != null && sugestao.isAbsolute() ? ar : null,
+                sugestao == null ? "" : sugestao.getName(),
+                java.util.List.of(new SeletorDeArquivos.Filtro("Todos os arquivos")));
     }
 
-    /**
-     * param preDir = pode ser diretório ou arquivo (não importa)
-     * @param preDir
-     * @param master
-     * @return 
-     */
+    /** preDir can name either a directory or a previously opened file. */
     public static File ShowDlgLoadDiagrama(String preDir, Editor master) {
-        JFileChooser f = new JFileChooser();
-        f.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        f.setFileFilter(new FileNameExtensionFilter("BrModelo", Arquivo.brM3, Arquivo.xml));
-        f.addChoosableFileFilter(new FileNameExtensionFilter("BrModelo(bin)", Arquivo.brM3));
-        f.addChoosableFileFilter(new FileNameExtensionFilter("BrModelo(xml)", Arquivo.xml));
-        f.setAcceptAllFileFilterUsed(true);
-        
-        if (preDir == null || "".equals(preDir)) {
-            f.setCurrentDirectory(new File(System.getProperty("user.dir")));
-        } else {
-            File f2 = new File(preDir);
-            if (f2.isDirectory()) {
-                f.setCurrentDirectory(f2);
-            } else {
-                f.setCurrentDirectory(new File(f2.getPath()));
-            }
-        }
-
-        //f.setApproveButtonText(Editor.fromConfiguracao.getValor("Controler.dlg.modelo.abrir"));
-        int returnVal = f.showOpenDialog((Component) master.getFramePrincipal());
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = f.getSelectedFile();
-            if (!file.exists()) {
-                return null;
-            }
-            return file;
-        } else {
-            return null;
-        }
+        return selecionar((Component) master.getFramePrincipal(), false, "Abrir diagrama", "Abrir",
+                preDir, "", filtrosDiagrama(true));
     }
 
     public static JFontChooser JFC = new JFontChooser();

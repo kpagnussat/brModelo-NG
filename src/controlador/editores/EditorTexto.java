@@ -42,22 +42,23 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
     public EditorTexto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.AcabamentoDialogos.aplicar(this);
         TextArea = new JTextArea();
+        tamFonte = TextArea.getFont().getSize();
+        txtZoon.setText(String.valueOf(tamFonte));
         TextLineNumber tln = new TextLineNumber(TextArea);
         tln.setUpdateFont(true);
 
         scrPrincipal.getViewport().add(TextArea);
         scrPrincipal.setRowHeaderView(tln);
         this.pack();
+        util.AcabamentoDialogos.limitar(this);
 
         getRootPane().registerKeyboardAction(e -> {
-            //this.dispose();
-            //setResultado(JOptionPane.CANCEL_OPTION);
             setVisible(false);
 
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         getRootPane().registerKeyboardAction(e -> {
-            //setResultado(JOptionPane.OK_OPTION);
             setVisible(false);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, java.awt.event.InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -65,7 +66,7 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
             btnCopyActionPerformed(null);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
         setTitle(Editor.fromConfiguracao.getValor("Controler.interface.Titulo.EditorDeCodigo"));
-        this.pack();
+        util.LayoutDialogos.texto(this, jToolBar1, scrPrincipal, jPanel2);
     }
 
     /**
@@ -92,7 +93,7 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
         jToolBar1.setRollover(true);
         jToolBar1.setMargin(new java.awt.Insets(2, 2, 2, 2));
 
-        btnZmn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoommenos.png"))); // NOI18N
+        btnZmn.setIcon(util.Icones.de("/imagens/zoommenos.png")); // NOI18N
         btnZmn.setFocusable(false);
         btnZmn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnZmn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -110,7 +111,7 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
         txtZoon.setToolTipText(bundle.getString("MostradorDeCodigo.toolTipText")); // NOI18N
         jToolBar1.add(txtZoon);
 
-        btnZma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoom.png"))); // NOI18N
+        btnZma.setIcon(util.Icones.de("/imagens/zoom.png")); // NOI18N
         btnZma.setFocusable(false);
         btnZma.setHideActionText(true);
         btnZma.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -123,10 +124,10 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
         jToolBar1.add(btnZma);
         jToolBar1.add(jSeparator1);
 
-        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/copy.png"))); // NOI18N
+        btnCopy.setIcon(util.Icones.de("/imagens/copy.png")); // NOI18N
         btnCopy.setFocusable(false);
         btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCopy.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cpdim_cp.png"))); // NOI18N
+        btnCopy.setPressedIcon(util.Icones.de("/imagens/cp.png")); // NOI18N
         btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,7 +136,7 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
         });
         jToolBar1.add(btnCopy);
 
-        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/menu_salvarc.png"))); // NOI18N
+        btnSalvar.setIcon(util.Icones.de("/imagens/menu_salvarc.png")); // NOI18N
         btnSalvar.setFocusable(false);
         btnSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -218,13 +219,8 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
         if (arq == null) {
             return;
         }
-        if (arq.exists()) {
-            if (util.Dialogos.ShowMessageConfirm(getRootPane(), Editor.fromConfiguracao.getValor("Controler.MSG_QUESTION_REWRITE")) != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
         try {
-            FileWriter fw = new FileWriter(arq.getAbsoluteFile(), true);
+            FileWriter fw = new FileWriter(arq.getAbsoluteFile(), false);
             TextArea.write(fw);
         } catch (IOException iOException) {
             util.BrLogger.Logger("ERROR_DIAGRAMA_SAVE_ANY", iOException.getMessage());
@@ -267,13 +263,12 @@ public class EditorTexto extends javax.swing.JDialog implements ClipboardOwner {
             tamFonte = 1;
         }
         Font f = TextArea.getFont();
-        TextArea.setFont(new Font(f.getFamily(), f.getStyle(), tamFonte));
+        TextArea.setFont(f.deriveFont((float)tamFonte));
         txtZoon.setText(String.valueOf(tamFonte));
     }
 
     @Override
     public void lostOwnership(Clipboard clpbrd, Transferable t) {
-        //
     }
 
 }

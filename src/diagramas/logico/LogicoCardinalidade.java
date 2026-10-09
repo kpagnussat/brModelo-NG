@@ -41,7 +41,6 @@ public class LogicoCardinalidade  extends PreCardinalidade {
         res.add(p, InspectorProperty.PropertyFactorySN("cardinalidade.tamanhoautmatico", "setTamanhoAutmatico", isTamanhoAutmatico()).AddCondicaoForFalse(afetados));
         res.add(p + 1, InspectorProperty.PropertyFactorySN("cardinalidade.movimentacaomanual", "setMovimentacaoManual", isMovimentacaoManual()));
 
-        //res.add(InspectorProperty.PropertyFactorySeparador("mer"));
         ArrayList<String> strCards = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             strCards.add(CardToString(IntToCard(i)));
@@ -60,7 +59,6 @@ public class LogicoCardinalidade  extends PreCardinalidade {
         me.appendChild(util.XMLGenerate.ValorBoolean(doc, "MovimentacaoManual", isMovimentacaoManual()));
         me.appendChild(util.XMLGenerate.ValorString(doc, "Papel", getPapel()));
         me.appendChild(util.XMLGenerate.ValorFonte(doc, getFont()));
-        //me.appendChild(util.XMLGenerate.ValorRefFormElementar(doc, "LigadoA", getLigadoA()));
     }
 
     @Override

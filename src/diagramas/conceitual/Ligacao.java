@@ -34,9 +34,6 @@ public class Ligacao extends PreLigacao {
         super(modelo);
     }
 
-//    public Ligacao(Diagrama modelo, boolean cardNome) {
-//        super(modelo, cardNome);
-//    }
 
     public Ligacao(Diagrama modelo, Cardinalidade aCard) {
         super(modelo, aCard);
@@ -117,7 +114,6 @@ public class Ligacao extends PreLigacao {
             me.appendChild(util.XMLGenerate.ValorColor(doc, "ForeColor", getForeColor()));
         }
         me.appendChild(util.XMLGenerate.ValorInteger(doc, "Largura", (int) getLargura()));
-        //me.appendChild(util.XMLGenerate.ValorInteger(doc, "Fator_Largura", (int)fator_largura));
 
         Element lig = doc.createElement("Ligacoes");
         util.XMLGenerate.AtributoRefFormElementar(lig, "PontaA", getFormaPontaA());
@@ -138,8 +134,6 @@ public class Ligacao extends PreLigacao {
 
     @Override
     public boolean CommitXML(Element me, HashMap<Element, FormaElementar> mapa) {
-        //NodeList ligLst = me.getElementsByTagName("Ligacoes");
-        //Element lig =  (Element) ligLst.item(0);
         Element lig = util.XMLGenerate.FindByNodeName(me, "Ligacoes");
 
         String idPt = lig.getAttribute("PontaA");
@@ -152,7 +146,6 @@ public class Ligacao extends PreLigacao {
         if (resB instanceof Forma) {
             getPontaB().SetEm((Forma)resB);
         }
-        //reSetBounds()
         if (resA instanceof Forma) ((Forma)resA).PosicionePonto(getPontaA());
         if (resB instanceof Forma) ((Forma)resB).PosicionePonto(getPontaB());
         OrganizeLinha();
@@ -196,7 +189,6 @@ public class Ligacao extends PreLigacao {
                 card.LoadFromXML(ecard, colando);
             }
         }
-        //reSetBounds();
         return true;
     }
 
@@ -212,26 +204,17 @@ public class Ligacao extends PreLigacao {
     private void addCard() {
         PreCardinalidade card = getCard();
         if (card != null) return;
-        //if (cardNome) {
             setCard(new Cardinalidade(getMaster(), "Cardinalidade"));
-        //} else {
-        //    setCard(new Cardinalidade(getMaster()));
-        //}
     }
     
     @Override
     public void PrepareCardinalidade() {
-//        PreCardinalidade card = getCard();
-//        if (card == null) {
-//            return;
-//        }
         if (getPontaA() == null || getPontaB() == null) {
             removeCar();
             return;
         }
         
         if (!getPontaA().isEstaLigado() || !getPontaB().isEstaLigado()) {
-            //removeCar();
             PreCardinalidade card = getCard();
             if (card != null) card.Fixe(null);
             return;
@@ -259,6 +242,5 @@ public class Ligacao extends PreLigacao {
             return;
         }
         removeCar();
-//        card.Fixe(null);
    }
 }

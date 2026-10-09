@@ -37,20 +37,17 @@ public class Configuer {
     }
 
     private void LoadCfg() {
-        String tmp = System.getProperty("user.dir") + File.separator + "config.chc";
+        String tmp = util.Pastas.arquivo(util.Pastas.Tipo.CONFIG, "config.chc").getPath();
         File f = new File(tmp);
 
         ResourceBundle resourceMap = getResourceMap();
 
         for (String v : resourceMap.keySet()) {
-//            if (v.startsWith("Inspector.") || v.startsWith("Controler.")) {
-//                configuracao.put(v, resourceMap.getString(v));
-//            } else if (v.startsWith("diagrama.")) {
                 configuracao.put(v, resourceMap.getString(v));
-//            }
         }
 
         if (!f.exists()) {
+            configuracao.putIfAbsent(EncaixeGrade.CHAVE, "true");
             SaveCfg();
         } else {
             try {
@@ -69,6 +66,7 @@ public class Configuer {
                 SaveCfg();
             }
         }
+        if (configuracao.putIfAbsent(EncaixeGrade.CHAVE, "true") == null) SaveCfg();
     }
 
     public String getValor(String key) {
@@ -87,7 +85,13 @@ public class Configuer {
 
     public void setValor(String key, String value) {
         configuracao.put(key, value);
-        SaveCfg();
+        if (key.equals(util.TemaAplicacao.CHAVE) || key.equals(util.TemaAplicacao.CLARO) || key.equals(util.TemaAplicacao.ESCURO)) {
+            try {
+                util.ConfiguracaoTema.salvar(util.Pastas.arquivo(util.Pastas.Tipo.CONFIG, "config.chc").toPath(), key, value);
+            } catch (java.io.IOException e) {
+                util.BrLogger.Logger("ERROR_SAVE_CFGFILE", e.getMessage());
+            }
+        } else SaveCfg();
     }
 
     public boolean SetAndSaveIfNeed(String key, String value) {
@@ -104,7 +108,7 @@ public class Configuer {
     }
 
     public void SaveCfg() {
-        String tmp = System.getProperty("user.dir") + File.separator + "config.chc";
+        String tmp = util.Pastas.arquivo(util.Pastas.Tipo.CONFIG, "config.chc").getPath();
         try {
             try (FileOutputStream cfgFile = new FileOutputStream(tmp)) {
                 Properties prop = new Properties();
@@ -208,18 +212,18 @@ public class Configuer {
     }
 
     public static Image getImageFromResource(String keyImg) {
-        String tmp = "/imagens/" + getResourceMap().getString(keyImg);
-        Image res = new ImageIcon(Configuer.class.getResource(tmp)).getImage();
-        return res;
+        return getImageIconFromResource(keyImg).getImage();
     }
 
     public static ImageIcon getImageIconFromResource(String keyImg) {
         String tmp = "/imagens/" + getResourceMap().getString(keyImg);
-        return new ImageIcon(Configuer.class.getResource(tmp));
+        java.net.URL url = Configuer.class.getResource(tmp);
+        if (url != null) return new ImageIcon(url);
+        return (ImageIcon) util.Icones.vetorDaChave(keyImg, tmp.contains("/Campo") && !tmp.contains("/CampoUN") ? 24 : 16);
     }
     
     public String getAutoSaveFile() {
-        String tmp = System.getProperty("user.dir") + File.separator + "autosave.chc";
+        String tmp = util.Pastas.arquivo(util.Pastas.Tipo.ESTADO, "autosave.chc").getPath();
         return tmp;
     }
 }

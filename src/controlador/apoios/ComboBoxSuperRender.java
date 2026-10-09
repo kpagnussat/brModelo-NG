@@ -43,11 +43,6 @@ public class ComboBoxSuperRender extends DefaultListCellRenderer {
         if (c instanceof JLabel) {
             ProcesseFonte((JLabel) c, index, isSelected);
         }
-//        else {
-//            c.setBackground(Color.red);
-//            c = super.getListCellRendererComponent(list, value, index, isSelected,
-//                    cellHasFocus);
-//        }
         return c;
     }
 

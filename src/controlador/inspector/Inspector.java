@@ -7,13 +7,10 @@ package controlador.inspector;
 import controlador.Editor;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -40,12 +37,16 @@ public class Inspector extends JScrollPane {
     }
 
     private void Init() {
-        box = new JPanel();
+        box = new PainelLinhas();
         this.add(box);
-        box.setSize(300, 800);
         setViewportView(box);
-        box.setLayout(null);
-//----        box.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        box.setBackground(util.EstiloUI.fundo(box, "Panel.background"));
+        getViewport().setBackground(util.EstiloUI.fundo(getViewport(), "Panel.background"));
+        util.FocoInspector.instalar(this);
+        // Font-driven row sizes, with single-command sections joined visually.
+        // The item list and each header's collapse state stay intact.
+        box.setLayout(new DisposicaoPropriedades());
+        box.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -104,6 +105,7 @@ public class Inspector extends JScrollPane {
         this.registerKeyboardAction(al_up, stroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         InitEditores();
+        GradePropriedades.instalar(this);
 
     }
 
@@ -127,9 +129,7 @@ public class Inspector extends JScrollPane {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                //if (e.getStateChange() == ItemEvent.SELECTED) {
                 EndEdit(true, false);
-                //}
             }
         });
 
@@ -153,28 +153,13 @@ public class Inspector extends JScrollPane {
             }
         });
 
-//        TipoMenu.addFocusListener( new FocusAdapter() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                TipoMenu.showPopup();
-//                TipoMenu.setPopupVisible(true);
-//            }
-//
-//        });
         TipoTexto.setBorder(null);
     }
 
     public void DoResize() {
-        int scrollw = getVerticalScrollBar().getWidth() + 1;
-        int tam = getWidth() - (2 * espaco) - scrollw;
-        java.awt.Dimension d = new java.awt.Dimension(tam, altura);
-        for (InspectorItemBase item : Itens) {
-            item.setPreferredSize(d);
-            item.setSize(d);
-            item.repaint();
-        }
-        //validate();
-        //EndEdit(true, true);
+        // Widths follow the viewport (PainelLinhas tracks it); just relayout and repaint.
+        box.revalidate();
+        box.repaint();
     }
     private JPanel box;
 
@@ -187,7 +172,38 @@ public class Inspector extends JScrollPane {
         return Itens;
     }
     public final int espaco = 1;
-    public int altura = 20;
+
+    /**
+     * Rows container. Tracking the viewport width makes rows stretch to the visible width
+     * (no manual scrollbar-width math); height stays at the preferred size so it scrolls.
+     */
+    private static class PainelLinhas extends JPanel implements javax.swing.Scrollable {
+
+        @Override
+        public java.awt.Dimension getPreferredScrollableViewportSize() {
+            return getPreferredSize();
+        }
+
+        @Override
+        public int getScrollableUnitIncrement(java.awt.Rectangle r, int orientation, int direction) {
+            return 10;
+        }
+
+        @Override
+        public int getScrollableBlockIncrement(java.awt.Rectangle r, int orientation, int direction) {
+            return 100;
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            return true;
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportHeight() {
+            return false;
+        }
+    }
     protected final JComboBox TipoMenu = new JComboBox();
     protected final JCheckBox TipoSN = new JCheckBox();
     protected final InspectorExtenderEditor TipoDlg = new InspectorExtenderEditor(this);
@@ -207,16 +223,12 @@ public class Inspector extends JScrollPane {
         if (pprt.tipo == InspectorProperty.TipoDeProperty.tpNothing) {
             return null;
         }
-        int p = Itens.size() * (altura + espaco);
         InspectorItemBase item = InspectorItemBase.SuperFactory(this, pprt);
-        int scrollw = getVerticalScrollBar().getWidth() + 1;
-//---        item.setPreferredSize(new java.awt.Dimension(getWidth() - (2 * espaco) - scrollw, altura));
-
-        //item.setLocation(espaco, p + 2);
-        item.setBounds(espaco, p + 2, getWidth() - (2 * espaco) - scrollw, altura);
-        this.box.add(item);//----, new org.netbeans.lib.awtextra.AbsoluteConstraints(espaco, p + 2, -1, -1));
+        this.box.add(item);
         Itens.add(item);
-        box.validate();
+        GradePropriedades.instalar(item);
+        DicasInspector.instalar(item);
+        box.revalidate();
         return item;
     }
 
@@ -290,18 +302,10 @@ public class Inspector extends JScrollPane {
     /**
      * Evita loop infinito
      */
-    //private int saltos = 0;
     private void SelectNext(boolean sobe) {
         if (Itens.isEmpty()) {
             return;
         }
-//
-//        if (selecionado != null && selecionado.getOndeEditar() instanceof JTextField) {
-//            String txt = TipoTexto.getText();;
-//            if (!txt.equals(selecionado.getValor())) {
-//                EndEdit(true, false);
-//            }
-//        }
 
         int p = Itens.indexOf(selecionado);
         if (sobe) {
@@ -337,17 +341,6 @@ public class Inspector extends JScrollPane {
             PerformSelect(Itens.get(p));
         }
 
-//        PerformSelect(Itens.get(p));
-//        if (selecionado instanceof InspectorItemSeparador || (!selecionado.CanEdit())) {
-//            saltos++;
-//            if (saltos > Itens.size()) {
-//                saltos = 0;
-//                return;
-//            }
-//            SelectNext(sobe);
-//        } else {
-//            saltos = 0;
-//        }
     }
     //</editor-fold>
 
@@ -373,7 +366,6 @@ public class Inspector extends JScrollPane {
             } else {
                 CarregueValor(selecionado);
             }
-            //return;
         } else {
             if (selecionado == null) {
                 return;
@@ -469,7 +461,6 @@ public class Inspector extends JScrollPane {
     }
 
     public void Carrege(ArrayList<InspectorProperty> conjPropriedades) {
-        //saltos = 0;
         boolean eq = false;
         if (gerado != null && gerado.size() == conjPropriedades.size()) {
             eq = true;
@@ -497,8 +488,7 @@ public class Inspector extends JScrollPane {
             });
             InspectorItemBase tmp = AddSeparador("");
             ((InspectorItemSeparador) tmp).endOFF = true;
-            tmp.setBackground(new Color(240, 240, 240));
-            //requestFocus(); // Não atrair o focus! 16/08/2014
+            tmp.setBackground(util.EstiloUI.fundo(tmp, "Panel.background"));
             novo = true;
         }
         gerado = conjPropriedades;
@@ -512,7 +502,6 @@ public class Inspector extends JScrollPane {
             });
         }
         RePosicionar();
-        //repaint();
     }
 
     private ArrayList<InspectorItemBase> getListItensForProperty(ArrayList<String> pprs) {
@@ -575,7 +564,6 @@ public class Inspector extends JScrollPane {
             it.RefreshGrupoCanEdit();
         }
         revalidate();
-        //repaint();
     }
 
     /**
@@ -615,24 +603,15 @@ public class Inspector extends JScrollPane {
     }
 
     public void RePosicionar() {
+        // Only expanded rows participate in layout; items remain in the original list.
         box.removeAll();
-        int tl = 0;
-        int scrollw = getVerticalScrollBar().getWidth() + 1;
         for (InspectorItemBase item : getItens()) {
-            if (!item.isVisible()) {
-                continue;
+            if (item.isVisible() && !(item instanceof InspectorItemSeparador header && header.endOFF)) {
+                this.box.add(item);
             }
-            int p = tl * (altura + espaco);
-            tl++;
-            item.setPreferredSize(new java.awt.Dimension(getWidth() - (2 * espaco) - scrollw, altura));
-            this.box.add(item);//---, new org.netbeans.lib.awtextra.AbsoluteConstraints(espaco, p + 2, -1, -1));
-            item.setLocation(espaco, p + 2);
         }
-//        box.validate();
-//        this.validate();
-        box.setSize(box.getSize().width, tl * (altura + espaco));
-        box.setPreferredSize(box.getSize());
-        //DoResize();
+        box.revalidate();
+        box.repaint();
     }
 
     public InspectorItemBase FindByProperty(String pprt) {
@@ -647,15 +626,7 @@ public class Inspector extends JScrollPane {
     @Override
     public void paint(Graphics grphcs) {
         super.paint(grphcs); //To change body of generated methods, choose Tools | Templates.
-        Graphics2D g = (Graphics2D) grphcs;
-        int f = g.getFontMetrics().getHeight();
-        /**
-         * Corrige a altura do inspector no caso de tamanho de fonte diferente
-         * no SO.
-         */
-        if (altura != f + 6) {
-            altura = f + 6;
-        }
+        // Row height used to be patched here after layout; rows now size themselves.
     }
 
     private double divisor = 0.5;

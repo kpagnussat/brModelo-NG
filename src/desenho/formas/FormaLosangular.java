@@ -36,7 +36,7 @@ public class FormaLosangular extends FormaNaoRetangularBase {
     @Override
     public Shape getRegiao() {
         if (Regiao == null) {
-            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
             Polygon los = new Polygon();
             los.addPoint(r.x, r.y + r.height / 2);
             los.addPoint(r.x + r.width / 2, r.y);
@@ -89,7 +89,6 @@ public class FormaLosangular extends FormaNaoRetangularBase {
         SubPointos[9] = new Point(nvX2 + pontoPosi4.x, nvY1 + pontoPosi1.y); //1
         SubPointos[10] = new Point(nvX1 + pontoPosi6.x, nvY1 + pontoPosi5.y); //2
         SubPointos[8] = new Point(nvX2 + pontoPosi7.x, nvY1 + pontoPosi7.y); //0
-        //needRecalPts = false; // o super faz isso!
     }
     // </editor-fold>
 

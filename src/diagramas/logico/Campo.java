@@ -52,7 +52,7 @@ public class Campo implements Serializable {
             return;
         }
 
-        float alfa = 1f - getTabela().getAlfa();// 0.2f;
+        float alfa = 1f - getTabela().getAlfa();
         Composite originalComposite = g.getComposite();
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfa));
         Paint bkpp = g.getPaint();
@@ -73,29 +73,27 @@ public class Campo implements Serializable {
 
         Rectangle bkp = g.getClipBounds();
 
-        ImageIcon img = null;
+        String img = null;
         if (isFkey()) {
             if (getCampoOrigem() == null) {
                 g.drawRoundRect(r.x - 1 + f, r.y + 4 - 1, imgl + 1, imgl + 1, 4, 4);
             }
             if (isKey()) {
-                img = Editor.fromControler().ImagemDeDiagrama.get(getTabela().imgkfk);
+                img = getTabela().imgkfk;
             } else if (isUnique()) {
-                img = Editor.fromControler().ImagemDeDiagrama.get(getTabela().imgunfk);
+                img = getTabela().imgunfk;
             } else {
-                img = Editor.fromControler().ImagemDeDiagrama.get(getTabela().imgfk);
+                img = getTabela().imgfk;
             }
         } else if (isKey()) {
-            img = Editor.fromControler().ImagemDeDiagrama.get(getTabela().imgk);
+            img = getTabela().imgk;
         } else if (isUnique()) {
-            img = Editor.fromControler().ImagemDeDiagrama.get(getTabela().imgun);
+            img = getTabela().imgun;
         }
 
         if (img != null) {
-            if (getTabela().isDisablePainted()) {
-                img = new ImageIcon(util.TratadorDeImagens.dye(img, getTabela().getForeColor()));
-            }
-            g.drawImage(img.getImage(), r.x + f, r.y + 4, imgl, imgl, null);
+            util.Icones.pinteNoPapel(img, g, r.x + f, r.y + 4, imgl,
+                    getTabela().isDisablePainted() ? getTabela().getForeColor() : null);
         }
         g.clipRect(r.x, r.y, r.width, r.height);
         g.setColor(getTabela().getForeColor());
@@ -130,22 +128,6 @@ public class Campo implements Serializable {
         return null;
     }
 
-//    public void setCampoOrigem(Campo campoOrigem) {
-//        if (this.campoOrigem != campoOrigem) {
-//            if (campoOrigem != null) {
-//                if (getTabelaOrigem() != null && getTabelaOrigem().getCampos().indexOf(campoOrigem) > -1) {
-//                    this.campoOrigem = campoOrigem;
-//                } else {
-//                    this.campoOrigem = null;
-//                }
-//            } else {
-//                this.campoOrigem = null;
-//                //getTabela().DoMuda();
-//            }
-//            Repaint();
-//            RefreshPosNovoTexto(MSG_CAMPO_ORIGEM_RECIVE);
-//        }
-//    }
     public String getComplemento() {
         return complemento;
     }

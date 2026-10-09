@@ -40,15 +40,11 @@ public class PreEntidade extends FormaRetangular {
     public PreEntidade(Diagrama modelo) {
         super(modelo);
         showOrgDiag = true;
-//        getAncorasCode().add(Ancorador.CODE_ORG_AT);
-//        getAncorasCode().add(CODE_EDT_ATR);
     }
 
     public PreEntidade(Diagrama modelo, String texto) {
         super(modelo, texto);
         showOrgDiag = true;
-//        getAncorasCode().add(Ancorador.CODE_ORG_AT);
-//        getAncorasCode().add(CODE_EDT_ATR);
     }
 
     @Override
@@ -142,6 +138,7 @@ public class PreEntidade extends FormaRetangular {
     public void DoAnyThing(int Tag) {
         super.DoAnyThing(Tag);
         if (Tag == CONST_DO_ORGATTR) {
+            mudouAtributos = desenho.formas.OrganizadorDeConexoes.organize(this);
             List<PontoDeLinha> pts = getListaDePontosLigados().stream()
                     .filter(p -> p.getDono().getOutraPonta(p).getEm() instanceof Atributo)
                     .collect(Collectors.toList());
@@ -153,6 +150,9 @@ public class PreEntidade extends FormaRetangular {
 
             for (PontoDeLinha p : pts) {
                 Atributo att = (Atributo) p.getDono().getOutraPonta(p).getEm();
+                if (getMaster().getItensSelecionados().contains(att)) {
+                    continue;
+                }
                 if (Alinhe(p, att)) {
                     mudouAtributos = true;
                 }

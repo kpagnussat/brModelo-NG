@@ -23,6 +23,15 @@ public class FormCli extends javax.swing.JDialog {
     public FormCli(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        getContentPane().setLayout(new java.awt.BorderLayout(0, util.AcabamentoDialogos.px(16)));
+        getContentPane().removeAll();
+        getContentPane().add(Scrooler, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
+        util.LayoutDialogos.area(Scrooler, 760, 360);
+        javax.swing.JButton close = new javax.swing.JButton("Fechar");
+        close.addActionListener(event -> menuSairActionPerformed(event));
+        jPanel2.add(close);
+        util.AcabamentoDialogos.aplicar(this);
         masterCli1.setJanela(this);
         masterCli1.setComponentPopupMenu(jPopupMenu1);
     }
@@ -86,7 +95,7 @@ public class FormCli extends javax.swing.JDialog {
             .addGap(0, 32, Short.MAX_VALUE)
         );
 
-        masterCli1.setPreferredSize(new java.awt.Dimension(600, 50));
+
 
         javax.swing.GroupLayout masterCli1Layout = new javax.swing.GroupLayout(masterCli1);
         masterCli1.setLayout(masterCli1Layout);

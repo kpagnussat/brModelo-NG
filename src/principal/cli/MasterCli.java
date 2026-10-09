@@ -39,7 +39,7 @@ public class MasterCli extends JPanel implements KeyListener {
     public MasterCli() {
         super();
         processador = new CliDiagramaProcessador(this);
-        setBackground(Color.white);
+        setBackground(util.EstiloUI.fundo(this, "TextField.background"));
 
         setFocusTraversalKeysEnabled(false);
         setDoubleBuffered(true);
@@ -125,16 +125,6 @@ public class MasterCli extends JPanel implements KeyListener {
             }
         };
 
-//        Action actionListener = new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent actionEvent) {
-//                System.out.println(actionEvent.toString());
-//                if (isFocusOwner()) return;  //ação ocorrerá pelo keylistener.
-//                setControlDown(actionEvent.getModifiers() == ActionEvent.CTRL_MASK);
-//                setShiftDown(actionEvent.getModifiers() == ActionEvent.SHIFT_MASK);
-//                setAltDown(actionEvent.getModifiers() == ActionEvent.ALT_MASK);
-//            }
-//        };
         ActionMap actionMap = getActionMap();
         actionMap.put(ac_crtl, al_crtl);
         actionMap.put(ac_crtl_up, al_crtl_up);
@@ -192,8 +182,6 @@ public class MasterCli extends JPanel implements KeyListener {
                     movimenteCursor(+1);
                     e.consume();
                     break;
-//                case KeyEvent.VK_TAB:
-//                    break;
                 case KeyEvent.VK_DELETE:
                     apagarLetra(posCursor);
                     e.consume();
@@ -278,7 +266,7 @@ public class MasterCli extends JPanel implements KeyListener {
 
         g2d.addRenderingHints(renderHints);
 
-        g2d.setPaint(Color.BLACK);
+        g2d.setPaint(util.EstiloUI.cor("Label.foreground"));
         Stroke stroke = new BasicStroke(2.f,
                 BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
         g2d.setStroke(stroke);
@@ -293,22 +281,25 @@ public class MasterCli extends JPanel implements KeyListener {
     }
     
     private void PintarTextos(Graphics2D g) {
+        dzCli.setFont(getFont());
+        dzExecutado.setFont(getFont());
         if (strs.length() > 0) {
-            dzExecutado.PinteTexto(g, Color.BLUE, new Rectangle(espaco, espaco, getWidth() - espaco * 2, getHeight() - espaco), strs.toString());
+            dzExecutado.PinteTexto(g, util.EstiloUI.cor("Component.accentColor"), new Rectangle(espaco, espaco, getWidth() - espaco * 2, getHeight() - espaco), strs.toString());
         }
         int alturaOld = dzExecutado.getMaxHeigth() + 2 * espaco;
         String txt = insertChar(palavra, '|');
 
         cliRect = new Rectangle(espaco, alturaOld, getWidth() - espaco * 2, getHeight());
-        dzCli.PinteTexto(g, Color.yellow, cliRect, txt); //apenas para calcular a altura.
+        dzCli.PinteTexto(g, util.EstiloUI.cor("TextField.foreground"), cliRect, txt); //apenas para calcular a altura.
         int recuo = g.getFontMetrics().getDescent();
         int alturaCli = dzCli.getMaxHeigth() + 2 * recuo + espaco;
 
         cliRect = new Rectangle(espaco, alturaOld, getWidth() - espaco * 2, alturaCli);
+        g.setColor(util.EstiloUI.elevado());
         g.fillRect(cliRect.x, cliRect.y, cliRect.width, cliRect.height);
         int pos = alturaCli + alturaOld;
         alturaTexto = pos;
-        dzCli.PinteTexto(g, Color.black, new Rectangle(cliRect.x, cliRect.y + recuo, cliRect.width, cliRect.height - 2 * recuo), txt);
+        dzCli.PinteTexto(g, util.EstiloUI.cor("TextField.foreground"), new Rectangle(cliRect.x, cliRect.y + recuo, cliRect.width, cliRect.height - 2 * recuo), txt);
         AtualizaTamanho();
     }
 

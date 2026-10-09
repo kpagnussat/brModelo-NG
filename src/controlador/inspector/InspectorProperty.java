@@ -300,7 +300,6 @@ public class InspectorProperty {
         InspectorProperty ppr = new InspectorProperty(partCaption);
         ppr.valor_string = "...";
         ppr.property = pprt;
-        //ppr.property = partCaption;//não pode ser assim
         ppr.tipo = InspectorProperty.TipoDeProperty.tpCommand;
         return ppr;
     }
@@ -308,9 +307,7 @@ public class InspectorProperty {
     public static InspectorProperty PropertyFactoryCommand(String pprt, String partCaption, String valor) {
         InspectorProperty ppr = new InspectorProperty(partCaption);
         ppr.valor_string = valor;
-        //ppr.valor_string = "...";
         ppr.property = pprt;
-        //ppr.property = partCaption;//não pode ser assim
         ppr.tipo = InspectorProperty.TipoDeProperty.tpCommand;
         return ppr;
     }
@@ -320,7 +317,6 @@ public class InspectorProperty {
         ppr.caption = caption;
         ppr.valor_string = "...";
         ppr.property = pprt;
-        //ppr.property = partCaption;//não pode ser assim
         ppr.tipo = InspectorProperty.TipoDeProperty.tpCommand;
         return ppr;
     }
@@ -342,17 +338,11 @@ public class InspectorProperty {
         return ppr;
     }
     
-//    public static InspectorProperty PropertyFactoryApenasLeituraCor(String partCaption, String valor) {
-//        InspectorProperty ppr = new InspectorProperty(partCaption);
-//        ppr.valor_string = valor;
-//        ppr.tipo = InspectorProperty.TipoDeProperty.tpApenasLeituraCor;
-//        return ppr;
-//    }
 
     public static InspectorProperty PropertyFactoryCor(String partCaption, String prop, Color valor) {
         InspectorProperty ppr = new InspectorProperty(partCaption);
         ppr.property = prop;
-        ppr.valor_string = util.Utilidades.ColorToString(valor);//   String.valueOf(valor.getRGB());
+        ppr.valor_string = util.Utilidades.ColorToString(valor);
         ppr.tipo = InspectorProperty.TipoDeProperty.tpCor;
         return ppr;
     }

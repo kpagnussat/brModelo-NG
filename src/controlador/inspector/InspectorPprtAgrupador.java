@@ -60,9 +60,6 @@ public class InspectorPprtAgrupador {
             this.afetados = afetados;
         }
 
-//        public String getPropriedade() {
-//            return InspectorPprtAgrupador.this.propriedade;
-//        }
 
         public String[] getAfetados() {
             return afetados;

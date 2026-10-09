@@ -58,18 +58,10 @@ public class Tabela extends baseDrawerFromForma {
     }
 
     private void Inicie() {
-        //setDelimite(false);
         setAlfa(0.25f);
         setGradiente(true);
-        //setGradienteStartColor(new Color(204, 204, 255));
         showOrgDiag = true;
         INI_ORGDIAG = roundrect / 2;
-//        getAncorasCode().add(CODE_EDT_CMP);
-//        getAncorasCode().add(CODE_EDT_CMP_TP);
-//        getAncorasCode().add(CODE_DDL);
-//        getAncorasCode().add(CODE_SOBE);
-//        getAncorasCode().add(CODE_DESCE);
-//        getAncorasCode().add(CODE_DEL_CMP_CONST);
     }
 
     @Override
@@ -130,17 +122,11 @@ public class Tabela extends baseDrawerFromForma {
         }
         if (this.constraintSelecionado != null) {
             this.constraintSelecionado.setSelecionado(false);
-//            if (this.constraintSelecionado.getLigacao() != null && this. constraintSelecionado.roqued) {
-//                this.constraintSelecionado.getLigacao().PerformRoqued(false);
-//            }
         }
         this.constraintSelecionado = selecionado;
         if (this.constraintSelecionado != null) {
             this.constraintSelecionado.setSelecionado(true);
             setCampoSelecionado(null);
-//            if (this.constraintSelecionado.getLigacao() != null) {
-//                this.constraintSelecionado.getLigacao().PerformRoqued(true);
-//            }
         }
         if (getMaster().getSelecionado() == this) {
             getMaster().PerformInspector();
@@ -259,7 +245,6 @@ public class Tabela extends baseDrawerFromForma {
         if (getCampoSelecionado() == null && getConstraintSelecionado() == null) {
             super.CompleteGenerateProperty(GP);
         }
-//            res.add(InspectorProperty.PropertyFactorySeparador(COMM_RI));
 
         res.add(InspectorProperty.PropertyFactorySeparador("tabela.edtitores", true));
 
@@ -271,7 +256,6 @@ public class Tabela extends baseDrawerFromForma {
 
         res.add(InspectorProperty.PropertyFactoryCommand(FormaElementar.nomeComandos.cmdDoAnyThing.name(), COMM_EDT_CMPS).setTag(EDITOR_CAMPOS));
         res.add(InspectorProperty.PropertyFactoryCommand(FormaElementar.nomeComandos.cmdDoAnyThing.name(), COMM_EDT_CMPS_TP).setTag(EDITOR_CAMPOS_TP));
-        //}
         return GP;
     }
 
@@ -588,7 +572,7 @@ public class Tabela extends baseDrawerFromForma {
 
                     Rectangle rx = new Rectangle(getLeft() + lar, getTop() + y, lag, cmpAltura);
 
-                    float alfa = 1f - getAlfa();// 0.2f;
+                    float alfa = 1f - getAlfa();
                     Composite originalComposite = g.getComposite();
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfa));
                     Paint bkpp = g.getPaint();
@@ -655,12 +639,12 @@ public class Tabela extends baseDrawerFromForma {
     }
 
     public void drawRoqued(Rectangle area, Graphics2D g) {
-        ImageIcon img = Editor.fromControler().ImagemDeDiagrama.get("diagrama.Constraint_see.img");
+        javax.swing.Icon img = util.Icones.noPapel("diagrama.Constraint_see.img", 16);
         int imgl = 16;
         if (getWidth() > imgl) {
             if (img != null) {
                 int x = (area.height - imgl) / 2;
-                g.drawImage(img.getImage(), area.x + area.width - imgl - 2, area.y + x, imgl, imgl, null);
+                img.paintIcon(null, g, area.x + area.width - imgl - 2, area.y + x);
 
                 Stroke bkps = g.getStroke();
                 g.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1, 2}, 0));
@@ -815,7 +799,6 @@ public class Tabela extends baseDrawerFromForma {
         }
         Campos.remove(campo);
         NotifiqueIR(null, Tabela.MSG_CMP_DELETE, campo);
-        //SendNotificacao(campo, Constantes.Operacao.opSubDestroy);
         if (isAutosize()) {
             needRecalc = true;
             InvalidateArea();
@@ -919,7 +902,7 @@ public class Tabela extends baseDrawerFromForma {
             nomes.add(c.getTexto());
         });
         int i = 0;
-        String tmp = nome; // + "_1";
+        String tmp = nome;
         while (nomes.indexOf(tmp) > -1) {
             tmp = nome + "_" + String.valueOf(++i);
         }
@@ -1292,7 +1275,6 @@ public class Tabela extends baseDrawerFromForma {
         }
     }
 
-    //public static int MSG_IR_CHANGE = 1;
     public static final int MSG_IR_CHANGE_ADD_CMP = 2;
     public static final int MSG_IR_CHANGE_DEL_CMP = 3;
     public static final int MSG_IR_PREDELETE = 4;
@@ -1396,12 +1378,10 @@ public class Tabela extends baseDrawerFromForma {
         }
         if (cmp.isFkey() && (fk.getCamposDeOrigem().indexOf(cmp) == -1)) {
             fk.Add(null, cmp);
-            //# NotifiqueIR(fk, MSG_IR_CHANGE_ADD_CMP, cmp); //# Não precisa. Fk não muda os outros!
             return;
         }
         if (!cmp.isFkey()) {
             fk.RemoveFromDestino(cmp);
-            //# NotifiqueIR(fk, MSG_IR_CHANGE_DEL_CMP, cmp); //# Não precisa. Fk não muda os outros!
             AnaliseAndRemove(fk);
         }
     }

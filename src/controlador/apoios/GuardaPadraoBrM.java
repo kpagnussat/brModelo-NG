@@ -37,10 +37,11 @@ public class GuardaPadraoBrM implements Serializable {
     public Diagrama getDiagrama() {
         Diagrama res = null;
         try {
-            try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(diagrama))) {
-                res = (Diagrama) in.readObject();
+            try (ObjectInputStream in = new util.LeitorSeguro(new ByteArrayInputStream(diagrama))) {
+                // Deep stack: the recursive walk outgrows the EDT on large, interlinked diagrams.
+                res = (Diagrama) util.PilhaProfunda.ler(in);
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassCastException | ClassNotFoundException | IOException e) {
             util.BrLogger.Logger("ERROR_DIAGRAMA_LOAD_PADRAO", e.getMessage());
             return null;
         }

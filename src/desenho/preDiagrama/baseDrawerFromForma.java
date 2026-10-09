@@ -126,8 +126,8 @@ public class baseDrawerFromForma extends Forma {
     public final int VERTICAL = 0;
     public final int HORIZONTAL = 1;
     private int gdirecao = VERTICAL;
-    private Color gradienteEndColor = new Color(204, 204, 204, 255);//Color.WHITE;
-    private Color gradienteStartColor = new Color(0, 0, 0, 255);//Color.BLACK;
+    private Color gradienteEndColor = new Color(204, 204, 204, 255);
+    private Color gradienteStartColor = new Color(0, 0, 0, 255);
     protected int roundrect = 22;
     private boolean delimite = true;
     private float alfa = 0.5f;
@@ -234,7 +234,7 @@ public class baseDrawerFromForma extends Forma {
         InvalidateArea();
     }
 
-    protected void PaintGradiente(Graphics2D g) { //, boolean round) {
+    protected void PaintGradiente(Graphics2D g) {
         int dist = 0;
         DimensioneParaPintura();
         W -= dist;

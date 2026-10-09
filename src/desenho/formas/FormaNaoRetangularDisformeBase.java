@@ -59,7 +59,6 @@ public class FormaNaoRetangularDisformeBase extends FormaNaoRetangularBase {
     }
 
     protected Point getReposicionePonto(int ldo) {
-        //if (!shouldMove(ldo)) return new Point(0, 0);
         return reposicionePonto[ldo];
     }
 

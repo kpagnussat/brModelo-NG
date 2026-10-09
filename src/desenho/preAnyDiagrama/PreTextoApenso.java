@@ -26,13 +26,11 @@ public class PreTextoApenso extends PreTexto{
     public PreTextoApenso(Diagrama modelo) {
         super(modelo);
         AceitaAjusteAutmatico = false;
-        //setTextoSimples(false);
     }
 
     public PreTextoApenso(Diagrama modelo, String texto) {
         super(modelo, texto);
         AceitaAjusteAutmatico = false;
-        //setTextoSimples(false);
     }
 
     @Override
@@ -89,7 +87,6 @@ public class PreTextoApenso extends PreTexto{
                 return;
             }
             LinhaMestre.PrepareTexto();
-            //Reenquadre();
             Reposicione();
         }
     }
@@ -179,9 +176,9 @@ public class PreTextoApenso extends PreTexto{
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         getTextoFormatado().PinteTexto(g, getForeColor(), getArea(), getTexto());
     }

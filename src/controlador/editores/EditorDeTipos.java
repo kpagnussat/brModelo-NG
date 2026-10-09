@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -49,6 +48,14 @@ public class EditorDeTipos extends javax.swing.JDialog {
     public EditorDeTipos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.DicasInterface.dica(tree, "typesTable");
+        util.DicasInterface.dica(btnFechar, "cancel");
+        util.DicasInterface.dica(btnOK, "typesApply");
+        util.AcabamentoDialogos.editor(this, jPanel1, jSplitPane1, jPanel2);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(util.AcabamentoDialogos.px(760), util.AcabamentoDialogos.px(300)));
+        jSplitPane1.setDividerLocation(util.AcabamentoDialogos.px(200));
+        pack();
+        util.AcabamentoDialogos.limitar(this);
         getRootPane().registerKeyboardAction(e -> {
             setResultado(JOptionPane.CANCEL_OPTION);
             setVisible(false);
@@ -88,7 +95,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         setTitle(bundle.getString("EditorDeTipos.title")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("EditorDeTipos.tituloTabela"))); // NOI18N
+        jPanel1.setBorder(util.AcabamentoDialogos.bordaSecao(jPanel1, bundle.getString("EditorDeTipos.tituloTabela"))); // NOI18N
 
         lblMsg.setText(bundle.getString("EditorDeTipos.info")); // NOI18N
 
@@ -108,7 +115,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
 
         jSplitPane1.setDividerLocation(220);
 
-        Principal.setBackground(new java.awt.Color(204, 204, 204));
+        Principal.setBackground(util.EstiloUI.fundo(Principal, "Panel.background"));
         Principal.setLayout(null);
         jScrollPane1.setViewportView(Principal);
 
@@ -118,7 +125,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
 
         jSplitPane1.setLeftComponent(jScrollPane2);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         btnFechar.setText(bundle.getString("EditorDeCampos.Fechar")); // NOI18N
         btnFechar.addActionListener(new java.awt.event.ActionListener() {
@@ -142,7 +149,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFechar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,7 +197,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
 
     public void AdicionarPainel(Campo cmp) {
         javax.swing.JPanel ItemPan = new javax.swing.JPanel();
-        final int altura = 37;
+        int altura = 37; // minimum row height; grows with the theme font below
 
         ItemPan.setSize(largura, altura);
         java.awt.FlowLayout lay = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5);
@@ -208,7 +215,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
         ItemPan.add(lblNome);
 
         txtNome.setToolTipText("");
-        txtNome.setPreferredSize(new Dimension(190, 20));
+
         ItemPan.add(txtNome);
 
         lblTipo.setText(bundle.getString("EditorDeCampos.lblTipo")); // NOI18N
@@ -221,16 +228,10 @@ public class EditorDeTipos extends javax.swing.JDialog {
             tipos.add(tipo_txt);
         }
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel(tipos.toArray()));
-        comboTipo.setPreferredSize(new Dimension(73, 20));
+
         ItemPan.add(comboTipo);
 
-        Principal.add(ItemPan);
-        if (largura == 0) {
-            largura = lay.preferredLayoutSize(ItemPan).width;
-        }
-        ItemPan.setBounds(0, v, largura, altura);
-        v += altura + 3;
-        Principal.setPreferredSize(new Dimension(largura, v));
+        util.LinhasDialogos.adicionar(Principal, ItemPan);
 
         txtNome.setText(cmp.getTexto());
         comboTipo.setSelectedItem(tipo_txt);
@@ -327,9 +328,9 @@ public class EditorDeTipos extends javax.swing.JDialog {
                 if (value instanceof TreeItem) {
                     int id = ((TreeItem) value).getId();
                     if (id == 0) {
-                        setIcon(diagrama.getEditor().getControler().ImagemDeDiagrama.get(diagrama.getTipo().name()));
+                        setIcon(diagrama.getEditor().getControler().getIconeDoTipo(diagrama.getTipo()));
                     } else {
-                        ImageIcon img = diagrama.getEditor().getControler().getImagem(((TreeItem) value).getExtraInfo());
+                        javax.swing.Icon img = diagrama.getEditor().getControler().getIconeInterface(((TreeItem) value).getExtraInfo());
                         if (img != null) {
                             setIcon(img);
                         }
@@ -351,6 +352,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
         AtualizeTreeNavegacao();
 
         setSelecionada(null);
+        util.Escala.alargue(this, jScrollPane1);
     }
 
     private void treeValueChanged(javax.swing.event.TreeSelectionEvent evt) {
@@ -393,6 +395,7 @@ public class EditorDeTipos extends javax.swing.JDialog {
 
     private void Popule(Tabela sel) {
         Principal.removeAll();
+        Principal.setPreferredSize(null);
         Principal.validate();
         v = 0;
         if (sel != null) {
@@ -413,12 +416,6 @@ public class EditorDeTipos extends javax.swing.JDialog {
             String tp = tbl.getCampos().stream().filter(c -> c.getTipo().isEmpty()).anyMatch(c -> c.getTipo().isEmpty()) ? "error" : "ok";
             item.setExtraInfo(tp);
 
-//            if (item.getId() == getSelecionada().getID()) {
-//                String tp = getSelecionada().getCampos().stream().filter(c -> c.getTipo().isEmpty()).anyMatch(c -> c.getTipo().isEmpty()) ? "error" : "ok";
-//                item.setExtraInfo(tp);
-//                tree.repaint();
-//                break;
-//            }
         }
         tree.repaint();
     }

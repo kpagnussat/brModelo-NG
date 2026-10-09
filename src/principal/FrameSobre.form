@@ -48,8 +48,8 @@
   <SubComponents>
     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="util.EstiloUI.fundo(jScrollPane3, &quot;Panel.background&quot;)" type="code"/>
         </Property>
       </Properties>
 
@@ -57,8 +57,8 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="Pan">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="util.EstiloUI.fundo(Pan, &quot;Panel.background&quot;)" type="code"/>
             </Property>
           </Properties>
 
@@ -71,8 +71,8 @@
     <Container class="javax.swing.JPanel" name="subPan">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-            <EtchetBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+            <EmptyBorder bottom="8" left="8" right="8" top="8"/>
           </Border>
         </Property>
       </Properties>

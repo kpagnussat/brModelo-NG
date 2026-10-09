@@ -1,0 +1,3 @@
+#!/bin/sh
+# Use the sandbox's bundled JRE and portal chooser, including its document grants.
+exec /app/jre/bin/java -Dbrmodelo.seletor=portal -jar /app/share/brmodelo-ng/brModelo.jar "$@"

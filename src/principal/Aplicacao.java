@@ -34,7 +34,6 @@ SOFTWARE.
 package principal;
 
 import controlador.Diagrama;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -44,23 +43,26 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Aplicacao {
 
     public static FramePrincipal fmPrincipal;
-    public static final String VERSAO_A = "3";
-    public static final String VERSAO_B = "3";
-    public static final String VERSAO_C = "1";
-    public static final String VERSAO_DATA = "Setembro de 2020";
+    public static final String VERSAO_A = util.InformacoesAplicacao.versao().split("\\.")[0];
+    public static final String VERSAO_B = util.InformacoesAplicacao.versao().split("\\.")[1];
+    public static final String VERSAO_C = util.InformacoesAplicacao.versao().split("\\.")[2];
+    public static final String VERSAO_DATA = "";
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        util.Renderizacao.configurar(); // before anything starts AWT
+        // Command-line theme > saved preference > desktop; decorations share a
+        // native fallback on every OS until the WM interaction audit can be completed.
         initLookAndFeel();
-        JFrame.setDefaultLookAndFeelDecorated(true);
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 fmPrincipal = new FramePrincipal();
                 fmPrincipal.setVisible(true);
+                controlador.ArquivosInicializacao.abrir(fmPrincipal.getEditor(), args);
             }
         });
     }
@@ -74,8 +76,30 @@ public class Aplicacao {
     }
 
     private static void initLookAndFeel() {
+        util.TemaAplicacao.decoracoes();
+        if (util.TemaAplicacao.iniciar()) return;
+        initLookAndFeelPlataforma();
+    }
+
+    /** The platform look-and-feel: GTK on any Linux desktop, the native one elsewhere. */
+    private static void initLookAndFeelPlataforma() {
+        String sistema = UIManager.getSystemLookAndFeelClassName();
+        // Java only picks the GTK look-and-feel on GNOME. Other Linux desktops (KDE Plasma,
+        // Xfce, Cinnamon, MATE...) also publish a GTK theme (Plasma: Breeze / Breeze Dark), so
+        // try GTK there too instead of falling back to Metal; Metal stays the fallback when
+        // GTK is unavailable. An explicit -Dswing.systemlaf still wins.
+        if (System.getProperty("swing.systemlaf") == null
+                && sistema.equals(UIManager.getCrossPlatformLookAndFeelClassName())
+                && System.getProperty("os.name", "").toLowerCase().contains("linux")) {
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+                return;
+            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                // No usable GTK: keep the cross-platform look-and-feel below.
+            }
+        }
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(sistema);
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             util.BrLogger.Logger("ERROR_APP_LOAD_UI", ex.getMessage());
         }
@@ -83,7 +107,4 @@ public class Aplicacao {
     }
 
     //Apagar
-//    public static Aplicacao getApplication() {
-//        return Application.getInstance(Aplicacao.class);
-//    }
 }

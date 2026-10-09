@@ -53,7 +53,6 @@ public class DiagramaEap extends Diagrama {
     protected FormaElementar RealiseComando(Point posi) {
         ClearSelect(false);
         FormaElementar resu = null;
-        //Point tmpPt;
         Point pt1, pt2;
         FormaElementar obj1, obj2;
         Elementar res;

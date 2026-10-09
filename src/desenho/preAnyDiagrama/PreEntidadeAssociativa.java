@@ -56,7 +56,6 @@ public class PreEntidadeAssociativa extends PreEntidade {
         interno.setSelecionavel(false);
         getMaster().Remove(interno, true);
         getSubItens().add(interno);
-        //interno.reSetBounds();
         reSetBounds();
         
 
@@ -65,9 +64,6 @@ public class PreEntidadeAssociativa extends PreEntidade {
     @Override
     public void SetTexto(String Texto) {
         super.SetTexto(Texto);
-//        DesenhadorDeTexto txtd = getTextoFormatado();
-//        txtd.setAlinharEsquerda(true);
-//        txtd.setCentrarTextoVertical(false);
     }
 
     @Override
@@ -87,13 +83,11 @@ public class PreEntidadeAssociativa extends PreEntidade {
             return;
         }
         Rectangle res = getBounds();
-        //res.grow(-distSelecao * 4, -distSelecao * 4);
         
         int tmp = -(distSelecao * 4);
         res = new Rectangle(res.x - tmp, res.y - tmp, res.width + 2 * tmp - 2, res.height + 2 * tmp - 2);
         interno.SetBounds(res.x, res.y, res.width, res.height);
         
-        //interno.SetBounds(res.x, res.y, res.width - 2, res.height - 2);
         interno.Reposicione();
     }
 
@@ -119,7 +113,6 @@ public class PreEntidadeAssociativa extends PreEntidade {
         if (interno != null) {
             interno.ReciveFormaResize(ret);
             Rectangle res = getBounds();
-            //res.grow(-distSelecao * 4, -distSelecao * 4);
             int tmp = (distSelecao * 4);
             res = new Rectangle(res.x - tmp, res.y - tmp, res.width + 2*tmp - 2, res.height + 2*tmp - 2);
             if (!interno.getBounds().equals(res)) {
@@ -153,9 +146,9 @@ public class PreEntidadeAssociativa extends PreEntidade {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         super.PinteTexto(g);
     }
@@ -163,8 +156,6 @@ public class PreEntidadeAssociativa extends PreEntidade {
     @Override
     public boolean Reenquadre() {
         int ALeft = getLeft(), ATop = getTop();
-        //super.Reenquadre();
-        //if (ALeft != getLeft() || ATop != getTop()) {
         if (super.Reenquadre()) {
             if (interno != null) {
                 ReenquadreInterno();

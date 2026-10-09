@@ -32,19 +32,11 @@ public class DecisaoAtividade extends FormaLosangular{
 
     @Override
     public void PinteTexto(Graphics2D g) {
-        //super.PinteTexto(g); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
     public boolean CanLiga(Forma forma, Linha lin) {
         return true;
-//        if (forma == null) {
-//            return true;
-//        }
-//        if (super.CanLiga(forma, lin) && (!(forma instanceof PreEntidade))) {
-//            return forma.CanLiga(this, lin);
-//        }
-//        return false;
     }
 
 }

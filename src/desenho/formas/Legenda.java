@@ -35,15 +35,8 @@ public class Legenda extends Forma {
 
     public Legenda(Diagrama modelo) {
         super(modelo);
-        //setForeColorWithOutRepaint(Color.LIGHT_GRAY);
         SetTexto(Editor.fromConfiguracao.getValor("diagrama.Legenda"));
-//        DesenhadorDeTexto edt = getTextoFormatado();
-//        edt.setCentrarTextoVertical(false);
-//        edt.setAlinharEsquerda(true);
 
-//        Itens.add(new ItemDeLegenda("Vermelho", Color.red));
-//        Itens.add(new ItemDeLegenda("Vermelho adfs dsfsfsafsf", Color.red));
-//        Itens.add(new ItemDeLegenda("Vermelho azul", Color.blue));
     }
 
     public void addLegenda(String res, Color c) {
@@ -248,6 +241,7 @@ public class Legenda extends Forma {
         try {
             setTipo(TipoLegenda.values()[tpForInspector]);
         } catch (Exception e) {
+            // Keep the current legend type when the inspector value is invalid.
         }
     }
 
@@ -321,8 +315,6 @@ public class Legenda extends Forma {
 
         g.setComposite(originalComposite);
 
-//        g.setColor(Color.LIGHT_GRAY);
-//        g.drawLine(lft - 1, posi - altura - 2, getLeft() + getWidth() - 1, posi - altura - 2);
         g.setClip(bkp);
         g.setFont(fn);
     }
@@ -338,9 +330,7 @@ public class Legenda extends Forma {
 
         res.add(InspectorProperty.PropertyFactorySeparador("desenho"));
 
-        //if (canShowEditor()) {
         res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDlgLegenda.name()));
-        //}
 
         res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdAdicionarSubItem.name()).setTag(-1));
         res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "legenda.capturar").setTag(124));
@@ -439,10 +429,6 @@ public class Legenda extends Forma {
         me.appendChild(sbItens);
 
         //remover dicionário do XML do objeto legenda.
-//        NodeList nl = me.getElementsByTagName("Dicionario");
-//        if (nl != null && nl.getLength() > 0) {
-//            me.removeChild(nl.item(0));
-//        }
     }
 
     @Override
@@ -465,7 +451,7 @@ public class Legenda extends Forma {
             if (tmp.getNodeType() == Node.ELEMENT_NODE) {
                 Element e = (Element) ptLst.item(i);
                 String txt = e.getAttribute("Texto");
-                Color c = util.Utilidades.StringToColor(e.getAttribute("Cor"));// new Color(Integer.valueOf(e.getAttribute("Cor")));
+                Color c = util.Utilidades.StringToColor(e.getAttribute("Cor"));
                 int tag = Integer.valueOf(e.getAttribute("Tag"));
                 AddLegenda(txt, c, tag);
             }
@@ -501,10 +487,6 @@ public class Legenda extends Forma {
                 getMaster().PerformInspector(true);
             }
         }
-//        super.mousePressed(e);
-//        if (isSelecionado()) {
-//            SelecioneLegenda(e);
-//        }
 ///16/12/2016 - testar mais!
     }
 

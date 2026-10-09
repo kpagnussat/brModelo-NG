@@ -1,0 +1,35 @@
+app-id: io.github.kpagnussat.brModeloNG
+runtime: org.freedesktop.Platform
+runtime-version: '26.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.openjdk21
+command: brmodelo-ng
+finish-args:
+  # Java 21 Swing has no Wayland backend: it draws through X11 (XWayland on Wayland sessions).
+  - --socket=x11
+  - --share=ipc
+  - --device=dri
+  # Other locations are granted by the existing XDG FileChooser portal backend.
+  - --filesystem=xdg-documents
+  - --env=JAVA_HOME=/app/jre
+modules:
+  - name: openjdk
+    buildsystem: simple
+    build-commands:
+      - /usr/lib/sdk/openjdk21/install.sh
+  - name: brmodelo-ng
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 brmodelo-ng /app/bin/brmodelo-ng
+      - install -Dm644 brModelo.jar /app/share/brmodelo-ng/brModelo.jar
+      - install -Dm644 LICENSE /app/share/licenses/brmodelo-ng/LICENSE
+      - install -Dm644 io.github.kpagnussat.brModeloNG.desktop /app/share/applications/io.github.kpagnussat.brModeloNG.desktop
+      - install -Dm644 io.github.kpagnussat.brModeloNG.metainfo.xml /app/share/metainfo/io.github.kpagnussat.brModeloNG.metainfo.xml
+      - install -Dm644 io.github.kpagnussat.brModeloNG.xml /app/share/mime/packages/io.github.kpagnussat.brModeloNG.xml
+      - install -Dm644 brModelo.svg /app/share/icons/hicolor/scalable/apps/io.github.kpagnussat.brModeloNG.svg
+    sources:
+      # prepareFlatpak stages the strictly verified fat jar and integration files.
+      # No Gradle/Maven downloads occur inside flatpak-builder's sandbox.
+      - type: dir
+        path: ../../build/flatpak-input

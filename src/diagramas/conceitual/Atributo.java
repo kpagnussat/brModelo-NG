@@ -57,13 +57,9 @@ public class Atributo extends PreAtributo {
 //        Left = 3,
 //        Horizontal = 4,
 //        Vertical = 5
-//            lstDirecao.add(getValor("Inspector.lst.direcao.left")); //0
-//            lstDirecao.add(getValor("Inspector.lst.direcao.right")); //1
         if (di == 0) {
-            //di = 3;
             setDirecao(Direcao.Left);
         } else {
-            //di = 1;
             setDirecao(Direcao.Right);
         }
     }
@@ -78,8 +74,6 @@ public class Atributo extends PreAtributo {
 //        Left = 3,
 //        Horizontal = 4,
 //        Vertical = 5
-//            lstDirecao.add(getValor("Inspector.lst.direcao.left")); //0
-//            lstDirecao.add(getValor("Inspector.lst.direcao.right")); //1
         if (getDirecao() == Direcao.Left) {
             return 0;
         } else {
@@ -122,13 +116,11 @@ public class Atributo extends PreAtributo {
                     this.cardMaxima = cardMinima;
                 }
             }
-            //if (isMultivalorado()) {
                 if (this.cardMinima == 0) {
                     setOpcional(true);
                 } else {
                     setOpcional(false);
                 }
-            //}
             InvalidateArea();
         }
     }
@@ -141,11 +133,6 @@ public class Atributo extends PreAtributo {
         } else if (!opcional && cardMinima == 0) {
             setCardMinima(1);
         }
-//        if (opcional && !isMultivalorado() && cardMinima != 0) {
-//            cardMinima = 0;
-//        } else if (!opcional && !isMultivalorado() && cardMinima == 0) {
-//            cardMinima = 1;
-//        }
     }
 
     public boolean isMultivalorado() {
@@ -180,10 +167,6 @@ public class Atributo extends PreAtributo {
     private int cardMinima = 1;
 
     //</editor-fold>
-//    @Override
-//    public String getTexto() {
-//        return super.getTexto() + (isMultivalorado() ? " (" + getCardMinFromString() + ", " + getCardMaxFromString() + ")" : "");
-//    }
     public String getCardMinFromString() {
         int res = getCardMinima();
         String s = String.valueOf(res);
@@ -266,12 +249,6 @@ public class Atributo extends PreAtributo {
         me.appendChild(util.XMLGenerate.ValorString(doc, "CardMaxFromString", getCardMaxFromString()));
         me.appendChild(util.XMLGenerate.ValorString(doc, "TipoAtributo", getTipoAtributo()));
 
-//        PontoDeLinha pt = PontoLigacaoPrincipal(null);
-//        if (pt != null) {
-//            me.appendChild(util.XMLGenerate.ValorRefFormElementar(doc, "PontoLigacaoPrincipal", pt.getDono()));
-//        } else {
-//            me.appendChild(util.XMLGenerate.ValorRefFormElementar(doc, "PontoLigacaoPrincipal", null));
-//        }
     }
 
     @Override

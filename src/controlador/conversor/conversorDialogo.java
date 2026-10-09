@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import util.BrLogger;
 
 /**
  *
@@ -41,6 +40,14 @@ public class conversorDialogo extends javax.swing.JDialog {
     public conversorDialogo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        jPanel3.removeAll(); jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(conversorDrawer1);
+        conversorDrawer1.setMinimumSize(null);
+        conversorDrawer1.setBorder(javax.swing.BorderFactory.createEmptyBorder(util.AcabamentoDialogos.px(12), util.AcabamentoDialogos.px(12), util.AcabamentoDialogos.px(12), util.AcabamentoDialogos.px(12)));
+        javax.swing.JPanel heading = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING, util.AcabamentoDialogos.px(8), 0));
+        heading.add(btnMostrarOrigem); heading.add(btnMostrarDestino);
+        util.LayoutDialogos.area(jScrollPane1, 760, 340);
+        util.AcabamentoDialogos.editor(this, heading, jScrollPane1, jPanel1);
         getRootPane().setDefaultButton(btnPronto);
         getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "CANCEL");
         getRootPane().getActionMap().put("CANCEL", new AbstractAction("CANCEL") {
@@ -74,7 +81,7 @@ public class conversorDialogo extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jToolBar1.setBackground(new java.awt.Color(204, 204, 255));
+        jToolBar1.setBackground(util.EstiloUI.fundo(jToolBar1, "Panel.background"));
         jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
@@ -104,9 +111,8 @@ public class conversorDialogo extends javax.swing.JDialog {
         });
         jToolBar1.add(btnMostrarDestino);
 
-        jScrollPane1.setBackground(new java.awt.Color(153, 153, 153));
+        jScrollPane1.setBackground(util.EstiloUI.fundo(jScrollPane1, "Panel.background"));
 
-        conversorDrawer1.setMinimumSize(new java.awt.Dimension(600, 300));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -152,7 +158,7 @@ public class conversorDialogo extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnYesToAll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -189,7 +195,7 @@ public class conversorDialogo extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -259,6 +265,7 @@ public class conversorDialogo extends javax.swing.JDialog {
         Opcoes.OPC = -1;
         conversorDrawer1.setDiagramas(origem, destino);
         prepareQuestao(dig_img);
+        util.Escala.cresca(this);
     }
 
     public conversorDrawer getDrawer() {
@@ -272,6 +279,5 @@ public class conversorDialogo extends javax.swing.JDialog {
         conversorDrawer1.Escreve(Opcoes);
         conversorDrawer1.revalidate();
         conversorDrawer1.repaint();
-        //pack();
     }
 }

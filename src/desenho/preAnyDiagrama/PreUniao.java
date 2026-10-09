@@ -18,7 +18,6 @@ public class PreUniao extends PreEspecializacao {
     public PreUniao(Diagrama modelo) {
         super(modelo);
         setDirecao(Direcao.Down);
-        //SetTexto("U");
         toPaintTxt = "U";
     }
 

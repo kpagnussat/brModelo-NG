@@ -44,7 +44,6 @@ public class ImpressorPreview extends BaseControlador {
         tlpagina = prn.getQtdPagina();
         Largura = prn.Impressora.getRealFolhaWidth();
         Altura = prn.Impressora.getRealFolhaHeigth();
-        //setPreferredSize(getSize());
         setBackground(Color.WHITE);
     }
 
@@ -75,8 +74,6 @@ public class ImpressorPreview extends BaseControlador {
         Graphics2D Canvas = (Graphics2D) g;
         Canvas.addRenderingHints(renderHints);
 
-//        Canvas.setPaint(Color.BLACK);
-//        Canvas.draw3DRect(0, 0, getWidth() - 4, getHeight() - 4, true);
         Canvas.setPaint(Color.BLACK);
         Stroke stroke = new BasicStroke(1.f,
                 BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
@@ -111,8 +108,6 @@ public class ImpressorPreview extends BaseControlador {
     private void DrawPagina(Graphics2D Canvas) {
         if (pgatual > 0) {
             Canvas.drawImage(prn.imgs[pgatual - 1], l, t, w, h, null); //melhor
-            //Canvas.drawImage(prn.imgs[pgatual - 1], null, l, t);
-            //Canvas.drawImage(prn.imgs[pgatual -1], l, t, null);
         }
     }
     

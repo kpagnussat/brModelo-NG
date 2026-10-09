@@ -196,14 +196,6 @@ public class XMLGenerate {
         }
     }
 
-//    public static Element AtributosPonto(Element res, PontoDeLinha valor) {
-//        res.setAttribute("Left", Integer.toString(valor.getLeft()));
-//        res.setAttribute("Top", Integer.toString(valor.getTop()));
-//        //res.setAttribute("IsTopOrBotton", Boolean.toString(valor.IsTopOrBotton)); // primeiro e o último.
-//        AtributoRefFormElementar(res, "Em", valor.getEm());
-//        return res;
-//    }
-//
     public static Element ValorText(Document doc, String prop, String valor) {
         Element res = doc.createElement(prop);
         res.setTextContent(valor);
@@ -220,9 +212,6 @@ public class XMLGenerate {
     
     public static Element FindByNodeName(Element pai, String prop) {
         NodeList lst = pai.getElementsByTagName(prop);
-//        if (lst.getLength() == 0) {
-//            return null;
-//        }
         //não quero aqueles que pertençam a subitens,
         for (int i = 0; i < lst.getLength(); i++) {
             Element e = (Element) lst.item(i);
@@ -230,7 +219,6 @@ public class XMLGenerate {
                 return e;
             }
         }
-//        return (Element) lst.item(0);
         return null;
     }
     
@@ -263,7 +251,7 @@ public class XMLGenerate {
             return null;
         }
         String tmp = GetValorString(ac);
-        return util.Utilidades.StringToColor(tmp);// new Color(Integer.valueOf(tmp));
+        return util.Utilidades.StringToColor(tmp);
     }
     
     public static String getValorStringFrom(Element pai, String prop) {

@@ -70,6 +70,7 @@ public class PreTexto extends FormaTextoBase {
         try {
             inttp = TipoTexto.values()[Tipo];
         } catch (Exception e) {
+            // Use the rectangle default when the inspector value is invalid.
         }
 
         this.Tipo = inttp;
@@ -99,7 +100,7 @@ public class PreTexto extends FormaTextoBase {
         }
     }
     private boolean gradiente = false;
-    private Color gradienteEndColor = new Color(204, 204, 204, 255);//Color.WHITE;
+    private Color gradienteEndColor = new Color(204, 204, 204, 255);
     private Color gradienteStartColor = Color.BLACK;
     private boolean gradientePinteDetalhe = true;
 
@@ -156,10 +157,7 @@ public class PreTexto extends FormaTextoBase {
         Composite originalComposite = g.getComposite();
 
         switch (Tipo) {
-//            case tpEmBranco:
-//                break;
             case tpNota:
-//                if (isGradiente() && !isTextoSimples()) {
                 if (isGradiente()) {
                     int dist = 0;
                     int w = getWidth() - dist;
@@ -171,7 +169,6 @@ public class PreTexto extends FormaTextoBase {
                     GradientPaint GP = new GradientPaint(L, T, getGradienteStartColor(), dv ? L : L + w, dv ? T + h : T, getGradienteEndColor(), true);
                     g.setPaint(GP);
                 } else {
-                    //g.setColor(this.getForeColor());
                     g.setColor(this.getBackColor());
                 }
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfa));
@@ -192,19 +189,16 @@ public class PreTexto extends FormaTextoBase {
                 pa.moveTo(lw - tam, rec.y + tam - (1));
                 pa.lineTo(lw, rec.y + tam);
                 pa.closePath();
-//                if (isGradiente() && !isTextoSimples()) {
                 if (isGradiente()) {
                     g.fill(pa);
                     g.draw(pa);
                 } else {
-//                    if (!isTextoSimples()) g.fill(pa);
                     g.fill(pa);
                     g.setColor(this.getForeColor());
                     g.draw(pa);
                 }
                 break;
             case tpRetangulo:
-                //getTextoFormatado().CorretorPosicao = new Point(-2, -2);
                 if (sombra) {
                     g.setPaint(getCorSombra());
                     for (int i = 0; i < distSelecao; i++) {
@@ -227,7 +221,6 @@ public class PreTexto extends FormaTextoBase {
                 }
                 break;
             case tpRetanguloArred:
-                //getTextoFormatado().CorretorPosicao = new Point(-2, -2);
                 if (sombra) {
                     int rx = roundRectSize / 2;
                     g.setPaint(getCorSombra());
@@ -303,7 +296,6 @@ public class PreTexto extends FormaTextoBase {
                 }
             }
         }
-        //g.setComposite(originalComposite);
     }
     public static final int VERTICAL = 0;
     public static final int HORIZONTAL = 1;
@@ -369,10 +361,7 @@ public class PreTexto extends FormaTextoBase {
         int T = getTop();
         boolean dv = getGDirecao() == VERTICAL;
 
-        //Composite originalComposite = g.getComposite();
-        //g.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, alfa));
         GradientPaint GP = new GradientPaint(L, T, getGradienteStartColor(), dv ? L : L + w, dv ? T + h : T, getGradienteEndColor(), true);
-        //g.setPaint(GP);
 
         g.setPaint(getForeColor());
         if (round) {
@@ -396,7 +385,6 @@ public class PreTexto extends FormaTextoBase {
             path.closePath();
             g.fill(path);
         }
-        //g.setComposite(originalComposite);
 
     }
 

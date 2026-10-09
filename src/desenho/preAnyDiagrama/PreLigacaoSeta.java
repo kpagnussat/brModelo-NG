@@ -97,16 +97,12 @@ public class PreLigacaoSeta extends SuperLinha {
         me.removeChild(nl.item(0));
 
         me.appendChild(util.XMLGenerate.ValorBoolean(doc, "Inteligente", isInteligente()));
-        //me.appendChild(util.XMLGenerate.ValorBoolean(doc, "SetaAberta", isSetaAberta())); //já
 
-        //me.appendChild(util.XMLGenerate.ValorBoolean(doc, "TemSetaPontaA", isTemSetaPontaA()));
-        //me.appendChild(util.XMLGenerate.ValorBoolean(doc, "TemSetaPontaB", isTemSetaPontaB()));
 
         if (!getForeColor().equals(Elementar.defaultColor)) {
             me.appendChild(util.XMLGenerate.ValorColor(doc, "ForeColor", getForeColor()));
         }
         me.appendChild(util.XMLGenerate.ValorInteger(doc, "Largura", (int) getLargura()));
-        //me.appendChild(util.XMLGenerate.ValorInteger(doc, "Fator_Largura", (int)fator_largura));
 
         Element lig = doc.createElement("Ligacoes");
         util.XMLGenerate.AtributoRefFormElementar(lig, "PontaA", getFormaPontaA());
@@ -122,8 +118,6 @@ public class PreLigacaoSeta extends SuperLinha {
 
     @Override
     public boolean CommitXML(Element me, HashMap<Element, FormaElementar> mapa) {
-        //NodeList ligLst = me.getElementsByTagName("Ligacoes");
-        //Element lig =  (Element) ligLst.item(0);
         Element lig = util.XMLGenerate.FindByNodeName(me, "Ligacoes");
 
         String idPt = lig.getAttribute("PontaA");
@@ -136,7 +130,6 @@ public class PreLigacaoSeta extends SuperLinha {
         if (resB instanceof Forma) {
             getPontaB().SetEm((Forma) resB);
         }
-        //reSetBounds()
         if (resA instanceof Forma) {
             ((Forma) resA).PosicionePonto(getPontaA());
         }
@@ -154,9 +147,6 @@ public class PreLigacaoSeta extends SuperLinha {
         }
 
         setInteligente(util.XMLGenerate.getValorBooleanFrom(me, "Inteligente"));
-        //setSetaAberta(util.XMLGenerate.getValorBooleanFrom(me, "SetaAberta")); //já
-        //setTemSetaPontaA(util.XMLGenerate.getValorBooleanFrom(me, "TemSetaPontaA"));
-        //setTemSetaPontaB(util.XMLGenerate.getValorBooleanFrom(me, "TemSetaPontaB"));
         Color c = util.XMLGenerate.getValorColorFrom(me, "ForeColor");
         if (c != null) {
             setForeColor(c);

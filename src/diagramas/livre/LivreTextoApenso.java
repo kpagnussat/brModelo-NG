@@ -58,7 +58,6 @@ public class LivreTextoApenso extends PreTextoApenso {
         res.add(InspectorProperty.PropertyFactoryCor("texto.sombra.cor", "setCorSombra", getCorSombra()));
         res.add(InspectorProperty.PropertyFactorySeparador("texto.gradiente", true));
         String[] grupo = new String[]{"setGradienteStartColor", "setGradienteEndColor", 
-            //"setGradientePinteDetalhe", "setGradienteCorDetalhe", 
             "setGDirecao"
         };
 
@@ -80,17 +79,12 @@ public class LivreTextoApenso extends PreTextoApenso {
         res.add(InspectorProperty.PropertyFactoryNumero("diagrama.detalhe.alfa", "SetAlfa", (int) (100 * getAlfa())));
         ArrayList<String> ngrp = new ArrayList<>(Arrays.asList(grupo));
         ngrp.add("setGradiente");
-        //ngrp.add("setCorSombra");
-        //ngrp.add("setSombra");
-        //ngrp.add("setBackColor");
         ngrp.add("SetAlfa");
 
         txtTipo.AddCondicao(new String[]{"2", "3"}, new String[]{"setGradientePinteDetalhe", "setGradienteCorDetalhe", "setCorSombra", "setSombra"
-               // ,"setBackColor"
         });
         txtTipo.AddCondicao(new String[]{"1", "2", "3"}, ngrp.toArray(new String[]{}));
         txtTipo.AddCondicao(new String[]{"0"}, new String[]{"setAutosize"});
-//        txtTipo.AddCondicao(new String[]{"2", "3"}, new String[]{});
         //tpEmBranco, tpNota, tpRetangulo, tpRetanguloArred
 
         tmp = InspectorProperty.FindByProperty(res, "setTextoAdicional");
@@ -98,10 +92,8 @@ public class LivreTextoApenso extends PreTextoApenso {
 
         res.add(InspectorProperty.PropertyFactorySN("texto.autosize", "setAutosize", isAutosize()));
 
-        //if (isEhLegenda()) {
             res.add(InspectorProperty.PropertyFactorySeparador("texto.atreladoalinha"));
             res.add(InspectorProperty.PropertyFactorySN("texto.movimentacaomanual", "setMovimentacaoManual", isMovimentacaoManual()));
-        //}
 
         return res;
     }
@@ -111,29 +103,5 @@ public class LivreTextoApenso extends PreTextoApenso {
         return false;
     }
 
-//
-//    protected boolean ehlegenda = false;
-//
-//    public boolean isEhLegenda() {
-//        return ehlegenda;
-//    }
-//
-//    protected void setEhLegenda(boolean legenda) {
-//        this.ehlegenda = legenda;
-//    }
 
-//    @Override
-//    protected void ToXmlValores(Document doc, Element me) {
-//        super.ToXmlValores(doc, me);
-//        me.appendChild(util.XMLGenerate.ValorBoolean(doc, "EhLegenda", isEhLegenda()));
-//    }
-//
-//    @Override
-//    public boolean LoadFromXML(Element me, boolean colando) {
-//        if (!super.LoadFromXML(me, colando)) {
-//            return false;
-//        }
-//        setEhLegenda(util.XMLGenerate.getValorBooleanFrom(me, "EhLegenda"));
-//        return true;
-//    }
 }

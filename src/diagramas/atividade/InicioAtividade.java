@@ -29,9 +29,7 @@ public class InicioAtividade extends PreIniFimAtiv {
     protected void PinteRegiao(Graphics2D g) {
         g.setPaint(this.getForeColor());
         Rectangle r = getBounds();
-        //r = util.Utilidades.Grow(r, -1, -1, 0);
         g.fillOval(r.x, r.y, r.width, r.height);
-        //g.fill(getRegiao());
     }
 
 }

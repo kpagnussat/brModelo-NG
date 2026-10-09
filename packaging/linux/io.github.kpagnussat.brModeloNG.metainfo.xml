@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.kpagnussat.brModeloNG</id>
+  <name>brModelo NG</name>
+  <summary>Create entity-relationship and database diagrams</summary>
+  <summary xml:lang="pt-BR">Crie diagramas entidade-relacionamento e de bancos de dados</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.kpagnussat"><name>brModelo NG contributors</name></developer>
+  <description>
+    <p>brModelo NG is a fork of brModelo, created by Carlos Henrique Cândido.
+    It provides a modern desktop interface for conceptual and logical database models,
+    flowcharts, activity diagrams and work breakdown structures.</p>
+    <p>Open existing brModelo diagrams, export images and SQL, or save diagrams in the optional JSON format.</p>
+    <p xml:lang="pt-BR">brModelo NG é um fork do brModelo, criado por Carlos Henrique Cândido.
+    Oferece uma interface moderna para modelos conceituais e lógicos de bancos de dados,
+    fluxogramas, diagramas de atividades e estruturas analíticas de projetos.</p>
+    <p xml:lang="pt-BR">Abra diagramas brModelo existentes, exporte imagens e SQL ou salve diagramas no formato JSON opcional.</p>
+  </description>
+  <launchable type="desktop-id">io.github.kpagnussat.brModeloNG.desktop</launchable>
+  <url type="homepage">https://github.com/kpagnussat/brModelo-NG</url>
+  <url type="bugtracker">https://github.com/kpagnussat/brModelo-NG/issues</url>
+  <url type="vcs-browser">https://github.com/kpagnussat/brModelo-NG</url>
+  <provides><mediatype>application/x-brmodelo</mediatype><mediatype>application/x-brmodelo-json</mediatype></provides>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Conceptual database model in brModelo NG</caption>
+      <caption xml:lang="pt-BR">Modelo conceitual de banco de dados no brModelo NG</caption>
+      <image type="source" width="1400" height="1013">https://raw.githubusercontent.com/kpagnussat/brModelo-NG/master/docs/img/principal-claro.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases><release version="@APP_VERSION@" date="@RELEASE_DATE@" type="@RELEASE_TYPE@"/></releases>
+</component>

@@ -32,7 +32,7 @@ public class FluxDecisao extends FluxFormaBaseComplementar {
     @Override
     public Shape getRegiao() {
         if (Regiao == null) {
-            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
             Polygon los = new Polygon();
             los.addPoint(r.x, r.y + r.height / 2);
             los.addPoint(r.x + r.width / 2, r.y);

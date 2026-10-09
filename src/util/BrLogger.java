@@ -4,7 +4,7 @@
  */
 package util;
 
-import java.awt.Color;
+import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 
@@ -14,8 +14,43 @@ import javax.swing.JLabel;
  */
 public class BrLogger {
 
-    //private final Editor editor;
-    private static JLabel status;
+    private static volatile JLabel status;
+    private static volatile Runnable atualizarIndicador = () -> {};
+    private static final ContagemLogs novas = new ContagemLogs();
+
+    public static ContagemLogs.Estado novasMensagens() {
+        return novas.estado();
+    }
+
+    public static void setAtualizarIndicador(Runnable atualizar) {
+        atualizarIndicador = atualizar;
+        atualizarInterface(null);
+    }
+
+    public static void marcarLidas() {
+        novas.marcarLidas();
+        atualizarInterface(null);
+    }
+
+    private static void atualizarInterface(Excecao entrada) {
+        Runnable atualizar = () -> {
+            if (entrada != null && ContagemLogs.ehErro(entrada.Tipo)) {
+                MensagensStatus.mostrar(status, entrada.Tipo + entrada.Complemento + entrada.Valor,
+                        ContagemLogs.ehErro(entrada.Tipo));
+            }
+            atualizarIndicador.run();
+        };
+        if (SwingUtilities.isEventDispatchThread()) atualizar.run();
+        else SwingUtilities.invokeLater(atualizar);
+    }
+
+    private static void registrar(Excecao entrada) {
+        synchronized (Logs) {
+            Logs.add(entrada);
+            novas.receber(entrada.Tipo);
+        }
+        atualizarInterface(entrada);
+    }
 
     public static JLabel getStatus() {
         return status;
@@ -29,6 +64,7 @@ public class BrLogger {
      * Objeto simples para organizar as exceções.
      */
     public static class Excecao {
+        public final java.time.LocalDateTime Hora = java.time.LocalDateTime.now();
         public String Tipo = "";
         public String Valor = "";
         public String Complemento = "";
@@ -55,26 +91,24 @@ public class BrLogger {
     
     public static void Logger(String rpt, String exception) {
         Excecao p = new Excecao(rpt , (exception != null ? " (java: " + exception + ")" : ""));
-        Logs.add(p);
-        if (status != null) {
-            status.setForeground(Color.red);
-            String msg = p.Tipo + p.Valor;
-            status.setText(msg);
-        }
+        registrar(p);
     }
 
     public static void Logger(String rpt, String complemento, String exception) {
-        Excecao p = new Excecao(rpt, (exception != null ? " (java: " + exception + ")" : ""), complemento);
-        Logs.add(p);
-        if (status != null) {
-            status.setForeground(Color.red);
-            String msg = p.Tipo + p.Complemento + p.Valor ;
-            status.setText(msg);
-        }
+        registrar(new Excecao(rpt, (exception != null ? " (java: " + exception + ")" : ""), complemento));
     }
     
     public static void Clean() {
-        Logs.clear();
-        getStatus().setText("");
+        synchronized (Logs) {
+            Logs.clear();
+            novas.marcarLidas();
+        }
+        Runnable limpar = () -> {
+            MensagensStatus.parar(status);
+            if (status != null) status.setText("");
+            atualizarIndicador.run();
+        };
+        if (SwingUtilities.isEventDispatchThread()) limpar.run();
+        else SwingUtilities.invokeLater(limpar);
     }
 }

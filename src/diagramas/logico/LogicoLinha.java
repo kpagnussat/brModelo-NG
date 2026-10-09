@@ -50,7 +50,6 @@ public class LogicoLinha extends SuperLinha {
         setCardA(new LogicoCardinalidade(getMaster(), LogicoCardinalidade.class.getSimpleName()));
         setCardB(new LogicoCardinalidade(getMaster(), LogicoCardinalidade.class.getSimpleName()));
         getCardA().setCard(1);
-        //PrepareCardinalidade();
         getCardA().Fixe(null);
         getCardB().Fixe(null);
     }
@@ -163,7 +162,6 @@ public class LogicoLinha extends SuperLinha {
         if (resB instanceof Forma) {
             getPontaB().SetEm((Forma) resB);
         }
-        //reSetBounds()
         if (resA instanceof Forma) {
             ((Forma) resA).PosicionePonto(getPontaA());
         }

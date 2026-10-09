@@ -35,7 +35,6 @@ public class DataBaseModel implements Serializable {
     }
     
     private ArrayList<String> reservedWords = new ArrayList<>();
-    //private ArrayList<String> dataTypes = new ArrayList<>();
     private String nome = "";
     private String versao = "";
     private String descricao = "";

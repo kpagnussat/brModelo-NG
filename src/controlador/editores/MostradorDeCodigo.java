@@ -16,7 +16,6 @@
  */
 package controlador.editores;
 
-import controlador.editores.EditorTexto;
 import controlador.Editor;
 import diagramas.logico.DataBaseModel;
 import java.awt.Frame;
@@ -29,13 +28,12 @@ import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import principal.Aplicacao;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JOptionPane;
-import javax.swing.text.Utilities;
 
 /**
  *
@@ -46,18 +44,19 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
     public MostradorDeCodigo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.AcabamentoDialogos.aplicar(this);
         lblHtml = new JLabel();
+        // Code reads from the top; a JLabel centers vertically when the viewport is taller.
+        lblHtml.setVerticalAlignment(SwingConstants.TOP);
+        vlZoom = lblHtml.getFont().getSize();
+        txtZoon.setText(String.valueOf(vlZoom));
         scrPrincipal.getViewport().add(lblHtml);
-        //dbModel.InicieAnsi2011();
         
         getRootPane().registerKeyboardAction(e -> {
-            //this.dispose();
-            //setResultado(JOptionPane.CANCEL_OPTION);
             setVisible(false);
 
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         getRootPane().registerKeyboardAction(e -> {
-            //setResultado(JOptionPane.OK_OPTION);
             setVisible(false);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, java.awt.event.InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -65,7 +64,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
             btnCopyActionPerformed(null);
         }, KeyStroke.getKeyStroke(KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
         setTitle(Editor.fromConfiguracao.getValor("Controler.interface.Titulo.MostradorDeCodigo"));
-        this.pack();
+        util.LayoutDialogos.texto(this, jToolBar1, scrPrincipal, jPanel2);
     }
 
     /**
@@ -117,7 +116,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         jToolBar1.setRollover(true);
         jToolBar1.setMargin(new java.awt.Insets(2, 2, 2, 2));
 
-        btnZmn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoommenos.png"))); // NOI18N
+        btnZmn.setIcon(util.Icones.de("/imagens/zoommenos.png")); // NOI18N
         btnZmn.setFocusable(false);
         btnZmn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnZmn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -132,13 +131,13 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         txtZoon.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtZoon.setText("12");
         txtZoon.setToolTipText(bundle.getString("MostradorDeCodigo.toolTipText")); // NOI18N
-        txtZoon.setBorder(null);
+        txtZoon.setColumns(3);
         txtZoon.setCaretPosition(0);
-        txtZoon.setMinimumSize(new java.awt.Dimension(30, 14));
-        txtZoon.setPreferredSize(new java.awt.Dimension(140, 14));
+
+
         jToolBar1.add(txtZoon);
 
-        btnZma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/zoom.png"))); // NOI18N
+        btnZma.setIcon(util.Icones.de("/imagens/zoom.png")); // NOI18N
         btnZma.setFocusable(false);
         btnZma.setHideActionText(true);
         btnZma.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -151,10 +150,10 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         jToolBar1.add(btnZma);
         jToolBar1.add(jSeparator1);
 
-        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cp.png"))); // NOI18N
+        btnCopy.setIcon(util.Icones.de("/imagens/cp.png")); // NOI18N
         btnCopy.setFocusable(false);
         btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCopy.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cpdim_cp.png"))); // NOI18N
+        btnCopy.setPressedIcon(util.Icones.de("/imagens/cp.png")); // NOI18N
         btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,7 +162,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         });
         jToolBar1.add(btnCopy);
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/green_edit.gif"))); // NOI18N
+        btnEditar.setIcon(util.Icones.de("/imagens/green_edit.gif")); // NOI18N
         btnEditar.setFocusable(false);
         btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -174,7 +173,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         });
         jToolBar1.add(btnEditar);
 
-        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/menu_salvarc.png"))); // NOI18N
+        btnSalvar.setIcon(util.Icones.de("/imagens/menu_salvarc.png")); // NOI18N
         btnSalvar.setFocusable(false);
         btnSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -185,7 +184,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         });
         jToolBar1.add(btnSalvar);
 
-        btnClean.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/atualizar.png"))); // NOI18N
+        btnClean.setIcon(util.Icones.de("/imagens/atualizar.png")); // NOI18N
         btnClean.setToolTipText(bundle.getString("MostradorDeCodigo.Dica.LimparTexto")); // NOI18N
         btnClean.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,11 +266,6 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
             return;
         }
         
-        if (arq.exists()) {
-            if (util.Dialogos.ShowMessageConfirm(getRootPane(), Editor.fromConfiguracao.getValor("Controler.MSG_QUESTION_REWRITE")) != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
         try {
             PrintWriter out = new PrintWriter(arq.getAbsoluteFile());
             out.print(buffer);
@@ -328,8 +322,8 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
         String[] subs = texto.split("\n");
         StringBuilder bu = new StringBuilder();
 
-        final String fr = "<font color='red'>";
-        final String fb = "<font color='blue'>";
+        final String fr = "<font color='" + util.ConteudoSobre.cssCor(util.EstiloUI.cor("Actions.Red")) + "'>";
+        final String fb = "<font color='" + util.ConteudoSobre.cssCor(util.EstiloUI.cor("Component.linkColor")) + "'>";
         final String fimR = "</font>";
         final String fimB = "</font>";
         
@@ -375,9 +369,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
                 + "    margin-right: 0;\n"
                 + "    padding-left: " + vlZoom + "px;\n"
                 + "}</style>"
-//                + "<body style=\"font-size: " + vlZoom + "\">\n <font size='" + vlZoom + "'><ol style=\"font-size: " + vlZoom + "\">"
                 + "<body style=\"font-size: " + vlZoom + "\">\n<ol>"
-                //+ "<font size='" + vlZoom + "'>"
                 + bu.toString()
                 + "</ol>\n"
                 + "</font>\n</body>\n"
@@ -388,7 +380,7 @@ public class MostradorDeCodigo extends javax.swing.JDialog implements ClipboardO
     public String injete(String origem, String palavra, String inj, String fim, int posi) {
         String res;
         if (posi == 0) {
-            res = inj + origem.substring(1, palavra.length());
+            res = inj + origem.substring(1, 1 + palavra.length());
         } else {
             res = origem.substring(0, posi + 1) + inj + origem.substring(posi + 1, posi + 1 + palavra.length());
         }

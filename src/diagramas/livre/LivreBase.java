@@ -245,7 +245,7 @@ public class LivreBase extends FormaNaoRetangularDisformeBase {
 
     public Shape getRegiaoLosanglo() {
         if (Regiao == null) {
-            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+            Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
             Polygon los = new Polygon();
             los.addPoint(r.x, r.y + r.height / 2);
             los.addPoint(r.x + r.width / 2, r.y);
@@ -351,7 +351,6 @@ public class LivreBase extends FormaNaoRetangularDisformeBase {
 
         GP.add(InspectorProperty.PropertyFactorySN("linha.dashed", "setDashed", isDashed()));
         GP.add(InspectorProperty.PropertyFactoryNumero("diagrama.detalhe.alfa", "SetAlfa", (int) (100 * getAlfa())));
-        //if (getTipoDesenho() != TipoDraw.tpTexto) {
         ArrayList<InspectorProperty> res = GP;
         res.add(InspectorProperty.PropertyFactorySeparador("texto.gradiente", true));
 
@@ -366,17 +365,12 @@ public class LivreBase extends FormaNaoRetangularDisformeBase {
 
         res.add(InspectorProperty.PropertyFactoryMenu("texto.gradiente.direcao", "setGDirecao", getGDirecao(), Editor.fromConfiguracao.getLstDirecao(Controler.Comandos.cmdTexto)));
 
-//            ArrayList<String> ngrp = new ArrayList<>(Arrays.asList(grupo));
-//            ngrp.add("setGradiente");
-//            ngrp.add("setBackColor");
-//            ngrp.add("setGDirecao");
-        //}
         return super.CompleteGenerateProperty(GP);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Gradiente e Alfa">
-    private boolean gradiente = true; //false;
-    private Color gradienteEndColor = Color.WHITE; // new Color(204, 204, 204, 255);
+    private boolean gradiente = true;
+    private Color gradienteEndColor = Color.WHITE;
     private Color gradienteStartColor = Color.BLACK;
 
     public Color getGradienteStartColor() {

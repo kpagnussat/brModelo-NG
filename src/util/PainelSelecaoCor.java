@@ -42,7 +42,7 @@ public class PainelSelecaoCor extends AbstractColorChooserPanel {
 
     @Override
     public void buildChooser() {
-        setLayout(new BorderLayout());// GridLayout(0, 1));
+        setLayout(new BorderLayout());
 
         if (!itens.isEmpty()) {
             JScrollPane jsp = new javax.swing.JScrollPane();
@@ -86,13 +86,11 @@ public class PainelSelecaoCor extends AbstractColorChooserPanel {
 
     @Override
     public Icon getSmallDisplayIcon() {
-//        return null;
         return TratadorDeImagens.loadFromResource("Controler.interface.Icone", true);
     }
 
     @Override
     public Icon getLargeDisplayIcon() {
-//        return null;
         Image img = Configuer.getImageFromResource("Controler.interface.Icone");
         img = TratadorDeImagens.makeColorTransparent(img, Color.white);
         return new ImageIcon(img);

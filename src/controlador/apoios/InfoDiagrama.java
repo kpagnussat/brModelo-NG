@@ -82,7 +82,6 @@ public class InfoDiagrama extends Forma {
             vl.add(Double.toString(getMaster().getEditor().zoonsd[i] * 100) + "%");
         }
         res.add(InspectorProperty.PropertyFactoryMenu("zoom", "setZoonInt", getZoonInt(), vl));
-        //res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("zoom", Double.toString(getMaster().getZoom()*100) + "%"));
         res.add(InspectorProperty.PropertyFactorySeparador("diagrama.alinhamento"));
         res.add(InspectorProperty.PropertyFactoryNumero("diagrama.alinhamento_h", "setAlinhamento_h", getAlinhamento_h()));
         res.add(InspectorProperty.PropertyFactoryNumero("diagrama.alinhamento_v", "setAlinhamento_v", getAlinhamento_v()));
@@ -93,7 +92,6 @@ public class InfoDiagrama extends Forma {
         res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("fonte.tamanho", Integer.toString(f.getSize())));
         res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("fonte.estilo", util.Utilidades.decodeFontStyle(f.getStyle())));
         if (editFonte) {
-            //# res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdFonte.name()));
             res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdFonte.name(), nomeComandos.cmdFonte.name().toLowerCase(), getFont().getFontName()));
         }
 
@@ -171,9 +169,7 @@ public class InfoDiagrama extends Forma {
 
     @Override
     protected void ToXmlValores(Document doc, Element me) {
-        //super.InfoDiagrama_ToXmlValores(doc, me);
         me.appendChild(util.XMLGenerate.ValorString(doc, "Versao", getMaster().getVersao()));
-        //me.appendChild(util.XMLGenerate.ValorString(doc, "Nome", getMaster().getNome()));
         me.appendChild(util.XMLGenerate.ValorText(doc, "Autores", getAutores()));
         me.appendChild(util.XMLGenerate.ValorText(doc, "Observacao", getObservacao()));
         me.appendChild(util.XMLGenerate.ValorInteger(doc, "Width", getMaster().getWidth()));
@@ -197,7 +193,6 @@ public class InfoDiagrama extends Forma {
             diagramaUniversalUnicID = me.getAttribute("UniversalUnicID");
             realDiagramaUniversalUnicID = diagramaUniversalUnicID;
         }
-        //setNome(util.XMLGenerate.getValorStringFrom(me, "Nome"));
         setAutores(util.XMLGenerate.getValorTextoFrom(me, "Autores"));
         setObservacao(util.XMLGenerate.getValorTextoFrom(me, "Observacao"));
         setFont(util.XMLGenerate.getValorFonte(me));

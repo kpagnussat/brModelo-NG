@@ -21,7 +21,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -91,7 +90,6 @@ public class Desenhador extends Forma implements iBaseDrawer {
 
     public void setTipoImg() {
         setTipo(TIPOIMG);
-        //imgSeta = null;
     }
 
     public float getAlfa() {
@@ -118,7 +116,6 @@ public class Desenhador extends Forma implements iBaseDrawer {
         } else if (isTipoImg()) {
             DrawImagem(g);
         } else {
-            //# Shape bkpA = g.getClip();
             Rectangle bkpA = g.getClipBounds();
             Rectangle r = getBounds();
             g.clipRect(r.x, r.y, r.width, r.height);
@@ -276,21 +273,11 @@ public class Desenhador extends Forma implements iBaseDrawer {
 
             BufferedImage bi = new BufferedImage(pos.width, pos.height, BufferedImage.TYPE_INT_ARGB);
             Graphics gg = bi.getGraphics();
-            //Color bkp = g.getColor();
             gg.setColor(getSetaCor());
             drawArrow((Graphics2D) gg, recSeta.x, recSeta.y, recSeta.width, recSeta.height);
             imgSeta = bi;
-            //return;
-            //g.setColor(bkp);
         }
-        //g.drawLine(recSeta.x, recSeta.y, recSeta.width, recSeta.height);
 
-//        if (recSeta == null) {
-//            recSeta = new Rectangle(getLeft() + 1 + desvioX, getTop() + getHeight() / 2 + desvioX, getLeft() + getWidth() - 1 - desvioX, getTop() + getHeight() / 2 - desvioY);
-//        }
-        //drawArrow(g, 0, getHeight() / 2, getWidth(), getHeight() / 2);
-        //drawArrow(g, getLeft() + 1 + desvioX, getTop() + getHeight() / 2 + desvioX, getLeft() + getWidth() - 1 - desvioX, getTop() + getHeight() / 2 - desvioY);
-        //drawArrow(g, recSeta.x, recSeta.y, recSeta.width, recSeta.height);
         g.drawImage(imgSeta, getLeft() + 2, getTop() + 2, null);
     }
 
@@ -311,14 +298,12 @@ public class Desenhador extends Forma implements iBaseDrawer {
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
 
-        //g.setPaint(Color.BLACK);
         int ARR_SIZE = 3 + getSetaLargura();
         double dx = x2 - x1, dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
         int len = (int) Math.sqrt(dx * dx + dy * dy);
         AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
         at.concatenate(AffineTransform.getRotateInstance(angle));
-        //AffineTransform bkp = g.getTransform();
         g.setTransform(at);
 
         // Draw horizontal arrow starting in (0, 0)

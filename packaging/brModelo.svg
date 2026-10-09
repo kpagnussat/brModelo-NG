@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 128 128">
+  <title>brModelo NG — entity with attributes and a relationship</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3FA9E8"/>
+      <stop offset="1" stop-color="#1E6FB0"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="26" fill="url(#bg)"/>
+  <g stroke="#F5F8FC" stroke-width="6" stroke-linecap="round">
+    <path d="M28 62V40M47 62V34M66 62V40"/>
+    <path d="M78 82h10"/>
+  </g>
+  <!-- Filled circle = identifier attribute, as drawn in the diagram. -->
+  <circle cx="28" cy="33" r="9" fill="#F2A900" stroke="#FFF3D0" stroke-width="4"/>
+  <circle cx="47" cy="27" r="8" fill="#2A82C8" stroke="#F5F8FC" stroke-width="5"/>
+  <circle cx="66" cy="33" r="8" fill="#2A82C8" stroke="#F5F8FC" stroke-width="5"/>
+  <rect x="14" y="62" width="66" height="40" rx="6" fill="#F5F8FC"/>
+  <path d="M100 68 114 82 100 96 86 82Z" fill="#F2A900" stroke="#FFF3D0" stroke-width="4" stroke-linejoin="round"/>
+</svg>

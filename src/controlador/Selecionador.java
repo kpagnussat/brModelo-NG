@@ -33,7 +33,6 @@ public class Selecionador extends Forma {
     @Override
     public void DoPaint(Graphics2D g) {
         Paint bkppaint = g.getPaint();
-        //super.DoPaint(g); //To change body of generated methods, choose Tools | Templates.
         Graphics2D Canvas = g;
         Stroke stroke = g.getStroke();
         Canvas.setStroke(new BasicStroke(
@@ -44,13 +43,11 @@ public class Selecionador extends Forma {
                 new float[]{2f, 2f},
                 1f));
 
-        //Composite ori = g.getComposite();
-        //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN, 1f));
 
         Canvas.setPaint(Color.BLACK);
         Canvas.drawRect(getLeft(), getTop(), getWidth() - 2, getHeight() - 2);
         g.setStroke(stroke);
-        g.setPaint(bkppaint);//g.setComposite(ori);
+        g.setPaint(bkppaint);
     }
 
     public void Init(Point local) {

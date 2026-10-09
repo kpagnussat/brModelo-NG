@@ -46,12 +46,8 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Informa&#xe7;&#xe3;o:">
-              <ResourceString PropertyName="titleX" bundle="principal/Formularios_pt_BR.properties" key="EditorDeTipos.tituloTabela" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </TitledBorder>
-          </Border>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="util.AcabamentoDialogos.bordaSecao(jPanel1, java.util.ResourceBundle.getBundle(&quot;principal/Formularios_pt_BR&quot;).getString(&quot;EditorDeTipos.tituloTabela&quot;))" type="code"/>
         </Property>
       </Properties>
 
@@ -102,8 +98,8 @@
           <SubComponents>
             <Container class="javax.swing.JPanel" name="Principal">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="util.EstiloUI.fundo(Principal, &quot;Panel.background&quot;)" type="code"/>
                 </Property>
               </Properties>
 
@@ -134,8 +130,8 @@
     <Container class="javax.swing.JPanel" name="jPanel2">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-            <EtchetBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+            <EmptyBorder bottom="8" left="8" right="8" top="8"/>
           </Border>
         </Property>
       </Properties>
@@ -147,7 +143,7 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="btnFechar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="btnOK" min="-2" pref="107" max="-2" attributes="0"/>
+                  <Component id="btnOK" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

@@ -27,7 +27,6 @@ public class PrintControler implements Printable {
         page.setOrientation(PageFormat.PORTRAIT);
     }
 
-    //private Component componentToBePrinted;
     private final PrinterJob printJob;
 
     private PageFormat page;
@@ -51,25 +50,7 @@ public class PrintControler implements Printable {
                 util.BrLogger.Logger("ERROR_PRINTING", pe.getMessage());
             }
         }
-//        PrintRequestAttributeSet attr_set
-//                = new HashPrintRequestAttributeSet();
-//        if (page_range.x == 0) {
-//            res = getPrintJob().printDialog();
-//        } else {
-//            PrintRequestAttributeSet attr_set2
-//                    = new HashPrintRequestAttributeSet();
-//            attr_set2.add(new PageRanges(page_range.x, page_range.y));
-//            res = getPrintJob().printDialog(attr_set2);
-//        }
-//        if (res) {
-//            try {
-//                getPrintJob().print(attr_set);
-//            } catch (PrinterException pe) {
-//                System.out.println("Error printing: " + pe);
-//            }
-//            //page = getPrintJob().getPageFormat(null);
-//        }
-    }//method()  
+    }
 
     @Override
     public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
@@ -92,11 +73,11 @@ public class PrintControler implements Printable {
         } else {
             return (NO_SUCH_PAGE);
         }
-    }//method()  
+    }
 
     public final void setJobName(String jobName) {
         getPrintJob().setJobName(jobName);
-    }//method()  
+    }
 
     public void pageSetup() {
         page = getPrintJob().pageDialog(getPage());
@@ -119,34 +100,17 @@ public class PrintControler implements Printable {
             page = getPrintJob().getPageFormat(Atributos);
         }
 
-//        if (page_range.x == 0) {
-//            Atributos.add(new PageRanges(page_range.x, page_range.y));
-//            if (getPrintJob().printDialog()) {
-//                
-//                page = getPrintJob().getPageFormat(null);
-//            }
-//        } else {
-//            PrintRequestAttributeSet attr_set
-//                    = new HashPrintRequestAttributeSet();
-//            attr_set.add(new PageRanges(page_range.x, page_range.y));
-//            
-//            attr_set = getPrintJob(). getPrintService().getAttributes().;
-//            
-//            if (getPrintJob().printDialog(attr_set)) {
-//                page = getPrintJob().getPageFormat(attr_set);
-//            }
-//        }
     }
 
     public static void disableDoubleBuffering(Component c) {
         RepaintManager currentManager = RepaintManager.currentManager(c);
         currentManager.setDoubleBufferingEnabled(false);
-    }//method()  
+    }
 
     public static void enableDoubleBuffering(Component c) {
         RepaintManager currentManager = RepaintManager.currentManager(c);
         currentManager.setDoubleBufferingEnabled(true);
-    }//method()  
+    }
 
     public PrinterJob getPrintJob() {
         return printJob;

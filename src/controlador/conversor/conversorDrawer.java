@@ -26,13 +26,11 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
-import util.BrLogger;
 
 /**
  *
@@ -47,7 +45,7 @@ public class conversorDrawer extends BaseControlador {
     public javax.swing.ButtonGroup Grp = null;
 
     private void doInit() {
-        setBackground(Color.WHITE);
+        setBackground(util.EstiloUI.fundo(this, "Panel.background"));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
     }
 
@@ -62,20 +60,6 @@ public class conversorDrawer extends BaseControlador {
         if (toPaint != null) {
             g.drawImage(toPaint, r.width - toPaint.getWidth(), r.height - toPaint.getHeight(), null);
         }
-        g.setPaint(Color.BLACK);
-
-        int dist = 0;
-        int w = getWidth() - dist;
-        int h = getHeight() - dist;
-        int L = 0;
-        int T = 0;
-        boolean dv = false;
-
-        GradientPaint GP = new GradientPaint(L, T, Color.WHITE, dv ? L : L + w, dv ? T + h : T, Color.DARK_GRAY, true);
-        g.setPaint(GP);
-
-        r = new Rectangle(r.x, r.y, r.width, r.height);
-        g.fill(r);
         g.setComposite(originalComposite);
     }
 
@@ -116,7 +100,7 @@ public class conversorDrawer extends BaseControlador {
         Grp = new javax.swing.ButtonGroup();
         Opcoes.Textos.forEach(s -> {
             JLabel lbl = new JLabel(s);
-            lbl.setFont(new Font(lbl.getFont().getName(), Font.BOLD, lbl.getFont().getSize()));
+            lbl.putClientProperty("FlatLaf.style", "font: bold");
             add(lbl);
         });
         add(new JLabel(" "));

@@ -12,7 +12,8 @@ import java.io.File;
  */
 public class Arquivo {
 
-    public static final String brM3 = "brM3"; 
+    public static final String brM3 = "brM3";
+    public static final String brMj = "brMj";
     public static final String xml = "xml"; 
     public static final String bmp = "bmp"; 
     public static final String png = "png"; 
@@ -34,7 +35,15 @@ public class Arquivo {
 
     public static boolean IsbrM3(File f) {
         String ext = getExtension(f);
-        return ext.toUpperCase().equals(brM3.toUpperCase());
+        return brM3.equalsIgnoreCase(ext);
+    }
+
+    public static boolean IsbrMj(File f) {
+        return brMj.equalsIgnoreCase(getExtension(f));
+    }
+
+    public static boolean IsModelo(File f) {
+        return IsbrM3(f) || IsbrMj(f);
     }
 
     public static boolean Isxml(File f) {

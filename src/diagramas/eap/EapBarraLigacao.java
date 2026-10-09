@@ -184,7 +184,6 @@ public class EapBarraLigacao extends Forma {
         if (getDirecao() == HORIZONTAL) {
             ponto.setLado(3);
             ponto.setTop(getTop() + getHeight() / 2 - ponto.getHeight() / 2);
-            //} 
         } else {
             if (outraponta.getLeft() > getLeftWidth()) {
                 ponto.setLado(2);
@@ -271,8 +270,6 @@ public class EapBarraLigacao extends Forma {
             pt.setLocation(le, getTop() - meiopt + recuo);
             lst.remove(maisAci);
             lstp.remove(pt);
-            //int tl = lst.size();
-            //int i = 0;
             int posiL = getLeft() + getWidth() / 2;
             while (lst.size() > 0) {
                 to = maisAci.getTopHeight() + 2 * dist;
@@ -299,9 +296,6 @@ public class EapBarraLigacao extends Forma {
 
                 lst.remove(maisAci);
                 lstp.remove(pt);
-                //i++;
-//                maHeigth = Math.max(maHeigth, maisAci.getTopHeight());
-//                maWidth = Math.max(maWidth, maisAci.getLeftWidth());
             }
             if (getTopHeight() > to) {
                 int tmp = to - getTop() + meiopt;
@@ -312,7 +306,6 @@ public class EapBarraLigacao extends Forma {
         } else {
             //<editor-fold defaultstate="collapsed" desc="HORIZONTAL">
             final int meiopt = pt.getHeight() / 2;
-            //final int tamPt = pt.getHeight();
 
             int le = (maisAci.getLeft() + (maisAci.getWidth()) / 2) + meiopt;
             int to = maisAci.getTopHeight() + getHeight() + getHeight() / 2;
@@ -330,14 +323,12 @@ public class EapBarraLigacao extends Forma {
             }
             tam = tam - dist - (lst.get(0).getWidth() / 2 + lst.get(lst.size() - 1).getWidth() / 2) - 1;
             tam = Math.max(tam, LARG_ALT);
-            //if (opt.getLeft() < getLeft()) {
             if (getPosicao() == HESQUERDA) {
                 SetBounds(le + lst.get(0).getWidth() + getHeight(), to, tam, getHeight());
                 Reposicione();
                 pt.setLado(0);
                 to = getTop() + getHeight() / 2 - 1;
                 pt.setLocation(getLeft() - pt.getWidth() / 2 + recuo, to);
-                //} else if (opt.getLeft() > getLeftWidth()) {
             } else if (getPosicao() == HDIREITA) {
                 SetBounds(le - tam - getHeight() - lst.get(lst.size() - 1).getWidth() - getHeight(), to, tam, getHeight());
                 Reposicione();
@@ -378,9 +369,6 @@ public class EapBarraLigacao extends Forma {
                 maisAci = getFormaMaisEsquerda(lst);
                 if (maisAci != null) {
                     le += maisAci.getWidth() / 2;
-//                    maHeigth = Math.max(maHeigth, maisAci.getTopHeight());
-//                    maWidth = Math.max(maWidth, maisAci.getLeftWidth());
-//                    maLeft = Math.min(maLeft, maisAci.getLeft());
                 }
                 i++;
             }
@@ -407,7 +395,7 @@ public class EapBarraLigacao extends Forma {
                 tam += (areas.get(forma) == null ? forma.getWidth() + dist : areas.get(forma).getLarguraEapHorizontal(ja, areas));
             }
             if (getPosicao() != HCENTRO) {
-                tam += ma.getWidth() + getHeight();// 2*dist;
+                tam += ma.getWidth() + getHeight();
             }
         } else {
             tam = ma.getWidth() + getDistancia() - (ma.getWidth() / 2);
@@ -544,8 +532,6 @@ public class EapBarraLigacao extends Forma {
             pt.setLocation(le, getTop() - meiopt + recuo);
             lst.remove(maisAci);
             lstp.remove(pt);
-            //int tl = lst.size();
-            //int i = 0;
             int posiL = getLeft() + getWidth() / 2;
             to = maisAci.getTopHeight() + 2 * dist;
             le = getLeftWidth() + getWidth();
@@ -895,21 +881,6 @@ public class EapBarraLigacao extends Forma {
         });
     }
 
-//    protected Forma getFormaPrincipal(EapBarraLigacao eap, HashMap<Forma, EapBarraLigacao> lst) {
-//        if (lst.isEmpty()) {
-//            return null;
-//        }
-//        for (Forma forma : lst.keySet()) {
-//            if (lst.get(forma) == eap) {
-//                return forma;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    private Forma getFormaPrincipal(HashMap<Forma, EapBarraLigacao> lst) {
-//        return getFormaPrincipal(this, lst);
-//    }
     private Forma getFormaMaisAcima(ArrayList<Forma> lst) {
         if (lst.isEmpty()) {
             return null;

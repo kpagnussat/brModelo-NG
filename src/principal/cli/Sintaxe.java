@@ -157,18 +157,6 @@ public class Sintaxe {
         }
         String res = getBestCMD(comm.get(nv));
         //este trecho nào deverá ser executado
-//        if (res.isEmpty()) {
-//            if (Proximos.isEmpty()) {
-//                return stx;
-//            }
-//            res = stx + " [";
-//            for (Sintaxe sx : Proximos) {
-//                res += sx.getSintaxeCMD() + ",";
-//            }
-//            res = res.substring(0, res.length() - 1) + "]";
-//            return res;
-//        }
-        //
         stx += " " + res;
         res = stx;
         if (Proximos.isEmpty()) {

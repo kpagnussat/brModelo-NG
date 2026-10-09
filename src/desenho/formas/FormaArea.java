@@ -43,13 +43,11 @@ public class FormaArea extends Forma {
     public FormaArea(Diagrama modelo) {
         super(modelo);
         areaDefault = Editor.fromConfiguracao.getValor("Inspector.obj.formaarea.area.default");
-        //setForeColor(new Color(204,204, 255));
     }
 
     public FormaArea(Diagrama modelo, String texto) {
         super(modelo, texto);
         areaDefault = Editor.fromConfiguracao.getValor("Inspector.obj.formaarea.area.default");
-        //setForeColor(new Color(204,204, 255));
     }
 
     public int getLocalDaLinha(DimensionadorArea aThis) {
@@ -113,7 +111,6 @@ public class FormaArea extends Forma {
         alturaTexto = g.getFontMetrics().getHeight();
         alturaTexto += alturaTexto / 2;
         int top = getTop() + alturaTexto;
-        //int newTop = getTextoFormatado().getMaxHeigth();
         int lastlarg = distSelecao + getLeft();
         PaintGradiente(g);
         boolean excesso = false;
@@ -159,7 +156,7 @@ public class FormaArea extends Forma {
         super.DoPaint(g);
     }
 
-    protected void PaintGradiente(Graphics2D g) { //, boolean round) {
+    protected void PaintGradiente(Graphics2D g) {
         Paint bkp = g.getPaint();
         int dist = distSelecao;
 
@@ -177,8 +174,6 @@ public class FormaArea extends Forma {
             g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1, 2}, 0));
         }
 
-//        GradientPaint GP = new GradientPaint(getLeft(), getTop(), Color.LIGHT_GRAY, dv ? getLeft() : getLeft() + W, dv ? getTop() + H : getTop(), Color.white, true);
-//        g.setPaint(GP);
         int w = getWidth() - dist;
         int h = getHeight() - dist;
         int L = getLeft();
@@ -325,9 +320,9 @@ public class FormaArea extends Forma {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         Rectangle r = getArea();
         r = new Rectangle(r.x, r.y, r.width, alturaTexto);
@@ -348,34 +343,6 @@ public class FormaArea extends Forma {
     @Override
     public ArrayList<InspectorProperty> GenerateProperty() {
         ArrayList<InspectorProperty> res = super.GenerateProperty();
-//        res.add(InspectorProperty.PropertyFactoryTexto("formaarea.area.default", "setAreaDefault", getAreaDefault()));
-//        res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdAdicionarSubItem.name()).setTag(-1));
-//
-//        int i = 0;
-//        for (DimensionadorArea dime : getRegioes()) {
-//            res.add(InspectorProperty.PropertyFactorySeparador("formaarea.area"));
-//            res.add(InspectorProperty.PropertyFactoryTexto("formaarea.area", "SetDimensaoTexto", dime.getTexto()).setTag(i));
-//            res.add(InspectorProperty.PropertyFactoryNumero("formaarea.largura", "SetDimensaoLargura", dime.getLargura()).setTag(i));
-//            res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdExcluirSubItem.name()).setTag(i));
-//            i++;
-//        }
-//
-//        ArrayList<FormaElementar> overme = WhoIsOverMe();
-//        res.add(InspectorProperty.PropertyFactorySeparador("formaarea.overme"));
-//        res.add(InspectorProperty.PropertyFactorySN("formaarea.movesubs", "setMoverSubs", isMoverSubs()));
-//        res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "formaarea.capture").setTag(99));
-//        res.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "formaarea.uncapture").setTag(-99));
-//        res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("formaarea.capturados", String.valueOf(overme.size())));
-//        
-//        if (!overme.isEmpty()) {
-//            res.add(InspectorProperty.PropertyFactorySeparador("formaarea.capturados"));
-//
-//            overme.stream().filter((dime) -> (dime instanceof Forma)).map((dime) -> (Forma) dime).forEach((f) -> {
-//                res.add(InspectorProperty.PropertyFactoryActionSelect(Editor.fromConfiguracao.getValor("diagrama." + Editor.getClassTexto(f) + ".nome"),
-//                        f.getTexto(),
-//                        String.valueOf(((FormaElementar) f.getPrincipal()).getID())));
-//            });
-//        }
         return res;
     }
 
@@ -418,7 +385,6 @@ public class FormaArea extends Forma {
 
         me.appendChild(util.XMLGenerate.ValorBoolean(doc, "Dashed", isDashed()));
 
-        //me.appendChild(util.XMLGenerate.ValorBoolean(doc, "Gradiente", isGradiente()));
         me.appendChild(util.XMLGenerate.ValorColor(doc, "GradienteStartColor", getGradienteStartColor()));
         me.appendChild(util.XMLGenerate.ValorColor(doc, "GradienteEndColor", getGradienteEndColor()));
         me.appendChild(util.XMLGenerate.ValorInteger(doc, "GDirecao", getGDirecao()));
@@ -449,7 +415,6 @@ public class FormaArea extends Forma {
         }
 
         setDashed(util.XMLGenerate.getValorBooleanFrom(me, "Dashed"));
-        //setGradiente(util.XMLGenerate.getValorBooleanFrom(me, "Gradiente"));
         Color c = util.XMLGenerate.getValorColorFrom(me, "GradienteStartColor");
         if (c != null) {
             setGradienteStartColor(c);
@@ -471,26 +436,17 @@ public class FormaArea extends Forma {
 
     @Override
     public ArrayList<InspectorProperty> CompleteGenerateProperty(ArrayList<InspectorProperty> GP) {
-        //if (getTipoDesenho() != TipoDraw.tpTexto) {
         ArrayList<InspectorProperty> res = GP;
         res.add(InspectorProperty.PropertyFactorySeparador("texto.gradiente"));
         GP.add(InspectorProperty.PropertyFactorySN("linha.dashed", "setDashed", isDashed()));
         GP.add(InspectorProperty.PropertyFactoryNumero("diagrama.detalhe.alfa", "SetAlfa", (int) (100 * getAlfa())));
 
-        //String[] grupo = new String[]{"setGradienteStartColor", "setGradienteEndColor", "setGDirecao"
-        //};
-        //res.add(InspectorProperty.PropertyFactorySN("texto.gradiente.is", "setGradiente", isGradiente()).AddCondicaoForFalse(new String[]{"setBackColor"}).AddCondicaoForTrue(grupo));
         res.add(InspectorProperty.PropertyFactoryCor("texto.gradiente.startcor", "setGradienteStartColor", getGradienteStartColor()));
 
         res.add(InspectorProperty.PropertyFactoryCor("texto.gradiente.endcor", "setGradienteEndColor", getGradienteEndColor()));
 
         res.add(InspectorProperty.PropertyFactoryMenu("texto.gradiente.direcao", "setGDirecao", getGDirecao(), Editor.fromConfiguracao.getLstDirecao(Controler.Comandos.cmdTexto)));
 
-//            ArrayList<String> ngrp = new ArrayList<>(Arrays.asList(grupo));
-//            ngrp.add("setGradiente");
-//            ngrp.add("setBackColor");
-//            ngrp.add("setGDirecao");
-        //}
         ArrayList<FormaElementar> overme = WhoIsOverMe();
         res.add(InspectorProperty.PropertyFactorySeparador("formaarea.overme"));
         res.add(InspectorProperty.PropertyFactorySN("formaarea.movesubs", "setMoverSubs", isMoverSubs()));
@@ -591,7 +547,6 @@ public class FormaArea extends Forma {
 
     @Override
     public void AdicionarSubItem(int idx) {
-        //super.AdicionarSubItem(idx);
         AddRegiao(Math.max(getWidth() / (getRegioes().size() + 2), 20));
     }
 
@@ -615,11 +570,6 @@ public class FormaArea extends Forma {
         overme.stream().filter((el) -> (!el.isSelecionado() && el.isVisible() && IsThatOverAndCanMove(el))).forEach((el) -> {
             el.DoMove(movX, movY);
         });
-//        for (FormaElementar el : overme) {
-//            if (!el.isSelecionado() && el.isVisible() && IsThatOverAndCanMove(el)) {
-//                el.DoMove(movX, movY);
-//            }
-//        }
         overme.stream().filter((item) -> (!item.Reenquadre())).forEach((item) -> {
             item.Reposicione();
         });

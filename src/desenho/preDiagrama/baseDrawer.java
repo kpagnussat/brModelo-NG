@@ -147,7 +147,7 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
         InvalidateArea();
     }
 
-    private int calculeSubEspaco(int vl) {
+    private int calculeSubEspaco() {
         final int bs = 32;
         double pro = (double) getProporcaoQtdPixel() / getProporcaoMedida();
         while (pro < bs) {
@@ -183,20 +183,13 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
         int traco = largTraco < margem ? largTraco : margem;
         traco = (isTop ? traco : -traco);
         int ytraco = yfim;
-//        int xini = getLeft() + margem;
-//        int pre_y = (isTop ? getTop() : getTopHeight() - margem);
-//        int xfim = getLeftWidth() - margem;
-//        int yfim = pre_y + margem / 2;
-//
-//        int traco = largTraco < margem ? largTraco : margem;
-//        int ytraco = pre_y + (margem - traco) / 2;
 
         g.setColor(getCorRegua());
         g.drawLine(xini, ytraco, xini, ytraco + 2 * traco);
         g.drawLine(xfim, ytraco, xfim, ytraco + 2 * traco);
         g.drawLine(xini, yfim, xfim, yfim);
 
-        int blc = calculeSubEspaco(W);
+        int blc = calculeSubEspaco();
         int sr = xini;
         int dv = modInteiro(blc);
         int subblc = 0;
@@ -239,20 +232,13 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
         int yIni = getTop() + margem;
         int yFim = getTopHeight() - margem;
         int xLin = xIni;
-//        int pre_x = (isrigth ? getLeftWidth() - margem : getLeft());
-//        int traco = largTraco < margem ? largTraco : margem;
-//        int xIni = pre_x + (margem - traco) / 2;
-//        int xFim = xIni + traco;
-//        int yIni = getTop() + margem;
-//        int yFim = getTopHeight() - margem;
-//        int xLin = pre_x + margem / 2;
 
         g.setColor(getCorRegua());
         g.drawLine(xIni, yIni, xFim, yIni);
         g.drawLine(xIni, yFim, xFim, yFim);
         g.drawLine(xLin, yIni, xLin, yFim);
 
-        int blc = calculeSubEspaco(W);
+        int blc = calculeSubEspaco();
         int sr = yIni;
         xFim -= traco;
 
@@ -295,14 +281,12 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
     private void Inicie() {
         setDelimite(false);
         SetTexto("");
-        //blankPaint = true;
         setAlteraForma(true);
     }
 
     @Override
     public void SetTexto(String Texto) {
         super.SetTexto(Texto);
-//        getTextoFormatado().CorretorPosicao = new Point(0, 3 * distSelecao + margem);
     }
 
     @Override
@@ -518,7 +502,7 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
             Reposicione();
             PropagueResizeParaLigacoes();
         } catch (Exception e) {
-
+            // Ignore invalid width input, as in the other inspector setters.
         }
     }
 
@@ -535,6 +519,7 @@ public class baseDrawer extends baseDrawerFromForma implements iBaseDrawer {
             Reposicione();
             PropagueResizeParaLigacoes();
         } catch (Exception e) {
+            // Ignore invalid height input, as in the other inspector setters.
         }
     }
 

@@ -59,9 +59,9 @@ public class TextoAtividade extends PreTextoApenso {
     @Override
     public void PinteTexto(Graphics2D g) {
         //no caso de mudança no zoom, um novo TextoFormatado deve ser criado.
-        if (getMaster().getZoom() != z) {
+        if (g.getTransform().getScaleX() != z) {
             setTextoFormatado(null);
-            z = getMaster().getZoom();
+            z = g.getTransform().getScaleX();
         }
         getTextoFormatado().PinteTexto(g, getForeColor(), getArea(), "[" + getTexto() + "]");
     }

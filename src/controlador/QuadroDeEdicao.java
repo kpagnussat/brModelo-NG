@@ -13,7 +13,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.image.BufferedImage;
 
 /**
  *
@@ -37,29 +36,6 @@ public class QuadroDeEdicao extends BaseControlador {
 
     private double zoom = 1.0;
 
-    //private boolean ShowGrid = false;
-    //private int GridWidth = 20;
-//
-//    public int getGridWidth() {
-//        return GridWidth;
-//    }
-//
-//    public void setGridWidth(int GridWidth) {
-//        if (GridWidth < 0 || GridWidth > 600) {
-//            GridWidth = 20;
-//        }
-//        this.GridWidth = GridWidth;
-//    }
-//
-//    public void setShowGrid(boolean ShowGrid) {
-//        //if (this.ShowGrid != ShowGrid) {
-//        this.ShowGrid = ShowGrid;
-//        //}
-//    }
-//
-//    public boolean isShowGrid() {
-//        return ShowGrid;
-//    }
     public Editor getEditor() {
         return master;
     }
@@ -168,12 +144,10 @@ public class QuadroDeEdicao extends BaseControlador {
      * @param ht altura da página
      */
     public void setMostrarAreaImpressao(boolean mostrarAreaImpressao, int wdt, int ht) {
-        //if (this.mostrarAreaImpressao != mostrarAreaImpressao) {
             this.mostrarAreaImpressao = mostrarAreaImpressao;
             this.areaImpressaoWidth = wdt;
             this.areaImpressaoHeigth = ht;
             repaint();
-        //}
     }
 
     // </editor-fold>
@@ -208,7 +182,6 @@ public class QuadroDeEdicao extends BaseControlador {
 
         renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        //renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         Graphics2D Canvas = (Graphics2D) g;
 
         Canvas.addRenderingHints(renderHints);
@@ -229,62 +202,10 @@ public class QuadroDeEdicao extends BaseControlador {
         getDiagramaAtual().ProcessPaint(Canvas);
     }
 
-//    BufferedImage grade = null;
-//    int gradeW = -1;
-//    int gradeWidth = -1;
-//    int gradeHeigth = -1;
 //    /**
 //     * Pinta a grade.
 //     * @param e
 //     */
-//    private void PinteGrade(Graphics2D gx) {
-//        Editor ma = master;
-//        if (ma == null) {
-//            return;
-//        }
-//
-//        if (gradeW != ma.getGridWidth() || gradeWidth != getWidth() || gradeHeigth != getHeight()){
-//            gradeW = ma.getGridWidth();
-//            gradeWidth = getWidth();
-//            gradeHeigth = getHeight();
-//            grade = null;
-//        }
-//        
-//        if (grade == null) {
-//            grade = new BufferedImage(gradeWidth, gradeHeigth,
-//                    BufferedImage.BITMASK);
-//
-//            Graphics2D g = grade.createGraphics();
-//
-//            g.setStroke(new BasicStroke(
-//                    1f,
-//                    BasicStroke.CAP_ROUND,
-//                    BasicStroke.JOIN_ROUND,
-//                    3f,
-//                    new float[]{2f, 1f},
-//                    0f));
-//
-//            int w = gradeW;
-//            int gW = (gradeWidth / w) + 1;
-//            int gH = (gradeHeigth / w) + 1;
-//
-//            int ww = gradeWidth;
-//            int hh = gradeHeigth;
-//
-//            g.setColor(new Color(231, 231, 231));
-//
-//            for (int i = 1; i < gW; i++) {
-//                g.drawLine(w * i, 0, w * i, hh);
-//            }
-//
-//            for (int i = 1; i < gH; i++) {
-//                g.drawLine(0, w * i, ww, w * i);
-//            }
-//            g.dispose();
-//        }
-//        gx.drawImage(grade, null, 0, 0);
-//            //grade = null;
-//    }
     
     @Override
     public void mouseClick(MouseEvent e) {

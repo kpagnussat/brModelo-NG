@@ -4,7 +4,6 @@
  */
 package controlador;
 
-import controlador.apoios.GuardaPadraoBrM;
 import controlador.apoios.Historico;
 import controlador.editores.DrawerEditor;
 import controlador.editores.LegendaEditor;
@@ -29,25 +28,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -63,6 +48,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import principal.Aplicacao;
 import util.CopFormatacao;
 
@@ -71,6 +58,9 @@ import util.CopFormatacao;
  * @author Rick
  */
 public class Editor extends BaseControlador implements KeyListener {
+
+    // Keep the historical Swing editor descriptor; scheduling state is transient.
+    private static final long serialVersionUID = -2784985447407333183L;
 
     public Diagrama diagramaAtual;
     private Selecionador multSel = null;
@@ -172,14 +162,12 @@ public class Editor extends BaseControlador implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 controlDown = false;
-                //shiftDown = false;
             }
         };
         Action al_shiftEcrtl_up = new AbstractAction() {
 
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //controlDown = false;
                 shiftDown = false;
             }
         };
@@ -217,16 +205,6 @@ public class Editor extends BaseControlador implements KeyListener {
             }
         };
 
-//        Action actionListener = new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent actionEvent) {
-//                System.out.println(actionEvent.toString());
-//                if (isFocusOwner()) return;  //ação ocorrerá pelo keylistener.
-//                setControlDown(actionEvent.getModifiers() == ActionEvent.CTRL_MASK);
-//                setShiftDown(actionEvent.getModifiers() == ActionEvent.SHIFT_MASK);
-//                setAltDown(actionEvent.getModifiers() == ActionEvent.ALT_MASK);
-//            }
-//        };
         ActionMap actionMap = getActionMap();
         actionMap.put(ac_crtl, al_crtl);
 
@@ -252,15 +230,11 @@ public class Editor extends BaseControlador implements KeyListener {
 
     private void initBox() {
         box = new QuadroDeEdicao(this);
-        //this.add(box);
         this.setSize((2 * box.getEditorMargem()) + box.getEditorAtualWidth(), (2 * box.getEditorMargem()) + box.getEditorAtualHeigth());
         this.setPreferredSize(this.getSize());
         this.setLayout(null);
 
-        this.add(box);//----, new org.netbeans.lib.awtextra.AbsoluteConstraints(box.getEditorMargem(), box.getEditorMargem(), -1, -1));
-//        this.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-//
-//        this.add(box, new org.netbeans.lib.awtextra.AbsoluteConstraints(box.getEditorMargem(), box.getEditorMargem(), -1, -1));
+        this.add(box);
 
         box.setSize(box.getEditorAtualWidth(), box.getEditorAtualHeigth());
         box.setPreferredSize(box.getSize());
@@ -271,64 +245,11 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     public void CarregueConfig() {
-        //PreCarregueConfig();  //Já chamado
         PerformInspectorCfg();
     }
 
     private void PreCarregueConfig() {
-        try {
-            String a = fromConfiguracao.getValor("cfg.mostrardimensoesaomover");
-            boolean sn = a.equals("cfg.mostrardimensoesaomover") ? true : Boolean.valueOf(a);
-            setMostrarDimensoesAoMover(sn);
-
-            a = fromConfiguracao.getValor("cfg.mostrargrade");
-            sn = a.equals("cfg.mostrargrade") ? true : Boolean.valueOf(a);
-            setShowGrid(sn);
-
-            a = fromConfiguracao.getValor("cfg.ancorador");
-            sn = a.equals("cfg.ancorador") ? true : Boolean.valueOf(a);
-            setAncorador(sn);
-
-            a = fromConfiguracao.getValor("cfg.propaguedeletetolines");
-            sn = a.equals("cfg.propaguedeletetolines") ? true : Boolean.valueOf(a);
-            setPropagueDeleteToLines(sn);
-
-            a = fromConfiguracao.getValor("cfg.location.salvar");
-            sn = a.equals("cfg.location.salvar") ? false : Boolean.valueOf(a);
-            setSalvarLocation(sn);
-
-            a = fromConfiguracao.getValor("cfg.gradelargura");
-            if (a.equals("cfg.gradelargura")) {
-                a = "20";
-            }
-            int tmp = Integer.valueOf(a);
-            setGridWidth(tmp);
-
-            a = fromConfiguracao.getValor("cfg.tipodefault");
-            if (a.equals("cfg.tipodefault")) {
-                a = "0";
-            }
-            tmp = Integer.valueOf(a);
-            setTipoDefaultInt(tmp);
-
-            a = fromConfiguracao.getValor("cfg.mostrarids");
-            sn = a.equals("cfg.mostrarids") ? false : Boolean.valueOf(a);
-            setMostrarIDs(sn);
-
-            a = fromConfiguracao.getValor("cfg.mostrartooltips");
-            sn = a.equals("cfg.mostrartooltips") ? false : Boolean.valueOf(a);
-            setMostrarTooltips(sn);
-
-            a = fromConfiguracao.getValor("cfg.autosalvarintervalo");
-            if (a.equals("cfg.autosalvarintervalo")) {
-                a = "5";
-            }
-            tmp = Integer.valueOf(a);
-            PreInicieAutoSave(tmp);
-
-        } catch (NumberFormatException e) {
-            util.BrLogger.Logger("ERROR_LOAD_CFGFILE", e.getMessage());
-        }
+        ConfiguracaoEditor.PreCarregueConfig(this);
     }
 
     public QuadroDeEdicao getBox() {
@@ -477,15 +398,9 @@ public class Editor extends BaseControlador implements KeyListener {
         Graphics2D Canvas = (Graphics2D) g;
         Canvas.addRenderingHints(renderHints);
 
-        Canvas.setPaint(Color.BLACK);
-        Stroke stroke = new BasicStroke(2.f,
-                BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
-        Canvas.setStroke(stroke);
-
-        Canvas.drawRect(box.getLocation().x, box.getLocation().y, box.getWidth(), box.getHeight());
-        Canvas.setPaint(Color.GRAY);
-        Canvas.drawRect(box.getLocation().x + 1, box.getLocation().y + 1, box.getWidth(), box.getHeight());
-        //Canvas.setPaint(Color.BLACK);
+        if (!diagramaAtual.isPinturaExterna()) {
+            util.MesaDiagrama.pintar(Canvas, box.getBounds());
+        }
     }
 
     /**
@@ -546,7 +461,7 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     public void setGridWidth(int GridWidth) {
-        if (GridWidth < 0 || GridWidth > 600) {
+        if (GridWidth <= 0 || GridWidth > 600) {
             GridWidth = 20;
         }
         this.gridWidth = GridWidth;
@@ -580,44 +495,11 @@ public class Editor extends BaseControlador implements KeyListener {
         this.editorConfig = editorConfig;
         if (editorConfig != null) {
             editorConfig.setEditor(this);
-            //PerformInspectorCfg();//não precisa!
         }
     }
 
     private ArrayList<InspectorProperty> GenerateProperty() {
-        ArrayList<InspectorProperty> res = new ArrayList<>();
-
-        res.add(InspectorProperty.PropertyFactorySeparador("cfg"));
-        res.add(InspectorProperty.PropertyFactorySN("cfg.mostrardimensoesaomover", "setMostrarDimensoesAoMover", isMostrarDimensoesAoMover()));
-
-        ArrayList<String> dias = new ArrayList<>();
-        for (Diagrama.TipoDeDiagrama tp : Diagrama.TipoDeDiagrama.values()) {
-            String tmp = Editor.fromConfiguracao.getValor("Inspector.lst.tipodiagrama." + tp.name().substring(2).toLowerCase());
-            dias.add(tmp);
-        }
-        res.add(InspectorProperty.PropertyFactoryMenu("cfg.tipodefault", "setTipoDefaultInt", getTipoDefault().ordinal(), dias));
-
-        res.add(InspectorProperty.PropertyFactorySeparador("desenho"));
-
-        res.add(InspectorProperty.PropertyFactorySN("cfg.propaguedeletetolines", "setPropagueDeleteToLines", isPropagueDeleteToLines()));
-
-        res.add(InspectorProperty.PropertyFactorySN("cfg.mostrargrade", "setShowGrid", isShowGrid()).AddCondicaoForTrue(new String[]{"setGridWidth"}));
-
-        res.add(InspectorProperty.PropertyFactoryNumero("cfg.gradelargura", "setGridWidth", getGridWidth()));
-
-        res.add(InspectorProperty.PropertyFactorySN("cfg.location.salvar", "setSalvarLocation", isSalvarLocation()));
-
-        res.add(InspectorProperty.PropertyFactoryNumero("cfg.autosalvarintervalo", "setAutoSaveInterval", getAutoSaveInterval()));
-
-        res.add(InspectorProperty.PropertyFactorySeparador("cfg.exibicao", true));
-        res.add(InspectorProperty.PropertyFactorySN("cfg.ancorador", "setAncorador", isAncorador()));
-        res.add(InspectorProperty.PropertyFactorySN("cfg.mostrarids", "setMostrarIDs", isMostrarIDs()));
-        res.add(InspectorProperty.PropertyFactorySN("cfg.mostrartooltips", "setMostrarTooltips", isMostrarTooltips()));
-
-        res.add(InspectorProperty.PropertyFactorySeparador("cfg.edicao", true));
-        res.add(InspectorProperty.PropertyFactorySN("cfg.apagartextoaoeditar", "setApagarTextoAoEditar", isApagarTextoAoEditar()));
-
-        return res;
+        return ConfiguracaoEditor.GenerateProperty(this);
     }
 
     private boolean salvarLocation = true;
@@ -630,54 +512,13 @@ public class Editor extends BaseControlador implements KeyListener {
         return salvarLocation;
     }
 
-    private void PerformInspectorCfg() {
+    void PerformInspectorCfg() {
         setTextoDica(null, "");
         getEditorConfig().Carrege(GenerateProperty());
     }
 
     private boolean AceitaEdicao(InspectorProperty propriedade, String valor) {
-        Editor ed = this;
-        Class[] par = new Class[1];
-        Object[] vl = new Object[1];
-        try {
-            switch (propriedade.tipo) {
-                case tpBooleano:
-                    par[0] = Boolean.TYPE;
-                    vl[0] = Boolean.parseBoolean(valor);
-                    break;
-                case tpCor:
-                    par[0] = Color.class;
-                    vl[0] = util.Utilidades.StringToColor(valor);//new Color(Integer.parseInt(valor));
-                    break;
-                case tpMenu:
-                    par[0] = Integer.TYPE;
-                    int p = Integer.parseInt(valor);
-                    vl[0] = p;
-                    break;
-                case tpNumero:
-                    par[0] = Integer.TYPE;
-                    int tmp = Integer.parseInt(valor);
-                    vl[0] = tmp;
-                    break;
-                default:
-                    par[0] = String.class;
-                    vl[0] = valor;
-            }
-            Class cl = ed.getClass();
-            Method mthd = cl.getMethod(propriedade.property, par);
-            mthd.invoke(ed, vl);
-
-            if (!propriedade.configuracaoStr.isEmpty()) {
-                fromConfiguracao.SetAndSaveIfNeed(propriedade.configuracaoStr, valor);
-            }
-
-            PerformInspectorCfg();
-
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            util.BrLogger.Logger("ERROR_SET_PROPERTY", e.getMessage());
-            return false;
-        }
-        return true;
+        return ConfiguracaoEditor.AceitaEdicao(this, propriedade, valor);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Zoom">
@@ -789,7 +630,6 @@ public class Editor extends BaseControlador implements KeyListener {
         }
     }
 
-    //public boolean canceleMostre = false;
     /**
      * Rola o Scroll para mostra a coordenada x, y
      *
@@ -808,39 +648,24 @@ public class Editor extends BaseControlador implements KeyListener {
      *
      * @param e
      */
+    /**
+     * Mouse-wheel scrolling of the diagram, following the usual desktop convention:
+     * wheel = vertical, Shift+wheel = horizontal (Ctrl+wheel = zoom, handled in Diagrama).
+     * Upstream picked the axis by whichever viewport edge (right or bottom) the pointer
+     * was closer to, so the same gesture scrolled in different directions depending on
+     * where the mouse was. Shift also covers touchpads and tilt wheels: AWT on Linux
+     * delivers horizontal wheel events as Shift+wheel.
+     */
     public void ScrollMove(MouseWheelEvent e) {
-        int x = parente.getHorizontalScrollBar().getValue();
-        int y = parente.getVerticalScrollBar().getValue();
-        int vpw = parente.getViewport().getWidth() - getMargem();
-        int vph = parente.getViewport().getHeight() - getMargem();
-        int p1 = e.getX() + getMargem() - x;
-        int p2 = e.getY() + getMargem() - y;
-
-        boolean ambos = (p2 > vph && p1 > vpw);
-
-        p1 = vpw - (p1);
-        p2 = vph - (p2);
-
-        if (p1 < p2 || ambos) {
-            parente.getVerticalScrollBar().setValue(y + 2 * e.getUnitsToScroll());
-        }
-        if (p2 < p1 || ambos) {
-            parente.getHorizontalScrollBar().setValue(x + 2 * e.getUnitsToScroll());
-        }
+        javax.swing.JScrollBar barra = e.isShiftDown()
+                ? parente.getHorizontalScrollBar()
+                : parente.getVerticalScrollBar();
+        barra.setValue(barra.getValue() + 2 * e.getUnitsToScroll());
         e.consume();
     }
 
     public boolean IsOpen(File arq) {
-        String tmp = arq.getAbsolutePath();
-        for (Diagrama d : getDiagramas()) {
-            if (d.getArquivo().equals(tmp)) {
-                setSelected(d);
-                JOptionPane.showMessageDialog(getParent(), Editor.fromConfiguracao.getValor("Controler.interface.mensagem.msg01"),
-                        Editor.fromConfiguracao.getValor("Controler.interface.mensagem.tit_informacao"), JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            }
-        }
-        return false;
+        return ArquivosEditor.IsOpen(this, arq);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Arquivos recentes">
@@ -871,40 +696,18 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     public void reloadMenuRecentes() {
-        for (int i = 0; i < 10; i++) {
-            if (recentes.size() > i) {
-                String arq = recentes.get(i);
-                String tmp = arq;
-                if (tmp.lastIndexOf(File.separator) > 0) {
-                    tmp = tmp.substring(tmp.lastIndexOf(File.separator) + 1);
-                }
+        ArquivosRecentes.reloadMenuRecentes(this, () -> new AbstractAction() {
 
-                //if (MenuRecente.getItemCount() >= recentes.size() + 2) {
-                if (MenuRecente.getItemCount() > i + 2) {
-                    MenuRecente.getItem(i).setText(tmp);
-                    MenuRecente.getItem(i).setToolTipText(arq);
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                File arq = new File(((JMenuItem) ae.getSource()).getToolTipText());
+                if (arq.exists()) {
+                    AbrirDiagramaFromFile(arq);
                 } else {
-                    JMenuItem jmi = new JMenuItem(tmp);
-                    jmi.setToolTipText(arq);
-                    jmi.addActionListener(new AbstractAction() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            File arq = new File(((JMenuItem) ae.getSource()).getToolTipText());
-                            if (arq.exists()) {
-                                AbrirDiagramaFromFile(arq);
-                            } else {
-                                JOptionPane.showMessageDialog(getParent(), "Diagrama não pode ser aberto. Arquivo não encontrado.", "Informação", JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }
-                    });
-                    MenuRecente.add(jmi, MenuRecente.getItemCount() - 2);
+                    JOptionPane.showMessageDialog(getParent(), "Diagrama não pode ser aberto. Arquivo não encontrado.", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else {
-                break;
             }
-        }
-        MenuRecente.setEnabled(MenuRecente.getItemCount() > 2);
+        });
     }
     //</editor-fold>
 
@@ -914,12 +717,8 @@ public class Editor extends BaseControlador implements KeyListener {
      *
      * @param Diagrama
      */
-    private void ChecarArquivosBiAbertos(Diagrama diag) {
-        getDiagramas().stream().filter(d -> !d.getArquivo().isEmpty() && d != diag).forEach(d -> {
-            if (d.getArquivo().equals(diag.getArquivo())) {
-                util.BrLogger.Logger("ERRO_SAME_FILE", " (" + d.getNome() + ")", null);
-            }
-        });
+    void ChecarArquivosBiAbertos(Diagrama diag) {
+        ArquivosEditor.ChecarArquivosBiAbertos(this, diag);
     }
 
     //</editor-fold>
@@ -952,7 +751,7 @@ public class Editor extends BaseControlador implements KeyListener {
 
     //</editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Menus e botões">
-    private final Controler controler = new Controler(this);
+    final Controler controler = new Controler(this);
 
     public Controler getControler() {
         return controler;
@@ -965,7 +764,7 @@ public class Editor extends BaseControlador implements KeyListener {
             }
             try {
                 Controler.menuComandos cmd = Controler.menuComandos.valueOf(ev.getActionCommand());
-                //Acao ac = (Acao) ((AbstractButton) ev.getSource()).getAction();
+                if (ArquivosEditor.processeComando(this, cmd, ev)) return;
                 switch (cmd) {
                     case cmdRendo:
                         if (!refazer()) {
@@ -1027,26 +826,6 @@ public class Editor extends BaseControlador implements KeyListener {
                     case cmdCopy:
                         diagramaAtual.doCopy();
                         break;
-                    case cmdCopyImg:
-                        final int borda = 2;
-                        Point p2 = diagramaAtual.getPontoExtremoSelecionado();
-                        int minX = p2.x;
-                        int minY = p2.y;
-
-                        for (int i = diagramaAtual.getItensSelecionados().size() - 1; i > -1; i--) {
-                            FormaElementar el = diagramaAtual.getItensSelecionados().get(i);
-                            minX = Math.min(minX, el.getLeft());
-                            minY = Math.min(minY, el.getTop());
-                        }
-
-                        minX = Math.max(minX - borda, 0);
-                        minY = Math.max(minY - borda, 0);
-
-                        BufferedImage cp_img = util.ImageGenerate.geraImagemForPrnSelecao(diagramaAtual, p2.x + borda, p2.y + borda);
-                        BufferedImage cp_img2 = cp_img.getSubimage(minX, minY, p2.x - minX, p2.y - minY);
-                        diagramaAtual.doCopy(cp_img2);
-                        break;
-
                     case cmdCopyFormat:
                         if (diagramaAtual.getSelecionado() != null) {
                             CopiadorFormatacao.Copiar(diagramaAtual.getSelecionado());
@@ -1091,33 +870,7 @@ public class Editor extends BaseControlador implements KeyListener {
                         break;
 
                     case cmdPaste:
-                        //canceleMostre = true;
                         diagramaAtual.doPaste();
-                        controler.makeEnableComands();
-                        //canceleMostre = false;
-                        break;
-
-                    case cmdSave:
-                        diagramaAtual.Salvar(diagramaAtual.getArquivo());
-                        RePopuleBarraDiagramas(false);
-                        controler.makeEnableComands();
-                        ChecarArquivosBiAbertos(diagramaAtual);
-                        break;
-                    case cmdSaveAs:
-                        diagramaAtual.Salvar();
-                        RePopuleBarraDiagramas(false);
-                        controler.makeEnableComands();
-                        ChecarArquivosBiAbertos(diagramaAtual);
-                        break;
-
-                    case cmdSaveAll:
-                        getDiagramas().stream().forEach(d -> {
-                            d.Salvar(d.getArquivo());
-                        });
-                        getDiagramas().stream().forEach(d -> {
-                            ChecarArquivosBiAbertos(d);
-                        });
-                        RePopuleBarraDiagramas(false);
                         controler.makeEnableComands();
                         break;
 
@@ -1134,11 +887,6 @@ public class Editor extends BaseControlador implements KeyListener {
                         }
                         break;
 
-                    case cmdOpen:
-                        File arq = util.Dialogos.ShowDlgLoadDiagrama(diagramaAtual.getArquivo(), this);
-                        AbrirDiagramaFromFile(arq);
-                        ChecarArquivosBiAbertos(diagramaAtual);
-                        break;
                     case cmdPrint:
                         FramePrincipal.DoComandoExterno(cmd);
                         break;
@@ -1146,7 +894,6 @@ public class Editor extends BaseControlador implements KeyListener {
                         Diagrama afechar = diagramaAtual;
                         int idx = getDiagramas().indexOf(afechar) + 1;
                         int tam = getDiagramas().size();
-                        //if (tam == 1) idx = -1;
                         if (idx == tam) {
                             idx -= 2;
                         }
@@ -1162,19 +909,6 @@ public class Editor extends BaseControlador implements KeyListener {
                         controler.makeEnableComands();
                         RePopuleBarraDiagramas(true);
                         break;
-                    case cmdExport:
-                        File arqui = util.Dialogos.ShowDlgSaveAsImg(this, diagramaAtual);
-                        if (arqui != null) {
-                            Point p = diagramaAtual.getPontoExtremo();
-                            BufferedImage img = util.ImageGenerate.geraImagemForPrn(diagramaAtual, p.x, p.y);
-                            if (util.Arquivo.IsBMP(arqui)) {
-                                ImageIO.write(img, util.Arquivo.bmp.toUpperCase(), arqui);
-                            } else {
-                                ImageIO.write(img, util.Arquivo.png.toUpperCase(), arqui);
-                            }
-                        }
-                        break;
-
                     default:
                         getDicas().setTexto(cmd.toString());
                 }
@@ -1185,36 +919,14 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     private void AbrirDiagramaFromFile(File arq) {
-        Diagrama res = Diagrama.LoadFromFile(arq, this);
-        if (res != null) {
-            ProcessePosOpen(res, !util.Arquivo.IsbrM3(arq));
-        }
+        ArquivosEditor.AbrirDiagramaFromFile(this, arq);
     }
 
-    private void ProcessePosOpen(Diagrama res, boolean isXml) {
-        if (res != null) {
-            res.setMaster(this);
-            int idx = -1;
-            if (!diagramaAtual.isAlterado()) {
-                idx = historicos.getDiagramas().indexOf(diagramaAtual);
-                FechaDiagrama(diagramaAtual, res);
-            }
-            validate();
-            diagramaAtual = res;
-            res.setMudou(false);
-            if (idx > -1) {
-                historicos.add(diagramaAtual, idx);
-            } else {
-                historicos.add(diagramaAtual);
-            }
-            res.OnAfterLoad(isXml);
-            prepareDiagramaAtual();
-            RePopuleBarraDiagramas(true);
-        }
+    void ProcessePosOpen(Diagrama res, boolean isXml) {
+        ArquivosEditor.ProcessePosOpen(this, res, isXml);
     }
 
     public void DoAction(ActionEvent ev) {
-        //setTextoDica("");
         if (diagramaAtual != null) {
             diagramaAtual.DoAction(ev);
             boolean eacao = false;
@@ -1281,23 +993,6 @@ public class Editor extends BaseControlador implements KeyListener {
 
     public void PopuleMenus(JMenu MenuEditar, JMenu MenuArquivo, JPopupMenu popup) {
         controler.PopuleMenus(MenuEditar, MenuArquivo, popup);
-//        popup.addPopupMenuListener(new PopupMenuListener() {
-//
-//            @Override
-//            public void popupMenuWillBecomeVisible(PopupMenuEvent pme) {
-//                
-//            }
-//
-//            @Override
-//            public void popupMenuWillBecomeInvisible(PopupMenuEvent pme) {
-//
-//            }
-//
-//            @Override
-//            public void popupMenuCanceled(PopupMenuEvent pme) {
-//                
-//            }
-//        });
     }
 
     public void NoAction() {
@@ -1356,7 +1051,7 @@ public class Editor extends BaseControlador implements KeyListener {
         if (res == -1) {
             return;
         }
-        diagramaAtual = Novo(Diagrama.TipoDeDiagrama.values()[res]);  //new Diagrama(this);
+        diagramaAtual = Novo(Diagrama.TipoDeDiagrama.values()[res]);
         prepareDiagramaAtual();
         historicos.add(diagramaAtual);
     }
@@ -1454,7 +1149,7 @@ public class Editor extends BaseControlador implements KeyListener {
         }
     }
 
-    private final Historico historicos = new Historico(this);
+    final Historico historicos = new Historico(this);
 
     public boolean desfazer() {
         Diagrama res = historicos.desfazer(diagramaAtual);
@@ -1517,8 +1212,7 @@ public class Editor extends BaseControlador implements KeyListener {
         switch (cmd) {
             case cmdLoadImg:
                 if (diagramaAtual != null && diagramaAtual.getSelecionado() instanceof desenho.formas.Desenhador) {
-                    //String titulo = fromConfiguracao.getValor(property);
-                    String res = util.Dialogos.ShowDlgFileImg(this.getRootPane());//, titulo); 
+                    String res = util.Dialogos.ShowDlgFileImg(this.getRootPane());
                     if (res == null) {
                         return true; //não é erro, foi cancelado pelo usuário.
                     }
@@ -1530,7 +1224,6 @@ public class Editor extends BaseControlador implements KeyListener {
                     }
                     getFramePrincipal().Super_Pronto();
                     PerformInspectorFor(diagramaAtual.getSelecionado());
-                    //return false;
                 }
                 break;
             case cmdDlgLegenda:
@@ -1628,7 +1321,7 @@ public class Editor extends BaseControlador implements KeyListener {
         de.setVisible(true);
     }
 
-    private boolean FechaDiagrama(Diagrama afechar, Diagrama noLugar) {
+    boolean FechaDiagrama(Diagrama afechar, Diagrama noLugar) {
         boolean needProcAutoSave = true;
         if (afechar.getMudou()) {
             afechar.ClearSelect(true);
@@ -1660,7 +1353,6 @@ public class Editor extends BaseControlador implements KeyListener {
         }
 
         int tam = getDiagramas().size();
-        //if (tam == 1) idx = -1;
         if (idx == tam) {
             idx -= 2;
         }
@@ -1729,22 +1421,21 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Auto Salvar">
-    //private final HashMap<String, byte[]> autoSave = new HashMap<>();
-    private final ArrayList<byte[]> autoSave = new ArrayList<>();
-    private boolean autoSaveAtivo = false;
-    private boolean autoSaveIniciado = false;
-    private int autoSaveInterval = 5;
+    final ArrayList<byte[]> autoSave = new ArrayList<>();
+    boolean autoSaveAtivo = false;
+    boolean autoSaveIniciado = false;
+    int autoSaveInterval = 5;
+    transient Timer autoSaveTimer;
+    transient Timer statusTimer;
+    transient ExecutorService autoSaveWriter;
+    transient boolean shuttingDown;
 
     public int getAutoSaveInterval() {
         return autoSaveInterval;
     }
 
     public void setAutoSaveInterval(int autoSaveInterval) {
-        if (autoSaveInterval > -1 && autoSaveInterval < 30) {
-            this.autoSaveInterval = autoSaveInterval;
-        }
-        autoSaveAtivo = autoSaveInterval > 0;
-        InicieAutoSave();
+        AutoSalvamentoEditor.setAutoSaveInterval(this, autoSaveInterval);
     }
 
     /**
@@ -1753,21 +1444,12 @@ public class Editor extends BaseControlador implements KeyListener {
      *
      * @return
      */
-    private boolean InicieAutoSave() {
-        if (tempoAs != null) {
-            tempoAs.cancel();
-            tempoAs = null;
-        }
-        if (!autoSaveAtivo) {
-            EndAutoSave();
-            return false;
-        }
+    boolean InicieAutoSave() {
+        return AutoSalvamentoEditor.InicieAutoSave(this);
+    }
 
-        Timer timer = new Timer();
-        autoSaveIniciado = true;
-        tempoAs = new Temporizador(this);
-        timer.schedule(tempoAs, 0, autoSaveInterval * 1000 * 60);
-        return true;
+    void startAutoSave(int initialDelay) {
+        AutoSalvamentoEditor.startAutoSave(this, initialDelay);
     }
 
     /**
@@ -1776,66 +1458,51 @@ public class Editor extends BaseControlador implements KeyListener {
      * @param iter = intervalo lido.
      * @return
      */
-    private boolean PreInicieAutoSave(int iter) {
-        this.autoSaveInterval = iter;
-        autoSaveAtivo = autoSaveInterval > 0;
-        if (autoSaveAtivo) {
-            Timer timer = new Timer();
-            autoSaveIniciado = true;
-            tempoAs = new Temporizador(this);
-            timer.schedule(tempoAs, autoSaveInterval * 1000 * 60, autoSaveInterval * 1000 * 60);
-            return true;
-        }
-        return false;
+    boolean PreInicieAutoSave(int iter) {
+        return AutoSalvamentoEditor.PreInicieAutoSave(this, iter);
     }
 
     /**
      * Já executou o autoSave? Sempre que um diagrama mudar, doneAutoSave =
      * false;
      */
-    private boolean doneAutoSave = true;
+    boolean doneAutoSave = true;
 
     /**
-     * É rodado pelo TImer. Executa o salvamento.
+     * Captures changed diagrams on the EDT, then queues file I/O on one daemon writer.
      *
      * @return
      */
-    private boolean DoAutoSave() {
-        //evita reescrita repetitiva!
-        if (doneAutoSave) {
-            return true;
-        }
-        DoStatus(fromConfiguracao.getValor("Controler.MSG_STATUS_AUTOSAVE"));
-        doneAutoSave = true;
-        autoSave.clear();
-        getDiagramas().stream().filter((d) -> (d.getMudou())).forEach((d) -> {
-            d.AutoSalvar(autoSave);
-        });
-        return AutoSalveToFile();
+    boolean DoAutoSave() {
+        return AutoSalvamentoEditor.DoAutoSave(this);
     }
 
-    private boolean AutoSalveToFile() {
-        try {
-            FileOutputStream fo = new FileOutputStream(fromConfiguracao.getAutoSaveFile());
-            try (ObjectOutput out = new ObjectOutputStream(fo)) {
-                out.writeObject(autoSave);
-                return true;
-            }
-        } catch (IOException iOException) {
-            util.BrLogger.Logger("ERROR_DIAGRAMA_AUTOSAVE_WIRTE", iOException.getMessage());
-            return false;
-        }
+    boolean AutoSalveToFile(ArrayList<byte[]> snapshot, String file) {
+        return AutoSalvamentoEditor.AutoSalveToFile(this, snapshot, file);
+    }
+
+    ExecutorService autoSaveWriter() {
+        return AutoSalvamentoEditor.autoSaveWriter(this);
+    }
+
+    void queueAutoSave() {
+        AutoSalvamentoEditor.queueAutoSave(this);
+    }
+
+    private static void onEdt(Runnable action) {
+        AutoSalvamentoEditor.onEdt(action);
     }
 
     /**
      * Termina o processo de auto-salvamento.
      */
     public void EndAutoSave() {
-        if (autoSaveIniciado) {
-            autoSaveIniciado = false;
-            autoSave.clear();
-            AutoSalveToFile();
-        }
+        AutoSalvamentoEditor.EndAutoSave(this);
+    }
+
+    /** Finish queued writes before exit without blocking the EDT on disk I/O. */
+    public void EndAutoSave(Runnable afterWrites) {
+        AutoSalvamentoEditor.EndAutoSave(this, afterWrites);
     }
 
     /**
@@ -1843,21 +1510,16 @@ public class Editor extends BaseControlador implements KeyListener {
      * auto-save.
      */
     public void DoAutoSaveCompleto() {
-        if (autoSaveIniciado) {
-            doneAutoSave = false;
-            DoAutoSave();
-        }
+        AutoSalvamentoEditor.DoAutoSaveCompleto(this);
     }
 
-    private Temporizador tempoAs;
+    Temporizador tempoAs;
 
     /**
-     * Auto-salvamento: Apenas uma classe que executa o Timer do auto
-     * salvamento, chama o método DoAutoSave do Editor. Status: escreve uma
-     * mensagem no campo de status (último campo da barra de status da janela
-     * principal). Pisca a mensagem
+     * Legacy task type retained for the serialized Editor descriptor. Its callbacks now
+     * run exclusively from Swing timers on the EDT; no java.util.Timer is created.
      */
-    class Temporizador extends TimerTask {
+    class Temporizador implements Runnable {
 
         private final Editor master;
         private final int tipo;
@@ -1873,7 +1535,7 @@ public class Editor extends BaseControlador implements KeyListener {
         }
 
         /**
-         * Neste modo o timer irá executar "tick" vezes e parar automaticamente.
+         * Legacy status callback; message expiration now belongs to MensagensStatus.
          *
          * @param omaster
          * @param msg
@@ -1889,17 +1551,7 @@ public class Editor extends BaseControlador implements KeyListener {
             if (tipo == AUTOSAVE) {
                 master.DoAutoSave();
             } else {
-                JLabel jl = master.getLblStatus();
-                if ("".equals(jl.getText())) {
-                    jl.setText(MSG);
-                } else {
-                    jl.setText("");
-                }
-                tick++;
-                if (tick > 5) {
-                    jl.setText("");
-                    this.cancel();
-                }
+                master.DoStatus(MSG);
             }
         }
     }
@@ -1912,46 +1564,7 @@ public class Editor extends BaseControlador implements KeyListener {
      * aviso ao usuário.
      */
     public boolean LoadAutoSave() {
-
-        File f = new File(fromConfiguracao.getAutoSaveFile());
-        if (!f.exists()) {
-            return false;
-        }
-
-        try {
-            FileInputStream fi = new FileInputStream(f);
-            try (ObjectInput in = new ObjectInputStream(fi)) {
-                ArrayList<byte[]> salvado = (ArrayList<byte[]>) in.readObject();
-                if (!salvado.isEmpty()) {
-                    if (!util.Dialogos.ShowMessageConfirmYES(getRootPane(),
-                            Editor.fromConfiguracao.getValor(salvado.size() > 1 ? "Controler.MSG_CONFIRM_LOAD_AUTOSAVE_PLURAL" : "Controler.MSG_CONFIRM_LOAD_AUTOSAVE"),
-                            false)) {
-                        in.close();
-                        return false;
-                    }
-                    salvado.stream().forEach(k -> {
-                        try {
-                            ObjectInputStream inb = new ObjectInputStream(new ByteArrayInputStream(k));
-                            GuardaPadraoBrM seguranca = (GuardaPadraoBrM) inb.readObject();
-                            inb.close();
-                            Diagrama res = Diagrama.LoadFromBrm(seguranca, this);
-                            ProcessePosOpen(res, false);
-                            res.setMudou(true);
-                        } catch (NullPointerException | IOException | ClassNotFoundException iOException) {
-                            util.BrLogger.Logger("ERROR_DIAGRAMA_AUTOSAVE_LOAD", "STREAM LENGTH: " + String.valueOf(k.length), iOException.getMessage());
-                        }
-                    });
-                    in.close();
-                    doneAutoSave = false;
-                    controler.makeEnableComands();
-                    AtualizeTreeNavegacao();
-                    return true;
-                }
-            }
-        } catch (NullPointerException | IOException | ClassNotFoundException iOException) {
-            util.BrLogger.Logger("ERROR_DIAGRAMA_AUTOSAVE_LOAD", iOException.getMessage());
-        }
-        return false;
+        return AutoSalvamentoEditor.LoadAutoSave(this);
     }
     //</editor-fold>
 
@@ -1967,11 +1580,12 @@ public class Editor extends BaseControlador implements KeyListener {
     }
 
     public void DoStatus(String msg) {
-        if (lblStatus == null) {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(() -> DoStatus(msg));
             return;
         }
-        //O temporizador cuida de tudo!
-        (new Timer()).schedule(new Temporizador(this, msg), 0, 1000);
+        if (lblStatus == null || shuttingDown) return;
+        statusTimer = util.MensagensStatus.mostrar(lblStatus, msg, false);
     }
     //</editor-fold>
 
@@ -2025,6 +1639,9 @@ public class Editor extends BaseControlador implements KeyListener {
             return;
         }
         this.mostrarTooltips = mostrarTooltips;
+        for (Inspector inspector : new Inspector[]{InspectorEditor, editorConfig, outroInspector}) {
+            if (inspector != null) for (var row : inspector.getItens()) controlador.inspector.DicasInspector.atualizar(row);
+        }
     }
 
     private boolean apagarTextoAoEditar = true;

@@ -44,8 +44,6 @@ public class FormaElementar extends Elementar {
 
     public FormaElementar(Diagrama master) {
         ID = master.getElementarID();
-//        ancorasCode.add(Ancorador.CODE_ANCORAR);
-//        ancorasCode.add(Ancorador.CODE_DEL);
         InitElementar(master);
     }
 
@@ -65,8 +63,6 @@ public class FormaElementar extends Elementar {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Campos">
     private List<Elementar> subItens = null;
-    //private boolean nulo = false;
-    //private boolean atualizando = false;
     private boolean selecionado = false;
     protected boolean PontosIsHide = false;
     protected boolean Selecionavel = true;
@@ -110,18 +106,6 @@ public class FormaElementar extends Elementar {
         this.PontosIsHide = PontosIsHide;
     }
 
-//    public boolean isAtualizando() {
-//        return atualizando;
-//    }
-//    public void setAtualizando(boolean atualizando) {
-//        this.atualizando = atualizando;
-//    }
-//    public boolean isNulo() {
-//        return nulo;
-//    }
-//    public void setNulo(boolean nulo) {
-//        this.nulo = nulo;
-//    }
     public boolean isSelecionado() {
         return selecionado;
     }
@@ -152,7 +136,6 @@ public class FormaElementar extends Elementar {
             return;
         }
         this.ancorado = ancorado;
-        //InvalidateArea();
     }
     // </editor-fold>
 
@@ -275,7 +258,6 @@ public class FormaElementar extends Elementar {
         super.DoPaint(g);
         if (isVisible()) {
             PinteSelecao(g);
-            //paintAncora(g);
             for (int i = subItens.size() - 1; i > -1; i--) {
                 if (subItens.get(i).CanPaint()) {
                     subItens.get(i).DoPaint(g);
@@ -284,16 +266,12 @@ public class FormaElementar extends Elementar {
         }
     }
 
-//    public void paintAncora(Graphics2D g) {
-//    }
     /**
      * Rearranja o componente de acordao com a posição dos pontos que o circunda quando selecionado.
      */
     public void reSetBounds() {
     }
 
-    //public void Recalcule() {
-    //}
     /**
      * Rearranja o componente de acordo com a posição dos pontos que o circunda quando selecionado.
      *
@@ -326,11 +304,13 @@ public class FormaElementar extends Elementar {
         isMouseDown = true && !isAncorado();
         down = new Point(e.getX(), e.getY());
         inidown = new Point(e.getX(), e.getY());
+        controlador.EncaixeGrade.iniciar(this, e, getBounds());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         isMouseDown = false;
+        controlador.EncaixeGrade.terminar(this);
         DoRaizeReenquadreReposicione();
         if (isPontosIsHide()) {
             getMaster().HidePontosOnSelecao(false);
@@ -348,11 +328,10 @@ public class FormaElementar extends Elementar {
             getMaster().HidePontosOnSelecao(true);
         }
         super.mouseDragged(e);
-        int X = e.getX();
-        int Y = e.getY();
         if (isMouseDown) {
-            int movX = X - down.x;
-            int movY = Y - down.y;
+            Point movimento = controlador.EncaixeGrade.mover(this, e, down);
+            int movX = movimento.x;
+            int movY = movimento.y;
             if ((movX != 0) || (movY != 0)) {
                 DoRaiseMove(movX, movY);
                 down.setLocation(e.getPoint());
@@ -626,7 +605,6 @@ public class FormaElementar extends Elementar {
 //    /**
 //     * Quais botões âncoras (botões que ficam ao lado do artefato selecionado no diagrama) deverão ser mostrados.
 //     */
-//    private final ArrayList<Integer> ancorasCode = new ArrayList<>();
 
     /**
      * Quais botões âncoras (botões que ficam ao lado do artefato selecionado no diagrama) deverão ser mostrados.

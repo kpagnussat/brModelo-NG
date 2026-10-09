@@ -36,6 +36,7 @@ public class FormaLogs extends javax.swing.JDialog {
     public FormaLogs(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.AcabamentoDialogos.aplicar(this);
         getRootPane().registerKeyboardAction(e -> {
             setVisible(false);
 
@@ -62,27 +63,22 @@ public class FormaLogs extends javax.swing.JDialog {
                 return canEdit[columnIndex];
             }
         };
-        carga.addColumn(Editor.fromConfiguracao.getValor("Controler.interface.logs.tabela.coluna.nr"));
-        carga.addColumn(Editor.fromConfiguracao.getValor("Controler.interface.logs.tabela.coluna.tipo"));
-        carga.addColumn(Editor.fromConfiguracao.getValor("Controler.interface.logs.tabela.coluna.complemento"));
-        carga.addColumn(Editor.fromConfiguracao.getValor("Controler.interface.logs.tabela.coluna.exception"));
-
-        
-        BrLogger.Logs.stream().forEach(l -> {
-            carga.addRow(new Object[] {carga.getRowCount() + 1, l.Tipo, l.Complemento, l.Valor});
-        });
+        carga.addColumn("Hora");
+        carga.addColumn("Tipo");
+        carga.addColumn("Mensagem");
+        carga.addColumn("Detalhes");
+        synchronized (BrLogger.Logs) {
+            BrLogger.Logs.forEach(l -> carga.addRow(new Object[] {
+                l.Hora.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),
+                util.ContagemLogs.ehErro(l.Tipo) ? "Erro" : "Informação",
+                util.VisualLogs.mensagem(l.Tipo),
+                l.Tipo + (l.Complemento.isBlank() ? "" : " — " + l.Complemento) + l.Valor
+            }));
+        }
         tbPrincipal.setModel(carga);
-        
-        tbPrincipal.getColumnModel().getColumn(0).setMaxWidth(60);
-        tbPrincipal.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tbPrincipal.getColumnModel().getColumn(1).setMaxWidth(300);
-        tbPrincipal.getColumnModel().getColumn(1).setMinWidth(50);
-        tbPrincipal.getColumnModel().getColumn(1).setPreferredWidth(240);
-        tbPrincipal.getColumnModel().getColumn(2).setMaxWidth(400);
-        tbPrincipal.getColumnModel().getColumn(2).setPreferredWidth(200);
-        tbPrincipal.getColumnModel().getColumn(3).setMaxWidth(1000);
-        tbPrincipal.getColumnModel().getColumn(3).setPreferredWidth(500);
-        
+        util.VisualLogs.preparar(tbPrincipal, jScrollPane1, jPanel1);
+        util.AcabamentoDialogos.aplicar(this);
+
     }
 
     /**
@@ -170,6 +166,7 @@ public class FormaLogs extends javax.swing.JDialog {
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         BrLogger.Clean();
+        ((javax.swing.table.DefaultTableModel)tbPrincipal.getModel()).setRowCount(0);
         this.setVisible(false);
     }//GEN-LAST:event_btnLimparActionPerformed
 

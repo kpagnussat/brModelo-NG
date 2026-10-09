@@ -79,32 +79,5 @@ public class LivreLigacao extends PreLigacaoSetaComApenso {
         InvalidateArea();
     }
 
-//    @Override
-//    public ArrayList<InspectorProperty> CompleteGenerateProperty(ArrayList<InspectorProperty> GP) {
-//        ArrayList<InspectorProperty> res = super.CompleteGenerateProperty(GP);
-//        int i = res.indexOf(InspectorProperty.FindByProperty(res, "ligacoes"));
-//        if (i > -1) {
-//            if (getTexto() != null) {
-//                res.add(i, InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "livreligacao.mostrarlegenda.s").setTag(90316));
-//            } else {
-//                res.add(i, InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "livreligacao.mostrarlegenda.n").setTag(90316));
-//            }
-//            res.add(i, InspectorProperty.PropertyFactorySeparador("livreligacao.mostrarlegenda.titulo"));
-//        }
-//        return GP;
-//    }
-//
-//    @Override
-//    public void DoAnyThing(int Tag) {
-//        super.DoAnyThing(Tag);
-//        if (Tag == 90316) {
-//            if (getTexto() == null) {
-//                PrepareTexto();
-//            } else {
-//                getTexto().setCanBeDeleted(true);
-//                getMaster().Remove(getTexto(), true);
-//            }
-//        }
-//    }
 
 }

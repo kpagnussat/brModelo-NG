@@ -9,10 +9,7 @@ package diagramas.fluxo;
 import controlador.Diagrama;
 import desenho.preAnyDiagrama.PreLigacaoSetaComApenso;
 import desenho.preAnyDiagrama.PreTextoApenso;
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Stroke;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

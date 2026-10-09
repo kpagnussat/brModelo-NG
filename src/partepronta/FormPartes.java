@@ -18,16 +18,11 @@ package partepronta;
 
 import controlador.Diagrama;
 import controlador.Editor;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.MouseInputListener;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import principal.Aplicacao;
 
 /**
@@ -41,7 +36,21 @@ public class FormPartes extends javax.swing.JFrame {
      */
     public FormPartes() {
         initComponents();
-        setTitle("brModelo: " + Editor.fromConfiguracao.getValor("Controler.interface.repositorio"));
+        jPanel3.removeAll();
+        jPanel3.setLayout(new java.awt.BorderLayout(util.AcabamentoDialogos.px(8), 0));
+        jPanel3.add(jToolBar1, java.awt.BorderLayout.WEST);
+        jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel1.removeAll();
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(jScrollPane3);
+        getContentPane().removeAll();
+        getContentPane().setLayout(new java.awt.BorderLayout(0, util.AcabamentoDialogos.px(16)));
+        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(util.AcabamentoDialogos.px(860), util.AcabamentoDialogos.px(420)));
+        jSplitPane1.setDividerLocation(util.AcabamentoDialogos.px(260));
+        util.AcabamentoDialogos.aplicar(this);
+        setTitle("brModelo NG: " + Editor.fromConfiguracao.getValor("Controler.interface.repositorio"));
     }
 
     /**
@@ -89,7 +98,7 @@ public class FormPartes extends javax.swing.JFrame {
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
 
-        btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/check.png"))); // NOI18N
+        btnOK.setIcon(util.Icones.de("/imagens/check.png")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         btnOK.setText(bundle.getString("FormPartes.btnOK.text")); // NOI18N
         btnOK.setToolTipText(bundle.getString("FormPartes.btnOK.toolTipText")); // NOI18N
@@ -103,7 +112,7 @@ public class FormPartes extends javax.swing.JFrame {
         });
         jToolBar1.add(btnOK);
 
-        btnEdt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/edit.png"))); // NOI18N
+        btnEdt.setIcon(util.Icones.de("/imagens/edit.png")); // NOI18N
         btnEdt.setText(bundle.getString("FormPartes.btnEdt.text")); // NOI18N
         btnEdt.setToolTipText(bundle.getString("FormPartes.btnEdt.toolTipText")); // NOI18N
         btnEdt.setFocusable(false);
@@ -116,7 +125,7 @@ public class FormPartes extends javax.swing.JFrame {
         });
         jToolBar1.add(btnEdt);
 
-        btnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/xis.png"))); // NOI18N
+        btnDel.setIcon(util.Icones.de("/imagens/xis.png")); // NOI18N
         btnDel.setText(bundle.getString("FormPartes.btnDel.text")); // NOI18N
         btnDel.setToolTipText(bundle.getString("FormPartes.btnDel.toolTipText")); // NOI18N
         btnDel.setActionCommand(bundle.getString("FormPartes.btnDel.actionCommand")); // NOI18N
@@ -131,7 +140,7 @@ public class FormPartes extends javax.swing.JFrame {
         jToolBar1.add(btnDel);
         jToolBar1.add(jSeparator1);
 
-        btnUP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/up.png"))); // NOI18N
+        btnUP.setIcon(util.Icones.de("/imagens/up.png")); // NOI18N
         btnUP.setText(bundle.getString("FormPartes.btnUP.text")); // NOI18N
         btnUP.setToolTipText(bundle.getString("FormPartes.btnUP.toolTipText")); // NOI18N
         btnUP.setFocusable(false);
@@ -144,7 +153,7 @@ public class FormPartes extends javax.swing.JFrame {
         });
         jToolBar1.add(btnUP);
 
-        btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/down.png"))); // NOI18N
+        btnDown.setIcon(util.Icones.de("/imagens/down.png")); // NOI18N
         btnDown.setToolTipText(bundle.getString("FormPartes.btnDown.toolTipText")); // NOI18N
         btnDown.setFocusable(false);
         btnDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -195,7 +204,7 @@ public class FormPartes extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        Pan.setBackground(new java.awt.Color(255, 255, 255));
+        Pan.setBackground(util.EstiloUI.fundo(Pan, "Panel.background"));
         Pan.setLayout(null);
         jScrollPane3.setViewportView(Pan);
 
@@ -218,7 +227,7 @@ public class FormPartes extends javax.swing.JFrame {
 
         jMenu1.setText(bundle.getString("FormPartes.jMenu1.text")); // NOI18N
 
-        menuOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/check.png"))); // NOI18N
+        menuOK.setIcon(util.Icones.de("/imagens/check.png")); // NOI18N
         menuOK.setText(bundle.getString("FormPartes.menuOK.text")); // NOI18N
         menuOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,7 +236,7 @@ public class FormPartes extends javax.swing.JFrame {
         });
         jMenu1.add(menuOK);
 
-        menuEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/edit.png"))); // NOI18N
+        menuEditar.setIcon(util.Icones.de("/imagens/edit.png")); // NOI18N
         menuEditar.setText(bundle.getString("FormPartes.menuEditar.text")); // NOI18N
         menuEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,7 +245,7 @@ public class FormPartes extends javax.swing.JFrame {
         });
         jMenu1.add(menuEditar);
 
-        menuSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/menu_salvar.png"))); // NOI18N
+        menuSalvar.setIcon(util.Icones.de("/imagens/menu_salvar.png")); // NOI18N
         menuSalvar.setText(bundle.getString("FormPartes.menuSalvar.text")); // NOI18N
         menuSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -451,11 +460,9 @@ public class FormPartes extends javax.swing.JFrame {
             JLabel picLabel = new JLabel(img);
 
             picLabel.setBounds(0, 0, img.getIconWidth(), img.getIconHeight());
-            //picLabel.setLocation(0, 0);
-            //picLabel.setPreferredSize(new Dimension(img.getIconWidth(), img.getIconHeight()));
             Pan.removeAll();
-            //picLabel.setLocation(10, 10);
-            Pan.add(picLabel);//, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+            Pan.add(picLabel);
+            Pan.setPreferredSize(new java.awt.Dimension(img.getIconWidth(), img.getIconHeight()));
             Pan.revalidate();
             Pan.repaint();
             HabiliteBtns(Partes.getLista().indexOf(sp));

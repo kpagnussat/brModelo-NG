@@ -5,7 +5,6 @@
  */
 package principal;
 
-import helper.ParteAjuda;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
@@ -19,12 +18,16 @@ import javax.swing.KeyStroke;
  */
 public class FrameSobre extends javax.swing.JDialog {
 
+    // Keep the existing UI serial identity while retiring the legacy help API.
+    private static final long serialVersionUID = 7550270622411571392L;
+
     /**
      * Creates new form FrameSobre
      */
     public FrameSobre(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.AcabamentoDialogos.aplicar(this);
         getRootPane().registerKeyboardAction(e -> {
             setVisible(false);
 
@@ -49,13 +52,13 @@ public class FrameSobre extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane3.setBackground(util.EstiloUI.fundo(jScrollPane3, "Panel.background"));
 
-        Pan.setBackground(new java.awt.Color(255, 255, 255));
+        Pan.setBackground(util.EstiloUI.fundo(Pan, "Panel.background"));
         Pan.setLayout(null);
         jScrollPane3.setViewportView(Pan);
 
-        subPan.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        subPan.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
         subPan.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 2, 2));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
@@ -101,43 +104,7 @@ public class FrameSobre extends javax.swing.JDialog {
     private javax.swing.JPanel subPan;
     // End of variables declaration//GEN-END:variables
 
-    void Inicie(ParteAjuda sel) {
-        this.setTitle(sel.getTitulo());
-        if (sel.getByteImage() != null || sel.getHtml() != null) {//.isEmpty()) {
-            Pan.removeAll();
-            int H = 0;
-            int W = 0;
-            if (!sel.getHtml().isEmpty()) {
-                JLabel htmLbl = new JLabel();
-                htmLbl.setText(sel.getHtml());
-                htmLbl.repaint();
-                Dimension d = htmLbl.getPreferredSize();
-                int x = (getPreferredSize().width - d.width) / 2;
-                if (getPreferredSize().width < d.width) {
-                    x = 0;
-                }
-//                int y = (getPreferredSize().height - d.height - subPan.getPreferredSize().height) / 2;
-//                if (getPreferredSize().height - subPan.getPreferredSize().height < d.height) {
-//                    y = 0;
-//                }
-                htmLbl.setBounds(x, 0, d.width, d.height);
-                //Pan.setBackground(Color.yellow);
-                Pan.add(htmLbl);
-                H = d.height + 10;
-                W = d.width;
-            }
-            if (sel.getByteImage() != null) {
-                ImageIcon img = new ImageIcon(sel.getByteImage());
-                JLabel picLabel = new JLabel(img);
-                W = W > img.getIconWidth() ? W : img.getIconWidth();
-                picLabel.setBounds(0, H, img.getIconWidth(), img.getIconHeight());
-                picLabel.setPreferredSize(new Dimension(img.getIconWidth(), img.getIconHeight()));
-                H += img.getIconHeight();
-                Pan.setPreferredSize(new Dimension(W, H));
-                Pan.add(picLabel);
-            }
-            Pan.revalidate();
-            Pan.repaint();
-        }
+    void Inicie() {
+        util.ConteudoSobre.dialogo(this, Pan, jScrollPane3, subPan, jButton1);
     }
 }

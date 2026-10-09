@@ -27,6 +27,15 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
     public fmImpressaoPreview(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        util.DicasInterface.dica(btnPrimeiro, "pageFirst");
+        util.DicasInterface.dica(btnAnterior, "pagePrevious");
+        util.DicasInterface.dica(btnProx, "pageNext");
+        util.DicasInterface.dica(btnUltimo, "pageLast");
+        util.DicasInterface.dica(btnPrint, "pagePrint");
+        util.DicasInterface.dica(btnPrintAll, "pagePrintAll");
+        util.DicasInterface.dica(btnFechar, "close");
+        util.DicasInterface.dica(lblPgAtual, "pageCount");
+        util.LayoutDialogos.preview(this, jToolBar1, btnFechar, jScrollPane1);
     }
 
     final int PRI = -2, ANT = -1, PRO = 1, ULT = 2;
@@ -44,6 +53,8 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         panBox.setPreferredSize(panBox.getSize());
 
         this.pack();
+
+        util.AcabamentoDialogos.limitar(this);
         movimentePg(1);
     }
 
@@ -56,6 +67,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
             prev.setPgatual(1);
         }
         if (prev.getTlpagina() < 2) {
+            lblPgAtual.setText("Página 1 de 1");
             return;
         }
         int pg = prev.getPgatual();
@@ -91,7 +103,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
                 btnPrimeiro.setEnabled(true);
                 break;
         }
-        lblPgAtual.setText("Pg. " + String.valueOf(prev.getPgatual()) + " de " + String.valueOf(prev.getTlpagina()));
+        lblPgAtual.setText("Página " + String.valueOf(prev.getPgatual()) + " de " + String.valueOf(prev.getTlpagina()));
         prev.repaint();
     }
 
@@ -122,7 +134,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnPrimeiro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/first.gif"))); // NOI18N
+        btnPrimeiro.setIcon(util.Icones.de("/imagens/first.gif")); // NOI18N
         btnPrimeiro.setFocusable(false);
         btnPrimeiro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrimeiro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -133,7 +145,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         });
         jToolBar1.add(btnPrimeiro);
 
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/prior.png"))); // NOI18N
+        btnAnterior.setIcon(util.Icones.de("/imagens/prior.png")); // NOI18N
         btnAnterior.setFocusable(false);
         btnAnterior.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAnterior.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -148,7 +160,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         lblPgAtual.setText(bundle.getString("fmImpressaoPreview.lblPgAtual.text")); // NOI18N
         jToolBar1.add(lblPgAtual);
 
-        btnProx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/next.gif"))); // NOI18N
+        btnProx.setIcon(util.Icones.de("/imagens/next.gif")); // NOI18N
         btnProx.setFocusable(false);
         btnProx.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnProx.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -159,7 +171,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         });
         jToolBar1.add(btnProx);
 
-        btnUltimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/last.gif"))); // NOI18N
+        btnUltimo.setIcon(util.Icones.de("/imagens/last.gif")); // NOI18N
         btnUltimo.setFocusable(false);
         btnUltimo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUltimo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -216,7 +228,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         });
         jToolBar1.add(btnFechar);
 
-        panBox.setBackground(new java.awt.Color(204, 204, 255));
+        panBox.setBackground(util.EstiloUI.fundo(panBox, "Panel.background"));
 
         javax.swing.GroupLayout panBoxLayout = new javax.swing.GroupLayout(panBox);
         panBox.setLayout(panBoxLayout);
@@ -241,7 +253,7 @@ public class fmImpressaoPreview extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
         );

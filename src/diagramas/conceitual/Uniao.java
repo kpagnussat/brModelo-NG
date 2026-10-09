@@ -64,7 +64,6 @@ public class Uniao extends PreUniao {
         } else {
             res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("uniao.resultante", "{}"));
         }
-        //res.add(InspectorProperty.PropertyFactoryApenasLeituraTexto("uniao.resultante", pe == null? "": pe.getTexto()));
         return res;
     }
 }

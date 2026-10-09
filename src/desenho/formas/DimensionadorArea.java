@@ -24,7 +24,6 @@ public class DimensionadorArea extends Elementar {
 
     public DimensionadorArea(FormaArea reg) {
         super(reg);
-        //setVisible(false);
         this.setWidth(getMaster().getPontoWidth());
         this.setHeight(getMaster().getPontoHeigth() * 4);
         this.setBackColor(Color.BLACK);
@@ -50,7 +49,7 @@ public class DimensionadorArea extends Elementar {
 
     @Override
     public void DoPaint(Graphics2D g) {
-        if ((regiao == null) /*|| (getDono().isAtualizando())*/) {
+        if ((regiao == null) ) {
             return;
         }
         super.DoPaint(g);

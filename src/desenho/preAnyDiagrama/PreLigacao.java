@@ -40,12 +40,7 @@ public class PreLigacao extends SuperLinha {
         PrepareCardinalidade();
     }
 
-    //protected boolean cardNome = false;
 
-//    public PreLigacao(Diagrama diagrama, boolean cardNome) {
-//        this(diagrama);
-//        //this.cardNome = cardNome;
-//    }
     // </editor-fold>
     
     private PreCardinalidade Card;
@@ -75,37 +70,6 @@ public class PreLigacao extends SuperLinha {
     }
 
     public void PrepareCardinalidade() {
-//        PreCardinalidade card = getCard();
-//        if (card == null) {
-//            return;
-//        }
-//        if (getPontaA() == null || getPontaB() == null) {
-//            card.setVisible(false);
-//            return;
-//        }
-//        if (!getPontaA().isEstaLigado() || !getPontaB().isEstaLigado()) {
-//            card.Fixe(null);
-//            return;
-//        }
-//
-//        boolean t1 = getFormaPontaA() instanceof PreEntidade;
-//        boolean t1b = getFormaPontaB() instanceof PreRelacionamento;
-//        if (t1 && t1b) {
-//            card.setVisible(true);
-//            card.Fixe(getPontaA());
-//            card.Posicione();
-//            return;
-//        }
-//
-//        boolean t2 = getFormaPontaB() instanceof PreEntidade;
-//        boolean t2b = getFormaPontaA() instanceof PreRelacionamento;
-//        if (t2 && t2b) {
-//            card.setVisible(true);
-//            card.Fixe(getPontaB());
-//            card.Posicione();
-//            return;
-//        }
-//        card.Fixe(null);
     }
 
     @Override
@@ -130,18 +94,15 @@ public class PreLigacao extends SuperLinha {
             pdl.Destroy();
         }
         if (Card != null) {
-            //Card.setRemovido(true);
             Card.setCanBeDeleted(true);
             getMaster().Remove(Card, false);
             //mudei aqui e não testei - comentei abaixo.
-            //Card.setCanBeDeleted(false); //se estiver na lista de selecionados não fará nada.
         }
         return super.Destroy();
     }
 
     @Override
     public ArrayList<InspectorProperty> CompleteGenerateProperty(ArrayList<InspectorProperty> GP) {
-        //GP.add(InspectorProperty.PropertyFactorySeparador("seta.titulo"));
         GP = super.CompleteGenerateProperty(GP);
         
         GP.add(InspectorProperty.PropertyFactoryCommand(nomeComandos.cmdDoAnyThing.name(), "linha.centre").setTag(140916));

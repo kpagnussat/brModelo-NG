@@ -10,7 +10,6 @@ import controlador.Editor;
 import controlador.inspector.InspectorProperty;
 import desenho.preAnyDiagrama.PreTextoApenso;
 import java.awt.BasicStroke;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ public class FluxTexto extends PreTextoApenso {
         tmp = InspectorProperty.FindByProperty(res, "setTextoAdicional");
         res.remove(tmp);
 
-        //res.add(InspectorProperty.PropertyFactorySN("texto.autosize", "setAutosize", isAutosize()));
         res.add(InspectorProperty.PropertyFactorySeparador("texto.atreladoalinha"));
         res.add(InspectorProperty.PropertyFactorySN("texto.movimentacaomanual", "setMovimentacaoManual", isMovimentacaoManual()));
         return res;

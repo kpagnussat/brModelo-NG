@@ -20,12 +20,10 @@ import controlador.Diagrama;
 import desenho.FormaElementar;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -102,20 +100,20 @@ public class GerenciadorPartes implements Serializable{
         GerenciadorPartes res;
         try {
             FileInputStream fi = new FileInputStream(arq);
-            try (ObjectInput in = new ObjectInputStream(fi)) {
+            try (ObjectInput in = new util.LeitorSeguro(fi)) {
                 res = (GerenciadorPartes) in.readObject();
                 in.close();
             }
             res.setMudou(false);
             return res;
-        } catch (NullPointerException | IOException | ClassNotFoundException iOException) {
+        } catch (ClassCastException | NullPointerException | IOException | ClassNotFoundException iOException) {
             util.BrLogger.Logger("ERROR_TEMPLATE_LOAD", iOException.getMessage());
             return null;
         }
     }
     
     public static GerenciadorPartes LoadDataTemplate() {
-        String tmp = System.getProperty("user.dir") + File.separator + "Template.brMt";
+        String tmp = util.Pastas.arquivo(util.Pastas.Tipo.DADOS, "Template.brMt").getPath();
         GerenciadorPartes gp = LoadData(tmp);
         if (gp == null) {
             gp = new GerenciadorPartes();
@@ -139,7 +137,7 @@ public class GerenciadorPartes implements Serializable{
     }
     
     public static boolean SaveDataTemplate(GerenciadorPartes obj) {
-        String tmp = System.getProperty("user.dir") + File.separator + "Template.brMt";
+        String tmp = util.Pastas.arquivo(util.Pastas.Tipo.DADOS, "Template.brMt").getPath();
         return SaveData(obj, tmp);
     }
     //</editor-fold>

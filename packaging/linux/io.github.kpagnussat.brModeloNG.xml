@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-brmodelo">
+    <comment>brModelo diagram</comment>
+    <comment xml:lang="pt_BR">Diagrama brModelo</comment>
+    <glob pattern="*.brM3"/>
+    <icon name="io.github.kpagnussat.brModeloNG"/>
+  </mime-type>
+  <mime-type type="application/x-brmodelo-json">
+    <comment>brModelo JSON diagram</comment>
+    <comment xml:lang="pt_BR">Diagrama JSON brModelo</comment>
+    <sub-class-of type="application/json"/>
+    <glob pattern="*.brMj"/>
+    <icon name="io.github.kpagnussat.brModeloNG"/>
+  </mime-type>
+</mime-info>

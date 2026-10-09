@@ -22,7 +22,6 @@ public class ImageGenerate {
     }
     
     public static BufferedImage CriarImagem(int w, int h) {
-        //int type = BufferedImage.TYPE_INT_BGR;
         int type = BufferedImage.TYPE_INT_ARGB;
         if (w < 1) w = 1;
         if (h < 1) h = 1;
@@ -82,15 +81,4 @@ public class ImageGenerate {
         
         return res;
     }
-//    public static BufferedImage geraImagemForPrn(Diagrama diag, int x, int y, int wdt, int ht) {
-//        
-//        BufferedImage res = CriarImagem(wdt, ht);
-//        Graphics2D g = (Graphics2D)res.getGraphics();
-//        g.setPaint(diag.getBackground());
-//        g.fillRect(x, y, wdt, ht);
-//        diag.ExternalPaint(g);
-//        g.dispose();
-//        
-//        return res;
-//    }
 }

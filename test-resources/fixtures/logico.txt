@@ -1,0 +1,98 @@
+diagramas.logico.DiagramaLogico type=tpLogico
+element0 diagramas.logico.LogicoLinha java.awt.Rectangle[x=407,y=87,width=361,height=363] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=255,b=255] isDuplaLinha=false isDashed=false isInteligente=true isTemSetaPontaA=false isTemSetaPontaB=true ends=element3,element2 points=java.awt.Point[x=765,y=99]@element3;java.awt.Point[x=765,y=90]@null;java.awt.Point[x=410,y=90]@null;java.awt.Point[x=410,y=447]@null;java.awt.Point[x=419,y=447]@element2;
+element0/0 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=416,y=444,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element0/1 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=762,y=96,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element0/2 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=762,y=87,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element0/3 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=407,y=87,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element0/4 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=407,y=444,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element1 diagramas.logico.LogicoLinha java.awt.Rectangle[x=142,y=87,width=280,height=341] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=255,b=255] isDuplaLinha=false isDashed=false isInteligente=true isTemSetaPontaA=false isTemSetaPontaB=true ends=element4,element2 points=java.awt.Point[x=145,y=99]@element4;java.awt.Point[x=145,y=90]@null;java.awt.Point[x=345,y=90]@null;java.awt.Point[x=345,y=425]@null;java.awt.Point[x=419,y=425]@element2;
+element1/0 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=416,y=422,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element1/1 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=142,y=96,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element1/2 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=142,y=87,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element1/3 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=342,y=87,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element1/4 desenho.linhas.PontoDeLinha java.awt.Rectangle[x=342,y=422,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2 diagramas.logico.Tabela java.awt.Rectangle[x=420,y=380,width=150,height=127] text=Matricula font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] isAutosize=true getTextoAdicional=
+element2/field0 text=id_matricula type=INTEGER PK=true FK=false unique=false separator=false source=null extra= notes=
+element2/field1 text=id_aluno type=INTEGER PK=false FK=true unique=false separator=false source=element4/field0 extra= notes=
+element2/field2 text=id_curso type=INTEGER PK=false FK=true unique=false separator=false source=element3/field0 extra= notes=
+element2/constraint0 type=tpPK name= named=false link=null source=null fields=element2/field0; -> null;
+element2/constraint1 type=tpFK name= named=false link=element1 source=element4/constraint0 fields=element4/field0; -> element2/field1;
+element2/constraint2 type=tpFK name= named=false link=element0 source=element3/constraint0 fields=element3/field0; -> element2/field2;
+element2/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=412,y=372,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=572,y=372,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=572,y=509,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=412,y=509,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=492,y=372,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=572,y=440,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=492,y=509,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element2/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=412,y=440,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3 diagramas.logico.Tabela java.awt.Rectangle[x=740,y=100,width=150,height=105] text=Curso font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] isAutosize=true getTextoAdicional=
+element3/field0 text=id_curso type=INTEGER PK=true FK=false unique=false separator=false source=null extra= notes=
+element3/field1 text=nome type=VARCHAR(80) PK=false FK=false unique=false separator=false source=null extra= notes=
+element3/constraint0 type=tpPK name= named=false link=null source=null fields=element3/field0; -> null;
+element3/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=732,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=892,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=892,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=732,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=812,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=892,y=149,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=812,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element3/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=732,y=149,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4 diagramas.logico.Tabela java.awt.Rectangle[x=120,y=100,width=150,height=105] text=Aluno font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] isAutosize=true getTextoAdicional=
+element4/field0 text=id_aluno type=INTEGER PK=true FK=false unique=false separator=false source=null extra= notes=
+element4/field1 text=email type=VARCHAR(120) PK=false FK=false unique=true separator=false source=null extra= notes=
+element4/constraint0 type=tpPK name= named=false link=null source=null fields=element4/field0; -> null;
+element4/constraint1 type=tpUNIQUE name= named=false link=null source=null fields=element4/field1; -> null;
+element4/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=112,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=272,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=272,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=112,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=192,y=92,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=272,y=149,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=192,y=207,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element4/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=112,y=149,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5 controlador.apoios.InfoDiagrama java.awt.Rectangle[x=5,y=5,width=300,height=150] text= font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] getTextoAdicional=
+element5/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element5/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6 diagramas.logico.LogicoCardinalidade java.awt.Rectangle[x=109,y=78,width=35,height=14] text=Cardinalidade_1 font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] getCard=C01 getPapel= getTextoAdicional=
+element6/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element6/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7 diagramas.logico.LogicoCardinalidade java.awt.Rectangle[x=377,y=410,width=35,height=14] text=Cardinalidade_2 font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] getCard=C0N getPapel= getTextoAdicional=
+element7/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element7/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8 diagramas.logico.LogicoCardinalidade java.awt.Rectangle[x=729,y=78,width=35,height=14] text=Cardinalidade_3 font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] getCard=C01 getPapel= getTextoAdicional=
+element8/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element8/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9 diagramas.logico.LogicoCardinalidade java.awt.Rectangle[x=377,y=432,width=35,height=14] text=Cardinalidade_4 font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=255,g=0,b=0] getCard=C0N getPapel= getTextoAdicional=
+element9/0 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/1 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/2 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/3 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/4 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/5 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/6 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]
+element9/7 desenho.formas.PontoDeForma java.awt.Rectangle[x=0,y=0,width=6,height=6] font=Arial/1/12.0 ink=java.awt.Color[r=0,g=0,b=0] background=java.awt.Color[r=0,g=0,b=0]

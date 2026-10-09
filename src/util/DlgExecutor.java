@@ -27,8 +27,11 @@ public class DlgExecutor extends javax.swing.JDialog {
         super(parent, modal);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initComponents();
+        util.LayoutDialogos.area(jScrollPane1, 640, 280);
+        javax.swing.JPanel heading = new javax.swing.JPanel(new java.awt.BorderLayout());
+        heading.add(new javax.swing.JLabel("Comandos a executar"));
+        util.AcabamentoDialogos.editor(this, heading, jScrollPane1, jPanel1);
         getRootPane().registerKeyboardAction(e -> {
-            //this.dispose();
             setResultado(JOptionPane.CANCEL_OPTION);
             setVisible(false);
             
@@ -57,26 +60,25 @@ public class DlgExecutor extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
-        btnCancelar.setText("CANCELAR");
+        btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
 
-        btnOK.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnOK.setText("OK (ctrl + enter)");
+        btnOK.setText("OK");
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
             }
         });
 
-        btnCopy.setBackground(new java.awt.Color(255, 255, 255));
-        btnCopy.setForeground(new java.awt.Color(255, 255, 255));
-        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/copy.png"))); // NOI18N
+        btnCopy.setBackground(util.EstiloUI.fundo(btnCopy, "Button.background"));
+        btnCopy.setForeground(util.EstiloUI.texto(btnCopy, "Button.foreground"));
+        btnCopy.setIcon(util.Icones.de("/imagens/copy.png")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("principal/Formularios_pt_BR"); // NOI18N
         btnCopy.setToolTipText(bundle.getString("DlgExecutor.toolTipCopy")); // NOI18N
         btnCopy.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +92,7 @@ public class DlgExecutor extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(btnCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCancelar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

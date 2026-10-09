@@ -42,9 +42,8 @@ public class Utilidades {
      * @return O mesmo valor de res se res for um int válido.
      */
     public static String TryIntStr(String res, String retornoEmCasoDeErro) {
-        int r;
         try {
-            r = Integer.valueOf(res);
+            Integer.valueOf(res);
         } catch (NumberFormatException e){
             return retornoEmCasoDeErro;
         }
@@ -184,21 +183,6 @@ public class Utilidades {
         return EncapsuleMsg(msg, new Object[] {param1, param2});
     }
 
-//    public static int[] Diminua(int[] base) {
-//        int[] res = new int[base.length];
-//        for (int i = 0; i < base.length; i++) {
-//            res[i] = base[i]-1;
-//        }
-//        return res;
-//    }
-//    
-//    public static int[] Aumente(int[] base) {
-//        int[] res = new int[base.length];
-//        for (int i = 0; i < base.length; i++) {
-//            res[i] = base[i]+1;
-//        }
-//        return res;
-//    }
     
     public static String textoParaCampo(String original) {
         return original.replaceAll("[ãâàáä]", "a")

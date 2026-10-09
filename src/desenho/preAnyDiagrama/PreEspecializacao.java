@@ -130,9 +130,6 @@ public class PreEspecializacao extends FormaTriangular {
                 return false;
             }
             if (!FinderLinked(forma, this)) {
-            //    return false;
-            //} else {
-                //getMaster().CheckLigConsistencia(this, forma, lin);//nunca usado! 20/09/2014
                 return true;
             }
         }
@@ -140,22 +137,6 @@ public class PreEspecializacao extends FormaTriangular {
     }
 
     protected boolean FinderLinked(Forma quem, Forma origem) {
-//        ArrayList<Forma> outras = getListaDeFormasLigadas(origem);
-//        for (Forma f : outras) {
-//            if (f == quem) {
-//                return true;
-//            }
-//            ArrayList<Forma> esp = f.getListaDeFormasLigadas(PreEspecializacao.class);
-//            for (Forma f2 : esp) {
-//                if (f2 == this) {
-//                    continue;
-//                }
-//                PreEspecializacao pree = (PreEspecializacao) f2;
-//                if (pree.FinderLinked(quem, f)) {
-//                    return true;
-//                }
-//            }
-//        }
         return false;
     }
     

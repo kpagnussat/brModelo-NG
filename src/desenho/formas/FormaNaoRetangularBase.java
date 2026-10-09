@@ -138,7 +138,6 @@ public class FormaNaoRetangularBase extends Forma {
      */
     @Override
     public void PosicionePonto(PontoDeLinha ponto) {
-        //super.PosicionePonto(ponto);
         switch (Tipo) {
             case tp2Pontos:
                 Posicione2Pontos(ponto);
@@ -187,20 +186,12 @@ public class FormaNaoRetangularBase extends Forma {
     }
 
     protected void Posicione4Pontos(PontoDeLinha ponto) {
-        //calculePontos();//getPontosCola...
         Point centro = ponto.getCentro();
 
-        //Point[] ll = getPontosCalculados(); // getPontosColaterais();
         Point[] ll = getPontosColaterais();
 
         int mx = retorneProximidade(centro, ll);
 
-//        int f = mx / 2;
-//        if (mx == 1 || mx == 7) {
-//            f = 0;
-//        } else if (mx == 3 || mx == 5) {
-//            f = 2;
-//        }
         ponto.setCentro(ll[mx]);
         ponto.setLado(mx);
     }
@@ -213,7 +204,7 @@ public class FormaNaoRetangularBase extends Forma {
         calculePontos();
         Point pt1, pt2, pt3, pMeio;
 
-        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight()); //getBounds();
+        Rectangle r = new Rectangle(getLeft(), getTop(), getWidth(), getHeight());
         Point p0 = r.getLocation();
         Point p1 = new Point(r.x + r.width, r.y);
         Point p2 = new Point(r.x + r.width, r.y + r.height);
@@ -339,10 +330,6 @@ public class FormaNaoRetangularBase extends Forma {
 
     public final double distance(Point p, Point q) {
         return util.Utilidades.distance(p, q);
-//        double dx = p.x - q.x;         //horizontal difference
-//        double dy = p.y - q.y;         //vertical difference
-//        double dist = Math.sqrt(dx * dx + dy * dy); //distance using Pythagoras theorem
-//        return dist;
     }
 
     @Override
@@ -361,10 +348,4 @@ public class FormaNaoRetangularBase extends Forma {
         g.setPaint(bkpP);
     }
     
-//    @Override
-//    protected void ToXmlValores(Document doc, Element me) {
-//        super.ToXmlValores(doc, me);
-//        //me.appendChild(util.XMLGenerate.ValorInteger(doc, "Tipo", getTipo().ordinal()));
-//        me.appendChild(util.XMLGenerate.ValorInteger(doc, "Direcao", getDirecao().ordinal()));
-//    }
 }

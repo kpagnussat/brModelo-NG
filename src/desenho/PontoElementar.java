@@ -85,10 +85,7 @@ public class PontoElementar extends Elementar {
 
     @Override
     public void DoPaint(Graphics2D g) {
-//        if (!CanPaint()) {
-//            return;
-//        }
-        if ((getDono() == null) /*|| (getDono().isAtualizando())*/) {
+        if ((getDono() == null) ) {
             return;
         }
         super.DoPaint(g);
@@ -119,24 +116,12 @@ public class PontoElementar extends Elementar {
 //    /**
 //     * Acredito que deverá ser usado apenas para serializar a linha para xml.
 //     */
-//    public void ToXlm(Document doc, Element root) {
-//        Element me = doc.createElement(Editor.getClassTexto(this));
-//        ToXmlAtributos(doc, me);
-//        InfoDiagrama_ToXmlValores(doc, me);
-//        root.appendChild(me);
-//    }
-//
 //    /**
 //     * Acredito que deverá ser usado apenas para serializar a linha para xml.
 //     */
-//    protected void InfoDiagrama_ToXmlValores(Document doc, Element me) {
-//    }
-//    
 //    /**
 //     * Acredito que deverá ser usado apenas para serializar a linha para xml.
 //     */
-//    protected void ToXmlAtributos(Document doc, Element me) {
-//    }
     @Override
     public Color getBackColor() {
         if (isDisablePainted()) {

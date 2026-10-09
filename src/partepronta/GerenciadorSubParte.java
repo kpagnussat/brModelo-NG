@@ -18,7 +18,6 @@ package partepronta;
 
 import controlador.Diagrama;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  *

@@ -34,7 +34,6 @@ public class conversorOpcoes {
     
     public int opcDefault = 0;
     public int OPC = 0;
-    //public int registradorTemporario = -1;
     public boolean isYesToAll() { 
         return Resultado == resultOfQuestion.resOkToAll;
     }
@@ -51,10 +50,8 @@ public class conversorOpcoes {
         Questoes.clear();
         Textos.clear();
         Observacoes.clear();
-        //Erros.clear();
         Disables.clear();
         opcDefault = 0;
-        //Resultado = resultOfQuestion.respCancel;
     }
     
     public Point LastPosi = null;
