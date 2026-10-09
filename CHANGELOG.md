@@ -1,6 +1,6 @@
 # Changelog
 
-As alterações do [brModelo NG](https://github.com/kpagnussat/brModelo-NG) são
+As alterações do [brModelo NG](https://github.com/kpagnussat/brModeloNG) são
 registradas neste arquivo, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 Esta seção reúne as mudanças do fork em relação ao brModelo oficial 3.3.2.
 O histórico anterior pertence ao
@@ -125,4 +125,4 @@ Primeira versão do **brModelo NG**.
 - Build Ant/NetBeans e jars de dependências versionados; o projeto usa o Gradle
   Wrapper e Maven Central, preservando os arquivos `.form` para edição visual.
 
-[1.0.0]: https://github.com/kpagnussat/brModelo-NG/releases/tag/v1.0.0
+[1.0.0]: https://github.com/kpagnussat/brModeloNG/releases/tag/v1.0.0

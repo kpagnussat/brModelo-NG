@@ -21,6 +21,6 @@ A ajuda agora é um site local gerado de Markdown e incluído no jar e nos pacot
 
 ## Créditos e lançamentos
 
-**Ajuda → Sobre** apresenta os créditos e a versão instalada. **Ajuda → Releases do brModelo NG** abre a [página de lançamentos do NG](https://github.com/kpagnussat/brModelo-NG/releases). Esse comando precisa de acesso à internet; a ajuda local não precisa.
+**Ajuda → Sobre** apresenta os créditos e a versão instalada. **Ajuda → Releases do brModelo NG** abre a [página de lançamentos do NG](https://github.com/kpagnussat/brModeloNG/releases). Esse comando precisa de acesso à internet; a ajuda local não precisa.
 
 Comece por [Primeiros passos](primeiros-passos.md) para experimentar o fluxo de edição.

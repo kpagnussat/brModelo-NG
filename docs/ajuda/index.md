@@ -22,7 +22,7 @@ Esta ajuda acompanha a instalação e funciona sem internet. No navegador, use a
 
 Pessoas: [Kristofer Pagnussat](https://github.com/kpagnussat), [Carlos Henrique Cândido](https://github.com/chcandido) e [Dr. Ronaldo dos Santos Mello](https://www.inf.ufsc.br/~r.mello/).
 
-Projetos: [brModelo NG](https://github.com/kpagnussat/brModelo-NG) e [brModelo original](https://github.com/chcandido/brModelo). Licença **GPL-3.0**. O NG se baseia na versão **3.3.2** do original. Os mesmos créditos estão em **Ajuda → Sobre**.
+Projetos: [brModelo NG](https://github.com/kpagnussat/brModeloNG) e [brModelo original](https://github.com/chcandido/brModelo). Licença **GPL-3.0**. O NG se baseia na versão **3.3.2** do original. Os mesmos créditos estão em **Ajuda → Sobre**.
 
 ## Exemplos desta ajuda
 

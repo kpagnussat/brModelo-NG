@@ -93,7 +93,7 @@ class BundledHelpTest {
         assertTrue(html.contains("href='https://github.com/kpagnussat'>Kristofer Pagnussat"));
         assertTrue(html.contains("href='https://github.com/chcandido'>Carlos Henrique Cândido"));
         assertTrue(html.contains("href='https://www.inf.ufsc.br/~r.mello/'>Dr. Ronaldo dos Santos Mello"));
-        assertTrue(html.contains("href='https://github.com/kpagnussat/brModelo-NG'>brModelo NG"));
+        assertTrue(html.contains("href='https://github.com/kpagnussat/brModeloNG'>brModelo NG"));
         assertTrue(html.contains("href='https://github.com/chcandido/brModelo'>brModelo original"));
         assertTrue(html.contains("GPL-3.0"));
         assertFalse(html.contains("sis4"));

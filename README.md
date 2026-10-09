@@ -9,15 +9,15 @@
 *O README do projeto original termina com um convite: "Copie, altere, publique."<br>
 O brModelo NG nasceu desse convite.*
 
-[![Versão](https://img.shields.io/github/v/release/kpagnussat/brModelo-NG?label=vers%C3%A3o)](https://github.com/kpagnussat/brModelo-NG/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/kpagnussat/brModelo-NG/total?label=downloads)](https://github.com/kpagnussat/brModelo-NG/releases)
-[![Build e testes](https://github.com/kpagnussat/brModelo-NG/actions/workflows/ci.yml/badge.svg)](https://github.com/kpagnussat/brModelo-NG/actions/workflows/ci.yml)
-[![Estrelas](https://img.shields.io/github/stars/kpagnussat/brModelo-NG?label=estrelas&style=flat)](https://github.com/kpagnussat/brModelo-NG/stargazers)
+[![Versão](https://img.shields.io/github/v/release/kpagnussat/brModeloNG?label=vers%C3%A3o)](https://github.com/kpagnussat/brModeloNG/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/kpagnussat/brModeloNG/total?label=downloads)](https://github.com/kpagnussat/brModeloNG/releases)
+[![Build e testes](https://github.com/kpagnussat/brModeloNG/actions/workflows/ci.yml/badge.svg)](https://github.com/kpagnussat/brModeloNG/actions/workflows/ci.yml)
+[![Estrelas](https://img.shields.io/github/stars/kpagnussat/brModeloNG?label=estrelas&style=flat)](https://github.com/kpagnussat/brModeloNG/stargazers)
 [![Licença GPL-3.0](https://img.shields.io/badge/licen%C3%A7a-GPL--3.0-blue.svg)](LICENSE)
 
-[![Linux](https://img.shields.io/badge/Linux-.deb%20%C2%B7%20.rpm%20%C2%B7%20Flatpak%20%C2%B7%20port%C3%A1til-FCC624?logo=linux&logoColor=black)](https://github.com/kpagnussat/brModelo-NG/releases/latest)
-[![Windows](https://img.shields.io/badge/Windows-.msi%20%C2%B7%20port%C3%A1til-0078D6?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==)](https://github.com/kpagnussat/brModelo-NG/releases/latest)
-[![macOS](https://img.shields.io/badge/macOS-.dmg-000000?logo=apple&logoColor=white)](https://github.com/kpagnussat/brModelo-NG/releases/latest)
+[![Linux](https://img.shields.io/badge/Linux-.deb%20%C2%B7%20.rpm%20%C2%B7%20Flatpak%20%C2%B7%20port%C3%A1til-FCC624?logo=linux&logoColor=black)](https://github.com/kpagnussat/brModeloNG/releases/latest)
+[![Windows](https://img.shields.io/badge/Windows-.msi%20%C2%B7%20port%C3%A1til-0078D6?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==)](https://github.com/kpagnussat/brModeloNG/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-.dmg-000000?logo=apple&logoColor=white)](https://github.com/kpagnussat/brModeloNG/releases/latest)
 [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](BUILDING.md)
 
 **[Baixar](#instalação)** · **[Novidades](#no-dia-a-dia)** · **[Ajuda](#ajuda-completa-no-f1)** · **[Compatibilidade](#compatibilidade-com-o-brmodelo-oficial)** · **[Por dentro](#por-dentro-do-código)** · **[Compilar e contribuir](#código-fonte-e-contribuições)** · **[English](#english)**
@@ -43,7 +43,7 @@ projetos (EAP) e diagramas livres.
 
 <div align="center">
 
-[![Baixar o brModelo NG](https://img.shields.io/github/v/release/kpagnussat/brModelo-NG?label=Baixar&style=for-the-badge&color=2ea44f)](https://github.com/kpagnussat/brModelo-NG/releases/latest)
+[![Baixar o brModelo NG](https://img.shields.io/github/v/release/kpagnussat/brModeloNG?label=Baixar&style=for-the-badge&color=2ea44f)](https://github.com/kpagnussat/brModeloNG/releases/latest)
 
 Os pacotes para Linux, Windows e macOS já trazem o Java.
 
@@ -216,7 +216,7 @@ executá-lo em [BUILDING.md](BUILDING.md#automated-tests).
 ## Instalação
 
 Baixe o arquivo do seu sistema na
-[página de Releases](https://github.com/kpagnussat/brModelo-NG/releases/latest):
+[página de Releases](https://github.com/kpagnussat/brModeloNG/releases/latest):
 
 | Sistema | Arquivo | Como executar |
 | --- | --- | --- |
@@ -305,8 +305,8 @@ modo, os seletores de tema ficam ocultos.
 >   customizados ([detalhes](docs/FORMATO-BRMJ.md)).
 
 Relatos de outros sistemas são bem-vindos nas
-[issues](https://github.com/kpagnussat/brModelo-NG/issues) e nas
-[discussões](https://github.com/kpagnussat/brModelo-NG/discussions).
+[issues](https://github.com/kpagnussat/brModeloNG/issues) e nas
+[discussões](https://github.com/kpagnussat/brModeloNG/discussions).
 
 ## Por dentro do código
 
@@ -383,10 +383,10 @@ as capturas de tela, as medições e a geração dos pacotes. Para começar:
 ```
 
 Relate problemas e envie contribuições pelo
-[repositório do brModelo NG](https://github.com/kpagnussat/brModelo-NG)
+[repositório do brModelo NG](https://github.com/kpagnussat/brModeloNG)
 ([como as contribuições entram](#como-este-repositório-é-publicado)); para
 dúvidas e ideias, use as
-[discussões](https://github.com/kpagnussat/brModelo-NG/discussions). Inclua passos
+[discussões](https://github.com/kpagnussat/brModeloNG/discussions). Inclua passos
 para reproduzir o problema, sistema operacional e, quando necessário, um
 diagrama pequeno com dados inventados.
 
@@ -481,7 +481,7 @@ closed with a link to that commit, and its author is credited in the CHANGELOG.
 Contributions are accepted under GPL-3.0-or-later.
 
 Download packages from the
-[Releases page](https://github.com/kpagnussat/brModelo-NG/releases), or see
+[Releases page](https://github.com/kpagnussat/brModeloNG/releases), or see
 [BUILDING.md](BUILDING.md) to build, test and run from source.
 Portable Linux (`.tar.gz`) and Windows (`.zip`) builds include Java and need no
 installation. The app is not on Flathub yet. The portable jar requires Java 21.

@@ -18,15 +18,15 @@
     <p xml:lang="pt-BR">Abra diagramas brModelo existentes, exporte imagens e SQL ou salve diagramas no formato JSON opcional.</p>
   </description>
   <launchable type="desktop-id">io.github.kpagnussat.brModeloNG.desktop</launchable>
-  <url type="homepage">https://github.com/kpagnussat/brModelo-NG</url>
-  <url type="bugtracker">https://github.com/kpagnussat/brModelo-NG/issues</url>
-  <url type="vcs-browser">https://github.com/kpagnussat/brModelo-NG</url>
+  <url type="homepage">https://github.com/kpagnussat/brModeloNG</url>
+  <url type="bugtracker">https://github.com/kpagnussat/brModeloNG/issues</url>
+  <url type="vcs-browser">https://github.com/kpagnussat/brModeloNG</url>
   <provides><mediatype>application/x-brmodelo</mediatype><mediatype>application/x-brmodelo-json</mediatype></provides>
   <screenshots>
     <screenshot type="default">
       <caption>Conceptual database model in brModelo NG</caption>
       <caption xml:lang="pt-BR">Modelo conceitual de banco de dados no brModelo NG</caption>
-      <image type="source" width="1400" height="1013">https://raw.githubusercontent.com/kpagnussat/brModelo-NG/master/docs/img/principal-claro.png</image>
+      <image type="source" width="1400" height="1013">https://raw.githubusercontent.com/kpagnussat/brModeloNG/v1.0.0/docs/img/principal-claro.png</image>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1"/>

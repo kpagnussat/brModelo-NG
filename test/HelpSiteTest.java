@@ -43,7 +43,7 @@ class HelpSiteTest {
         // Web addresses appear only as clickable link targets, never as something the page loads.
         assertEquals(html.split("(?i)https?:", -1).length - 1, html.split("href=\"https://", -1).length - 1);
         assertTrue(html.contains("href=\"https://projbd.heuser.pro.br/\""));
-        assertTrue(html.contains("href=\"https://github.com/kpagnussat/brModelo-NG/releases\""));
+        assertTrue(html.contains("href=\"https://github.com/kpagnussat/brModeloNG/releases\""));
         List<String> order = new ArrayList<>(List.of("index"));
         var topicLinks = Pattern.compile("\\]\\(([a-z-]+)\\.md\\)").matcher(Files.readString(sources.resolve("index.md")));
         while (topicLinks.find()) order.add(topicLinks.group(1));

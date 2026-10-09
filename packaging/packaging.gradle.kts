@@ -180,7 +180,7 @@ fun registerPackage(taskName: String, type: String, supported: Boolean) = tasks.
             command += listOf("--file-associations", assocDir.get().file("brM3.properties").asFile.absolutePath,
                 "--file-associations", assocDir.get().file("brMj.properties").asFile.absolutePath,
                 "--license-file", file("LICENSE").absolutePath,
-                "--about-url", "https://github.com/kpagnussat/brModelo-NG")
+                "--about-url", "https://github.com/kpagnussat/brModeloNG")
             if (linux) command += listOf("--linux-package-name", packageName, "--install-dir", "/opt",
                 "--linux-shortcut", "--linux-menu-group", "Education;Development;Office")
             if (type == "rpm") command += listOf("--linux-rpm-license-type", "GPL-3.0-or-later")

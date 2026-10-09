@@ -19,7 +19,7 @@ public final class ConteudoSobre {
                 + "<p>brModelo NG — <a href='https://github.com/kpagnussat'>Kristofer Pagnussat</a></p>"
                 + "<p>Baseado no brModelo 3.3.2 de <a href='https://github.com/chcandido'>Carlos Henrique Cândido</a>,<br>"
                 + "sob orientação do <a href='https://www.inf.ufsc.br/~r.mello/'>Dr. Ronaldo dos Santos Mello</a></p>"
-                + "<p>Licença GPL-3.0</p><p><a href='https://github.com/kpagnussat/brModelo-NG'>brModelo NG</a>"
+                + "<p>Licença GPL-3.0</p><p><a href='https://github.com/kpagnussat/brModeloNG'>brModelo NG</a>"
                 + " · <a href='https://github.com/chcandido/brModelo'>brModelo original</a></p></body></html>";
     }
 
