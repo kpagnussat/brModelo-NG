@@ -76,7 +76,7 @@ Primeira versão do **brModelo NG**.
 - **Navegação:** roda do mouse rola verticalmente por padrão; Shift permite
   rolagem horizontal.
 - **Desempenho e estrutura:** diálogo e descoberta de impressoras adiados até o
-  primeiro uso (inicialização de 3,3 s para 1,4 s); responsabilidades de classes
+  primeiro uso (janela visível em 0,9 s, contra 3,1 s no oficial 3.3.2); responsabilidades de classes
   grandes extraídas para auxiliares, preservando a forma serializada. A tela
   pinta só as linhas visíveis da grade, os ícones SVG da interface são
   renderizados uma vez por escala e tema, e no Linux o Java2D usa padrões que

@@ -112,6 +112,22 @@ cp build/readme-snaps/flatescuro/readme_campos.png docs/img/editor-campos.png
 cp build/readme-snaps/flatescuro/readme_status_erro.png docs/img/status-erro.png
 ```
 
+The **Organize links** before/after pair comes from the algorithm's own GUI test,
+which paints the diagram right before and after the action. The help page is a
+headless browser screenshot of the generated help site:
+
+```sh
+./gradlew --dependency-verification strict test -Pgui \
+  --tests brmodelo.OrganizarConexoesGuiTest -PsnapGridOutput=build/readme-snaps/organize
+magick build/readme-snaps/organize/organize-before.png -crop 840x360+100+190 +repage -strip docs/img/organizar-antes.png
+magick build/readme-snaps/organize/organize-after.png -crop 840x360+100+190 +repage -strip docs/img/organizar-depois.png
+
+./gradlew --dependency-verification strict renderHelp
+google-chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+  --window-size=1200,720 --screenshot=docs/img/ajuda.png \
+  "file://$PWD/build/generated/help/modelo-conceitual.html"
+```
+
 `snapDialogs` paints the Swing content without native title bars and borders.
 The status PNG captures a deterministic example error through the application's
 real logger and unread indicator; the renderer clears it before continuing.
@@ -180,6 +196,44 @@ environment lookup for deterministic directory tests. NG uses separate platform
 state directories, including a writable Windows application-data directory.
 The `.brM3` serialized model fields and identifiers retain compatibility with the
 official application.
+
+## Performance measurements
+
+`dev/measure_performance.py` compiles once and runs fresh JVMs outside Gradle,
+each with its own temporary home and XDG directories; inputs are only read and
+their hashes are checked again at the end. `BRMODELO_BENCH_JAR` swaps NG for
+another jar (such as the official one), using that jar's own look-and-feel setup
+and main-window construction:
+
+```sh
+export JAVA_HOME="/path/to/jdk21"
+BRMODELO_BENCH_JAR="/path/to/official/brModelo.jar" python3 dev/measure_performance.py build/perf/oficial --startup
+python3 dev/measure_performance.py build/perf/ng --startup
+BRMODELO_BENCH_JAR="/path/to/official/brModelo.jar" python3 dev/measure_performance.py build/perf/oficial-vp --viewport
+python3 dev/measure_performance.py build/perf/ng-vp --viewport
+```
+
+`--startup` records the JVM uptime when the main window becomes visible
+(7 cold starts). `--viewport` opens each fixture in the visible editor and times,
+over 100 iterations after 10 warm-up ones, painting the visible area, a selection
+click and a 40-pixel drag (3 runs). Results land in one CSV per run.
+
+Measured for 1.0.0 on an Intel Core i7-1360P laptop, Fedora Linux, OpenJDK
+21.0.12, against the official 3.3.2 jar (SHA-256 `c64c179b…ac513`). Startup is the
+median of 7 runs; the other rows give the range of per-run medians across the six
+fixtures:
+
+| Measurement | Official 3.3.2 | NG 1.0.0 |
+| --- | --- | --- |
+| Startup to visible main window (median of 7) | 3.06 s | 0.90 s |
+| Painting the visible area | 2.0 to 3.3 ms | 0.2 to 1.4 ms |
+| Selection click | 0.04 to 1.3 ms | 0.05 to 0.7 ms |
+| 40-pixel drag (NG includes snap to grid) | 0.13 to 0.63 ms | 0.27 to 1.4 ms |
+
+The NG editor's visible area is about 10% smaller (about 760×513 against 864×516)
+because of its layout, so the painting figures are indicative only. All
+interaction times stay far below a 16 ms frame. The startup gain comes mostly
+from creating the print dialog, with its native printer discovery, on first use.
 
 ## Invented fixtures and canonical dumps
 
@@ -268,7 +322,11 @@ the official jar in both directions. The report is
 
 All five `Dialogos` file dialogs use `util.SeletorDeArquivos`. On Linux/BSD the
 order is XDG Desktop Portal → AWT `FileDialog` → Swing `JFileChooser`; Windows and
-macOS start with AWT. A cancellation ends the selection; an absent interface,
+macOS start with the system dialog through FlatLaf's `SystemFileChooser`
+(`IFileDialog` on Windows, `NSOpenPanel`/`NSSavePanel` on macOS), which shows the
+request's file-type filters in order, then fall back to AWT and Swing. AWT's
+`FileDialog` has no file-type list (and on Windows ignores filename filters), so
+with several save types it asks for the type first. A cancellation ends the selection; an absent interface,
 D-Bus failure, response code 2 or malformed response tries the next backend.
 The last successful folder is stored as `cfg.seletor.ultimaPasta` in `config.chc`.
 Save dialogs retain binary `.brM3`, optional `.brMj` JSON and XML, PNG/BMP export,
@@ -279,6 +337,7 @@ Force one backend for support or desktop testing:
 
 ```sh
 java -Dbrmodelo.seletor=portal -jar build/libs/brModelo.jar
+java -Dbrmodelo.seletor=sistema -jar build/libs/brModelo.jar
 java -Dbrmodelo.seletor=nativo -jar build/libs/brModelo.jar
 java -Dbrmodelo.seletor=swing -jar build/libs/brModelo.jar
 ```
