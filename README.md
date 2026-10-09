@@ -26,12 +26,13 @@ O brModelo NG nasceu desse convite.*
 
 O **brModelo NG** é uma continuação independente do brModelo 3.3.2, a ferramenta
 livre de Carlos Henrique Cândido para o ensino de modelagem de bancos de dados.
-Ele preserva o programa e o seu propósito e melhora o uso em sistemas modernos.
 
 Você pode criar modelos conceituais e lógicos, converter do conceitual para o
 lógico, gerar SQL, exportar imagens e imprimir diagramas. Também estão
 disponíveis fluxogramas, diagramas de atividades, estruturas analíticas de
 projetos (EAP) e diagramas livres.
+
+<h3 align="center">Preserva o programa e o seu propósito.<br>Melhora o uso em sistemas modernos.</h3>
 
 <p align="center">
   <picture>
@@ -95,6 +96,9 @@ Para quem desenha diagramas, o que muda é:
 - **Barra de status que não deixa passar erros.** Mensagens temporárias somem
   após cinco segundos, mas o contador de não lidas permanece até você abrir o
   log; erros têm símbolo próprio, além da cor.
+- **Integrado ao sistema.** O NG aparece no menu de aplicativos, e os arquivos
+  `.brM3` e `.brMj` ganham o ícone dele e abrem com dois cliques
+  ([veja](#integrado-ao-sistema)).
 - **Seletor de arquivos do sistema.** No Linux, pelo XDG Desktop Portal, com os
   favoritos e locais do ambiente gráfico; no Windows e no macOS, pelo diálogo do
   próprio sistema, com a lista de tipos de arquivo. O NG lembra a última pasta.
@@ -137,6 +141,27 @@ código.
 <p align="center">
   <img src="docs/img/ajuda.png" alt="Página Modelo conceitual da ajuda do brModelo NG, com a lista de tópicos à esquerda" width="760">
 </p>
+
+### Integrado ao sistema
+
+Os pacotes registram o brModelo NG no sistema: ele aparece no menu de
+aplicativos, e os arquivos ganham o ícone do NG e os tipos *Diagrama brModelo*
+(`.brM3`) e *Diagrama JSON brModelo* (`.brMj`), que abrem com dois cliques.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/img/windows-arquivos.png" alt="Menu Iniciar e Explorador de Arquivos do Windows 11: o brModelo NG e os arquivos .brM3 e .brMj com o ícone do NG"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Windows 11: o aplicativo e os diagramas no menu Iniciar e no Explorador de Arquivos.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/img/linux-menu.png" alt="Menu de aplicativos do KDE no Kubuntu com o brModelo NG recém-instalado"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Kubuntu (KDE): o brModelo NG no menu de aplicativos, logo depois de instalar o <code>.deb</code>.</sub></td>
+  </tr>
+</table>
 
 ### Temas e editores
 
@@ -358,7 +383,8 @@ as capturas de tela, as medições e a geração dos pacotes. Para começar:
 ```
 
 Relate problemas e envie contribuições pelo
-[repositório do brModelo NG](https://github.com/kpagnussat/brModelo-NG); para
+[repositório do brModelo NG](https://github.com/kpagnussat/brModelo-NG)
+([como as contribuições entram](#como-este-repositório-é-publicado)); para
 dúvidas e ideias, use as
 [discussões](https://github.com/kpagnussat/brModelo-NG/discussions). Inclua passos
 para reproduzir o problema, sistema operacional e, quando necessário, um
@@ -380,6 +406,13 @@ commit por snapshot funcional**: cada commit reúne uma etapa já testada,
 normalmente uma release. Por isso o histórico aqui é curto, e qualquer commit
 é uma versão completa e funcional do programa. O que mudou em cada versão está
 no [CHANGELOG](CHANGELOG.md).
+
+**Contribuições continuam bem-vindas**, só seguem outro caminho. Um pull request
+não é mesclado direto aqui: ele é revisado, levado para o laboratório, testado
+junto com o resto e publicado no próximo snapshot. Depois disso, o pull request
+é fechado com um link para o commit que o incorporou, e o autor recebe o crédito
+no [CHANGELOG](CHANGELOG.md). Ao contribuir, você concorda em licenciar a sua
+mudança sob a mesma GPL-3.0-or-later do projeto.
 
 ## Outras versões do brModelo
 
@@ -442,6 +475,10 @@ CI. Official brModelo does not read `.brMj` JSON files.
 Development happens in a local repository that works as a lab; this public
 repository receives a single commit per working snapshot, each one a tested
 stage, usually a release. See the [CHANGELOG](CHANGELOG.md) for what changed.
+Contributions are welcome: a pull request is not merged directly; it is
+reviewed, brought into the lab, tested and published in the next snapshot, then
+closed with a link to that commit, and its author is credited in the CHANGELOG.
+Contributions are accepted under GPL-3.0-or-later.
 
 Download packages from the
 [Releases page](https://github.com/kpagnussat/brModelo-NG/releases), or see
